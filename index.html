@@ -1,0 +1,2221 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#111113">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icone-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icone-180.png">
+<script>window.CSP_SUPABASE = {"url": "https://smkjgykytjrlsvpiwypx.supabase.co", "key": "sb_publishable_vAV3wc-5ScorwKu4v_TQTA_SP5aEp7X"};</script>
+<title>Chapitres en suspens</title>
+<meta name="description" content="Résumés chapitre par chapitre des romans de Stephen King, pour reprendre une lecture interrompue sans se gâcher la suite.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Courier+Prime:wght@400;700&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: a collector's edition of a night reading room. Charcoal ground, cream ink, gilt for the
+   accent; the home page and each book page are composed like title pages, centred, with fleurons
+   between sections, and the books stand on a shelf. A book's own page takes on its cover's colour,
+   with its motif drawn huge behind the title. The book in progress carries a satin ribbon. */
+:root {
+  color-scheme: dark;
+  --bg: #111113;
+  --bg-raise: #18181b;
+  --ink: #ede8de;
+  --ink-soft: #c9c3b6;
+  --muted: #8f8b84;
+  --line: #2e2e33;
+  --gilt: #caa75e;
+  --accent: var(--gilt);
+  --accent-wash: rgba(202, 167, 94, .1);
+  --ribbon: #a3262a;
+  --mark: #d6675e;
+  --plank: #5a4330;
+  --plank-deep: #2b1f15;
+  --plank-edge: #6e5339;
+  --focus: #e0c27e;
+  --shadow: rgba(0, 0, 0, .6);
+  --glow-amount: 100%;
+  --mark-opacity: .12;
+  --art-opacity: 1;
+  --ornament: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='14' viewBox='0 0 180 14'%3E%3Cpath d='M0 7H74M106 7H180' stroke='%23000' stroke-width='.8'/%3E%3Cpath d='M90 1.5l5.5 5.5-5.5 5.5-5.5-5.5z' fill='none' stroke='%23000' stroke-width='1'/%3E%3Ccircle cx='80' cy='7' r='1.3'/%3E%3Ccircle cx='100' cy='7' r='1.3'/%3E%3C/svg%3E");
+  --font-display: "Bodoni Moda", "Bodoni 72", Didot, Georgia, serif;
+  --font-body: "Spectral", Georgia, "Times New Roman", serif;
+  --font-mono: "Courier Prime", "Courier New", ui-monospace, monospace;
+  --step--1: .8rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.25rem;
+  --step-2: 1.6rem;
+  --step-3: 2.4rem;
+  --step-4: clamp(3.2rem, 9vw, 6.2rem);
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --bg: #f2ebdc;
+    --bg-raise: #f9f4e9;
+    --ink: #241c13;
+    --ink-soft: #4b3f30;
+    --muted: #776953;
+    --line: #d9cdb5;
+    --gilt: #8a6620;
+    --accent-wash: rgba(138, 102, 32, .09);
+    --ribbon: #9a1f24;
+    --mark: #9a1f24;
+    --plank: #b48a5e;
+    --plank-deep: #8a6440;
+    --plank-edge: #c9a174;
+    --focus: #8a6620;
+    --shadow: rgba(60, 40, 20, .3);
+    --glow-amount: 22%;
+    --mark-opacity: .1;
+    --art-opacity: .5;
+  }
+  :root:not([data-theme="dark"]) body[data-view="book"] { --accent: color-mix(in srgb, var(--book-accent, var(--gilt)) 52%, #000); }
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f2ebdc;
+  --bg-raise: #f9f4e9;
+  --ink: #241c13;
+  --ink-soft: #4b3f30;
+  --muted: #776953;
+  --line: #d9cdb5;
+  --gilt: #8a6620;
+  --accent-wash: rgba(138, 102, 32, .09);
+  --ribbon: #9a1f24;
+  --mark: #9a1f24;
+  --plank: #b48a5e;
+  --plank-deep: #8a6440;
+  --plank-edge: #c9a174;
+  --focus: #8a6620;
+  --shadow: rgba(60, 40, 20, .3);
+  --glow-amount: 22%;
+  --mark-opacity: .1;
+  --art-opacity: .5;
+}
+:root[data-theme="light"] body[data-view="book"] { --accent: color-mix(in srgb, var(--book-accent, var(--gilt)) 52%, #000); }
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.62;
+  font-kerning: normal;
+}
+/* The glow and the paper grain stay put while the page scrolls. Each sits on its own fixed layer,
+   lifted onto the compositor, so Chrome slides the text over them instead of repainting the
+   whole window every frame (a `background-attachment: fixed` did that). */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  transform: translateZ(0);
+}
+body::after {
+  z-index: -1;
+  background: radial-gradient(80% 50% at 50% -10%, var(--accent-wash), transparent 70%);
+}
+body::before {
+  z-index: 0;
+  opacity: .065;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+/* A book's page, lit by its own cover */
+body[data-view="book"] {
+  --accent: var(--book-accent, var(--gilt));
+  --accent-wash: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+body[data-view="book"]::after {
+  background: radial-gradient(110% 58% at 50% -14%, color-mix(in srgb, var(--book-glow, transparent) var(--glow-amount), var(--bg)), transparent 72%);
+}
+#app { position: relative; z-index: 1; }
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding-inline: max(16px, 4vw);
+  padding-block: 0 88px;
+}
+body[data-view="book"] .wrap { overflow-x: clip; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+h1, h2, h3 { text-wrap: balance; }
+
+/* Small print is set in the book face, in italic: no typewriter labels outside the covers */
+.eyebrow, .tally, .pile-count, .book-year, .book-caption span, .now-where, .now-facts, .now-all,
+.rec-meta, .rec-why, .colophon, .book-meta, .status-dates, .status-read, .resume, .note, .cue,
+.item-word, .seen, .flag, .item-action, .back, .tools label, .cast summary small, .express-head,
+.express-note, .link-btn, .links a {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: .95rem;
+}
+.eyebrow { margin: 0; color: var(--muted); font-size: 1rem; text-wrap: balance; }
+
+/* Fleuron: two rules around a lozenge, in the page's accent */
+.masthead::after, .pile-head::after, .head-text h1::after, .part h3::after {
+  content: "";
+  display: block;
+  width: 180px;
+  height: 14px;
+  margin: 8px auto 0;
+  background: var(--accent);
+  -webkit-mask: var(--ornament) center / contain no-repeat;
+  mask: var(--ornament) center / contain no-repeat;
+}
+
+/* ---------- Home: a title page ---------- */
+.masthead {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  max-width: 46rem;
+  margin-inline: auto;
+  padding-block: 96px 64px;
+  text-align: center;
+}
+.masthead h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(3.2rem, 9vw, 6.4rem);
+  line-height: .9;
+  letter-spacing: -.015em;
+  margin: 0;
+}
+.masthead h1 em { display: block; font-style: italic; }
+.lede { margin: 4px 0 0; color: var(--ink-soft); font-size: var(--step-1); font-style: italic; line-height: 1.5; max-width: 38rem; }
+.tally {
+  margin: 4px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 20px;
+  color: var(--muted);
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+}
+.tally b { color: var(--ink); font-weight: 700; }
+.tally .is-reading b { color: var(--accent); }
+
+.pile + .pile, .recs { margin-top: 88px; }
+.pile-head { display: flex; flex-direction: column; align-items: center; gap: 2px; margin-bottom: 36px; text-align: center; }
+.pile-head h2 { font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: 2.4rem; line-height: 1.1; margin: 0; }
+.pile-count { order: 3; margin-top: 4px; color: var(--muted); }
+.pile-empty { margin: 0; text-align: center; color: var(--muted); font-style: italic; }
+
+/* Books standing on a shelf */
+.shelf {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 172px));
+  justify-content: center;
+  gap: 72px 40px;
+}
+.shelf-item { min-width: 0; }
+.book-link { display: grid; gap: 12px; text-decoration: none; }
+.book-year { display: flex; justify-content: center; color: var(--muted); }
+.book-caption { position: relative; display: grid; gap: 2px; padding-top: 18px; text-align: center; }
+/* The board the book stands on: with the 40px column gap, boards join up along a row */
+.book-caption::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: -21px;
+  right: -21px;
+  height: 10px;
+  background: linear-gradient(var(--plank), var(--plank-deep));
+  border-top: 1px solid var(--plank-edge);
+  box-shadow: 0 12px 18px -8px var(--shadow);
+}
+.book-caption strong { font-family: var(--font-display); font-weight: 500; font-size: 1.3rem; line-height: 1.15; }
+.book-caption span { color: var(--muted); }
+.book-caption .done-tag { color: var(--ink-soft); }
+.book-link .cover { transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s; }
+.book-link:hover .cover, .book-link:focus-visible .cover {
+  transform: translateY(-5px) rotate(-.6deg);
+  box-shadow: 0 22px 34px -14px var(--shadow), 0 2px 0 rgba(0,0,0,.2);
+}
+.book-link:focus-visible { outline: none; }
+.book-link:focus-visible .cover { outline: 2px solid var(--focus); outline-offset: 4px; }
+
+/* Reading progress: one tick per fiche */
+.progress { display: flex; gap: 2px; height: 4px; max-width: 30rem; }
+.progress > span { flex: 1; background: var(--line); }
+.progress > span.on { background: var(--accent); }
+
+/* The book in progress: a framed plate, a satin ribbon hanging out of the book */
+.now-list { list-style: none; margin: 0; padding: 0; display: grid; justify-items: center; gap: 40px; }
+.now {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  grid-template-areas: "cover head" "body body";
+  gap: 18px;
+  align-items: start;
+  width: 100%;
+  max-width: 820px;
+  padding: 20px;
+  background: var(--bg-raise);
+  border: 1px solid var(--line);
+  outline: 1px solid var(--line);
+  outline-offset: 5px;
+}
+.now-cover { grid-area: cover; position: relative; isolation: isolate; }
+.now-cover::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 60%;
+  right: 24%;
+  width: 12px;
+  height: calc(40% + 16px);
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--ribbon) 65%, #000), var(--ribbon) 45%,
+    color-mix(in srgb, var(--ribbon) 80%, #fff) 55%, color-mix(in srgb, var(--ribbon) 65%, #000));
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 8px), 0 100%);
+  filter: drop-shadow(0 6px 6px rgba(0, 0, 0, .45));
+  pointer-events: none;
+}
+.now-head { grid-area: head; min-width: 0; display: grid; gap: 8px; align-content: start; }
+.now-body { grid-area: body; min-width: 0; display: grid; gap: 12px; align-content: start; }
+.now-head h3 { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: var(--step-2); line-height: 1.02; }
+.now-head h3 a { text-decoration: none; }
+.now-where { margin: 0; color: var(--ink-soft); font-style: normal; }
+.now-where b { color: var(--accent); font-weight: 400; }
+.now-facts { margin: 0; color: var(--muted); }
+.now-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 4px; }
+.now-all { color: var(--muted); text-underline-offset: 3px; }
+.now-all:hover { color: var(--ink); }
+@media (min-width: 720px) {
+  .now {
+    grid-template-columns: 180px minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas: "cover head" "cover body";
+    gap: 14px 48px;
+    padding: 40px 44px;
+  }
+  .now-head { gap: 12px; }
+  .now-head h3 { font-size: 3.4rem; }
+  .now-cover::after { width: 14px; height: calc(40% + 30px); }
+}
+
+.colophon {
+  margin: 88px auto 0;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  max-width: 40rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* ---------- Covers ---------- */
+.cover {
+  position: relative;
+  aspect-ratio: 2 / 3;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 2px 4px 4px 2px;
+  background: var(--cv-bg);
+  color: var(--cv-fg);
+  overflow: hidden;
+  container-type: inline-size;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .05), 0 2px 0 rgba(0, 0, 0, .5), 0 18px 22px -16px rgba(0, 0, 0, .9);
+}
+.cv {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 4cqi;
+  padding: 9cqi 9cqi 10cqi 11cqi;
+}
+/* Cloth grain and a little sheen on every board, then the spine's shadow */
+.cover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, .03) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, .06) 0 1px, transparent 1px 3px),
+    linear-gradient(118deg, rgba(255, 255, 255, .1), transparent 40%);
+}
+.cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0,0,0,.3) 0, rgba(255,255,255,.08) 3.5%, transparent 7%);
+  pointer-events: none;
+}
+.cover[data-motif="fog"] { background: linear-gradient(180deg, #8a959a 0%, #5d676c 45%, #30373a 100%); }
+.cv-author {
+  font-family: var(--font-mono);
+  font-size: 6.4cqi;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  opacity: .78;
+  position: relative;
+}
+.cv-motif { position: relative; display: grid; place-items: center; min-height: 0; }
+.cv-motif svg { width: 100%; height: 100%; max-height: 100%; overflow: visible; }
+.cv-title {
+  position: relative;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 15cqi;
+  line-height: .95;
+  letter-spacing: -.01em;
+  text-wrap: balance;
+}
+.cover[data-long] .cv-title { font-size: 12cqi; }
+.cv-rule { display: block; width: 22cqi; height: 1px; background: currentColor; opacity: .5; margin-bottom: 4cqi; }
+
+/* ---------- Book page: a title page, centred ---------- */
+.topbar { padding-block: 22px 8px; }
+.back { text-decoration: none; color: var(--muted); display: inline-flex; gap: 8px; padding: 6px 0; }
+.back:hover { color: var(--ink); }
+
+.book-head {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  gap: 28px;
+  padding-block: 36px 44px;
+  text-align: center;
+}
+.book-head .cover {
+  width: 168px;
+  box-shadow: 0 40px 80px -30px color-mix(in srgb, var(--accent) 40%, transparent), 0 20px 30px -16px rgba(0, 0, 0, .9);
+}
+/* The book's own motif, drawn huge behind its title */
+.book-mark {
+  position: absolute;
+  z-index: -1;
+  right: -6%;
+  top: -30px;
+  width: min(560px, 74vw);
+  aspect-ratio: 1;
+  color: var(--accent);
+  opacity: var(--mark-opacity);
+  pointer-events: none;
+}
+.book-mark svg { width: 100%; height: 100%; overflow: visible; }
+/* A painted scene from the book's opening, spread behind the cover and fading into the page.
+   It replaces the drawn motif; only the patch behind the title is dimmed, so the painting stays
+   fully visible around it and the title keeps its contrast. */
+.book-art {
+  position: absolute;
+  inset: 0 0 auto;
+  height: clamp(440px, 58vw, 680px);
+  z-index: 0;
+  pointer-events: none;
+  background: center 45% / cover no-repeat;
+  opacity: var(--art-opacity);
+  -webkit-mask-image: linear-gradient(to bottom, #000 30%, transparent), linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to bottom, #000 30%, transparent), linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+  mask-composite: intersect;
+}
+.book-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(36% 30% at 50% 62%, color-mix(in srgb, var(--bg) 62%, transparent), transparent 100%);
+}
+.book-art + .wrap { position: relative; z-index: 1; }
+.book-art + .wrap .book-mark { display: none; }
+/* The painting is the picture here: no cover in front of it, and the title drops into its lower half. */
+.book-art + .wrap .book-head .cover { display: none; }
+.book-art + .wrap .book-head { padding-top: clamp(150px, 22vw, 260px); }
+.book-art + .wrap .head-text { text-shadow: 0 0 14px var(--bg), 0 0 4px var(--bg); }
+.book-art + .wrap .back { color: var(--ink-soft); text-shadow: 0 0 10px var(--bg), 0 0 3px var(--bg), 0 0 1px var(--bg); }
+.head-text { min-width: 0; display: grid; justify-items: center; gap: 10px; max-width: 44rem; }
+.head-text h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--step-4);
+  line-height: 1;
+  margin: 2px 0 0;
+}
+.book-meta { color: var(--muted); margin: 0; }
+.pitch { margin: 8px auto 0; font-size: var(--step-1); font-style: italic; line-height: 1.55; color: var(--ink-soft); max-width: 40rem; }
+.resume {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px 14px;
+  color: var(--ink-soft);
+}
+.resume::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--mark); }
+.status-box { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px 16px; margin-top: 6px; }
+.status { display: inline-flex; border: 1px solid var(--line); border-radius: 2px; overflow: hidden; }
+.status button {
+  background: none;
+  border: 0;
+  border-left: 1px solid var(--line);
+  padding: 8px 16px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--muted);
+  cursor: pointer;
+}
+.status button:first-child { border-left: 0; }
+.status button:hover { color: var(--ink); }
+.status button[aria-checked="true"] { background: var(--accent-wash); color: var(--accent); }
+.status-read { color: var(--ink-soft); }
+.status-dates { color: var(--muted); }
+@media (min-width: 720px) {
+  .book-head .cover { width: 184px; }
+}
+
+.btn {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  letter-spacing: .01em;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 8px 14px;
+  cursor: pointer;
+  color: var(--ink);
+}
+.btn:hover { border-color: var(--ink-soft); }
+.btn-accent { border-color: var(--accent); color: var(--accent); }
+.btn-accent:hover { background: var(--accent-wash); }
+.btn-solid { display: inline-block; padding: 11px 22px; text-decoration: none; }
+.link-btn {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.reading { max-width: 46rem; margin-inline: auto; }
+.cast { border-bottom: 1px solid var(--line); }
+.cast summary {
+  list-style: none;
+  cursor: pointer;
+  padding-block: 18px;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+}
+.cast summary::-webkit-details-marker { display: none; }
+.cast summary::after { content: "+"; margin-left: auto; color: var(--muted); font-size: var(--step-1); }
+.cast[open] summary::after { content: "–"; }
+.cast summary small { color: var(--muted); }
+.cast dl { margin: 0; padding-bottom: 22px; display: grid; gap: 12px; }
+.cast dt { font-weight: 600; }
+.cast dd { margin: 0; color: var(--ink-soft); }
+@media (min-width: 640px) {
+  .cast dl { grid-template-columns: 13rem minmax(0, 1fr); gap: 10px 20px; }
+}
+.links { list-style: none; margin: 0; padding: 0 0 22px; display: grid; gap: 12px; }
+.links li { padding-left: 18px; position: relative; color: var(--ink-soft); max-width: 62ch; }
+.links li::before { content: ""; position: absolute; left: 0; top: .72em; width: 8px; height: 1px; background: var(--accent); }
+.links li.locked { color: var(--muted); font-style: italic; }
+.links a { color: var(--accent); margin-left: 6px; white-space: nowrap; }
+
+/* Express recap, written by Claude from the summaries the reader has reached */
+.express {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-left: 2px solid var(--accent);
+  background: var(--accent-wash);
+  max-width: 62ch;
+}
+.express-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; margin: 0 0 8px; color: var(--accent); }
+.express-head span { margin-right: auto; }
+.express-text { margin: 0; white-space: pre-wrap; }
+.express-text.waiting { color: var(--muted); font-style: italic; }
+.express-note { margin: 8px 0 0; color: var(--muted); }
+/* Who is who: names in the display face, what we know of them beneath */
+.express-cast { margin: 0; }
+.express-cast dt { font-family: var(--font-display); font-weight: 500; font-size: 1.15rem; line-height: 1.2; }
+.express-cast dd { margin: 2px 0 12px; color: var(--ink-soft); }
+.express-cast dd:last-child { margin-bottom: 0; }
+
+/* What to read next */
+.recs-intro { margin: -14px auto 28px; color: var(--ink-soft); font-style: italic; max-width: 40rem; text-align: center; }
+.rec-list { list-style: none; margin: 0 auto; padding: 0; max-width: 860px; }
+.rec {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 6px 20px;
+  padding: 22px 0;
+  border-top: 1px solid var(--line);
+}
+.rec > * { grid-column: 2; }
+.rec > .rec-cover { grid-column: 1; grid-row: 1 / span 5; align-self: start; }
+.recs-more { margin: 22px 0 0; text-align: center; }
+.rec:last-child { border-bottom: 1px solid var(--line); }
+.rec h3 { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: 1.9rem; line-height: 1.1; }
+.rec-meta { margin: 0; color: var(--muted); }
+.rec-why { margin: 0; color: var(--accent); }
+.rec-pitch { margin: 4px 0 0; color: var(--ink-soft); max-width: 60ch; }
+.rec-action { align-self: start; }
+@media (min-width: 720px) {
+  .rec { grid-template-columns: 96px minmax(0, 1fr) auto; gap: 6px 28px; }
+  .rec > .rec-action { grid-column: 3; grid-row: 1 / span 4; }
+}
+.pending-tools { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 4px; }
+.pending-tools select {
+  font-family: var(--font-body);
+  font-size: .85rem;
+  background: var(--bg-raise);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 4px 6px;
+  max-width: 100%;
+}
+
+/* ---------- Chapters ---------- */
+.chapters { padding-top: 40px; }
+.chapters-head { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+.chapters-head h2 { font-family: var(--font-display); font-weight: 500; font-size: 3rem; margin: 0; line-height: 1; }
+.tools { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; align-items: center; }
+.tools label { color: var(--muted); }
+.tools select {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  background: var(--bg-raise);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 7px 8px;
+  max-width: 15rem;
+}
+.note { color: var(--muted); margin: 16px auto 6px; line-height: 1.6; max-width: 40rem; text-align: center; }
+
+/* The site's sync slip, under the colophon: a ruled card in the edition's quiet register */
+.sync {
+  margin: 36px auto 0;
+  max-width: 26rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: var(--step--1);
+  line-height: 1.6;
+}
+.sync-title {
+  font-family: var(--font-mono);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 10px;
+}
+.sync form { display: grid; gap: 10px; margin-top: 14px; }
+.sync input {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  background: var(--bg-raise);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 9px 10px;
+  width: 100%;
+}
+.sync input:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+.sync-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.sync-msg { min-height: 1.6em; margin: 4px 0 0; color: var(--ink-soft); }
+.sync-on b { color: var(--ink-soft); font-weight: 500; }
+
+/* Parts open like the parts of the edition */
+.part { margin-top: 72px; }
+.part h3 { margin: 0 0 22px; display: flex; flex-direction: column; align-items: center; text-align: center; font-weight: 400; }
+.part-num { font-family: var(--font-body); font-size: .8rem; letter-spacing: .3em; text-transform: uppercase; color: var(--accent); }
+.part-name { font-family: var(--font-display); font-style: italic; font-size: 2.3rem; line-height: 1.2; }
+
+.items { list-style: none; margin: 0; padding: 0; }
+.item { border-top: 1px solid var(--line); scroll-margin-top: 16px; }
+.item:last-child { border-bottom: 1px solid var(--line); }
+.item-toggle {
+  width: 100%;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  display: grid;
+  grid-template-columns: 4.4rem minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 12px;
+  padding: 13px 0;
+}
+.item-num {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.8rem;
+  line-height: 1;
+  font-variant-numeric: lining-nums tabular-nums;
+  color: var(--accent);
+  transition: color .2s;
+  white-space: nowrap;
+}
+.item-label { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; min-width: 0; }
+.item-word { color: var(--muted); }
+.flag { color: var(--mark); display: inline-flex; align-items: center; gap: 6px; }
+.flag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--mark); }
+/* Fiches before the last opened one: already read */
+.seen { color: var(--muted); display: inline-flex; align-items: center; gap: 7px; }
+.seen::before { content: ""; width: 7px; height: 3.5px; border-left: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: translateY(-2px) rotate(-45deg); }
+.item.passed .item-num { color: color-mix(in srgb, var(--muted) 72%, var(--bg)); }
+.item-action { color: var(--muted); }
+.item-toggle:hover .item-num { color: var(--ink); }
+.item-toggle:hover .item-action { color: var(--ink); }
+.item.open .item-action { color: var(--accent); }
+.item-body { padding: 0 0 24px calc(4.4rem + 12px); }
+.cue { color: var(--muted); margin: 0 0 8px; }
+.cue b { color: var(--accent); font-weight: 400; }
+.item-text { margin: 0; max-width: 62ch; font-size: 1.12rem; line-height: 1.72; }
+/* A lettrine opens each summary */
+.item-text::first-letter {
+  float: left;
+  font-family: var(--font-display);
+  font-size: 3.5em;
+  line-height: .8;
+  padding: .06em .1em 0 0;
+  color: var(--accent);
+}
+.item.open .item-text, .ending-body.reveal > * { animation: ink .6s ease-out both; }
+@keyframes ink { from { opacity: 0; filter: blur(3px); } to { opacity: 1; filter: none; } }
+.item-tools { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 16px; }
+@media (max-width: 520px) {
+  .masthead { padding-block: 64px 48px; }
+  .pile-head h2 { font-size: 2rem; }
+  /* two books a row on a phone; the boards still meet across the 30px gap */
+  .shelf { grid-template-columns: repeat(auto-fit, minmax(0, 148px)); gap: 64px 30px; }
+  .book-caption::before { left: -16px; right: -16px; }
+  .item-toggle { grid-template-columns: 3.2rem minmax(0, 1fr) auto; gap: 8px; }
+  .item-num { font-size: 1.4rem; }
+  .item-body { padding-left: calc(3.2rem + 8px); }
+}
+
+.ending {
+  margin-top: 64px;
+  padding: 30px clamp(18px, 4vw, 40px);
+  background: var(--bg-raise);
+  border: 1px solid var(--line);
+  outline: 1px solid var(--line);
+  outline-offset: 5px;
+  text-align: center;
+}
+.ending h2 { font-family: var(--font-display); font-weight: 500; font-size: var(--step-3); margin: 0; line-height: 1; }
+.ending-lock { margin: 10px auto 18px; color: var(--ink-soft); max-width: 40rem; }
+.ending-body { display: grid; gap: 26px; margin-top: 26px; }
+.ending-body h3 { font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: var(--step-2); margin: 0 0 6px; }
+.ending-body p { margin: 0 auto; max-width: 62ch; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+
+<div id="app"></div>
+
+<script>window.BOOKS = [];</script>
+<script>
+BOOKS.push({
+  id: `brume`,
+  title: `Brume`,
+  original: `The Mist`,
+  year: 1980,
+  unit: `section`,
+  meta: `Longue nouvelle · 11 sections`,
+  cover: { bg: `#5d676c`, fg: `#f2f1ec`, motif: `fog` },
+  art: `illustrations/brume.webp`,
+  note: `Longue nouvelle publiée dans le recueil du même nom (Skeleton Crew en anglais). Le texte est découpé en 11 sections numérotées, racontées par David après coup.`,
+  pitch: `Au lendemain d'un orage d'une violence rare sur Bridgton, dans le Maine, David Drayton part faire des courses en ville avec son fils Billy et son voisin, Brent Norton, en laissant sa femme Steff à la maison. Pendant qu'ils sont au supermarché, une brume épaisse descend du lac et engloutit tout. Des dizaines de clients se retrouvent piégés à l'intérieur. Et quelque chose vit dans la brume.`,
+  cast: [
+    [`David Drayton`, `Le narrateur, illustrateur, qui vit au bord du lac.`],
+    [`Billy Drayton`, `Son fils de 5 ans.`],
+    [`Steff Drayton`, `La femme de David, restée à la maison.`],
+    [`Brent Norton`, `Voisin et avocat new-yorkais, en froid avec David après un litige.`],
+    [`Ollie Weeks`, `Sous-directeur du supermarché, discret et réfléchi.`],
+    [`Mme Carmody`, `Antiquaire excentrique et très pieuse, connue pour ses remèdes de bonne femme.`],
+    [`Amanda Dumfries`, `Jeune femme en vacances, bloquée au magasin sans son mari.`],
+    [`Mme Reppler`, `Institutrice d'âge mûr, d'un sang-froid étonnant.`],
+    [`Mme Turman`, `Voisine qui garde parfois Billy.`],
+    [`Norm, Jim, Myron`, `Un jeune employé de rayon et deux hommes du coin.`]
+  ],
+  parts: [
+    {
+      title: null, name: null,
+      items: [
+        { n: `1`, t: `La nuit du 19 juillet, un orage d'une rare violence frappe la région du lac. David, Steff et Billy se réfugient au sous-sol. On entend les arbres tomber ; l'un d'eux s'abat sur la maison. Au matin, le calme est revenu.` },
+        { n: `2`, t: `David fait le tour des dégâts : arbres abattus, électricité coupée. Sur le lac, une étrange brume blanche avance, et Steff s'en inquiète. David propose à son voisin Brent Norton, avec qui il est pourtant en froid, de l'emmener en ville. Avec Billy, ils partent au supermarché de Bridgton, en remarquant une agitation inhabituelle de policiers et de militaires, peut-être liée au mystérieux projet Arrowhead de la base voisine.` },
+        { n: `3`, t: `Le supermarché, bondé, tourne sur un groupe électrogène. Une sirène retentit. Un homme au nez en sang entre en hurlant que quelque chose, dans la brume, a emporté un ami à lui. La brume engloutit le parking, puis le magasin. Le sol tremble et les vitrines se fissurent. Une femme supplie qu'on la raccompagne chez ses enfants ; personne n'ose, et elle part seule dans la brume.` },
+        { n: `4`, t: `Billy réclame sa mère en pleurant ; David le calme jusqu'à ce qu'il s'endorme. Dans la réserve, David entend des choses glisser contre la porte de chargement. La sortie du groupe électrogène est bouchée : avec Ollie, Jim et Myron, il faut décider qui ira dehors. Le jeune Norm se porte volontaire malgré les avertissements de David. À peine la porte relevée, des tentacules le saisissent et l'entraînent dans la brume.` },
+        { n: `5`, t: `David et Ollie tentent de prévenir les autres clients. Norton refuse de les croire, persuadé qu'on se moque de lui, et rallie quelques sceptiques que David surnomme la « Société de la Terre plate ». Mme Carmody commence à parler de fin du monde. La peur divise déjà le groupe.` },
+        { n: `6`, t: `Les clients barricadent les vitrines avec des sacs d'engrais et de terreau. Norton et ses fidèles décident de sortir chercher du secours ; l'un d'eux accepte d'attacher une corde à linge à sa taille. La corde se tend, puis revient sectionnée et couverte de sang. Amanda Dumfries confie à Ollie le revolver qu'elle a sur elle.` },
+        { n: `7`, t: `La nuit, des insectes géants se collent aux vitres, suivis de créatures volantes qui viennent les dévorer. L'une d'elles brise une vitre et tue un homme ; David la brûle avec une torche improvisée, et Mme Reppler en abat une autre à la bombe insecticide. On colmate les brèches. David s'endort avec Billy contre lui ; autour d'eux, certains boivent, d'autres perdent pied.` },
+        { n: `8`, t: `Ollie montre à David les corps de deux jeunes soldats qui se sont pendus dans la réserve : ils semblaient en savoir long sur le projet Arrowhead. Ollie soupçonne une expérience militaire d'avoir ouvert un passage vers un autre monde. Mme Carmody gagne des fidèles. David, à bout, trouve un réconfort passager auprès d'Amanda.` },
+        { n: `9`, t: `Une expédition part chercher des médicaments à la pharmacie voisine : David, Ollie, Mme Reppler et quelques hommes. Jim s'enfuit et disparaît dans la brume. Dans la pharmacie, d'énormes créatures semblables à des araignées tissent des fils corrosifs : plusieurs hommes meurent. David, Ollie et Mme Reppler regagnent le magasin de justesse.` },
+        { n: `10`, t: `Après cet échec, le magasin se divise : de plus en plus de clients suivent Mme Carmody, qui réclame un sacrifice. David pense que les créatures sont attirées par l'odeur et décide avec Ollie de tenter de rejoindre sa voiture à l'aube. Au moment du départ, Mme Carmody désigne Billy et Amanda à sa foule pour un sacrifice.` },
+        { n: `11`, t: `Ollie abat Mme Carmody. Le petit groupe court vers la voiture : Ollie est coupé en deux par une créature géante, d'autres sont tués. David, Billy, Amanda et Mme Reppler parviennent à partir. La route de la maison est bloquée : David doit renoncer à retrouver Steff. Ils roulent vers le sud, croisent une créature colossale, puis s'arrêtent pour la nuit dans un motel désert. David écrit leur histoire et capte peut-être, à la radio, le mot « Hartford ». Il s'accroche à cet espoir.` }
+      ]
+    }
+  ],
+  links: [
+    { t: `Le projet Arrowhead, cette mystérieuse expérience militaire menée sur la base voisine, est aussi évoqué dans Charlie et dans Les Tommyknockers.` },
+    { t: `Bridgton, où se trouve le supermarché, est une vraie ville du Maine où King a vécu dans les années 1970 ; on la croise aussi dans la nouvelle Poids lourds.` }
+  ],
+  conclusion: {
+    analyse: `Brume est un huis clos d'une grande efficacité : un décor banal, un supermarché, et une menace dont on ne saura presque rien. Le vrai sujet n'est pas les monstres mais le groupe humain : le déni de Norton, le courage modeste d'Ollie et de Mme Reppler, le fanatisme de Mme Carmody. Racontée par David après coup, la nouvelle se termine sans réponse, ce qui la rend plus troublante que bien des romans.`,
+    emotions: `Une claustrophobie croissante et la peur de l'inconnu, avec des pics d'horreur pure : le tentacule, la pharmacie. Une colère qui monte face à Mme Carmody et à ceux qui la suivent. Une angoisse constante pour Billy, et une fin suspendue entre espoir et désespoir.`,
+    message: `En situation de crise, la peur peut rendre les gens plus dangereux que les monstres eux-mêmes : la superstition et le besoin d'un coupable mènent au sacrifice. La nouvelle questionne aussi la confiance qu'on accorde aux autorités, avec ce projet Arrowhead dont personne ne sait rien. Et elle rappelle que l'espoir, même minuscule, suffit parfois pour continuer à avancer.`
+  }
+});
+
+</script>
+<script>
+BOOKS.push({
+  id: `carrie`,
+  title: `Carrie`,
+  original: `Carrie`,
+  year: 1974,
+  unit: `sequence`,
+  meta: `3 parties · pas de chapitres numérotés`,
+  cover: { bg: `#3b0e14`, fg: `#f0d8d4`, motif: `drop` },
+  art: `illustrations/carrie.webp`,
+  note: `Le roman n'est pas découpé en chapitres numérotés : il avance par fragments (récit, coupures de presse, témoignages, extraits d'enquête). Les résumés suivent ses grandes séquences, et chacune commence par un repère pour vous situer.`,
+  pitch: `Chamberlain, dans le Maine. Carrie White, seize ans, est le souffre-douleur de son lycée et vit sous la coupe d'une mère fanatique qui voit le péché partout. Le jour où une humiliation de trop la frappe dans les vestiaires, quelque chose s'éveille en elle. Entre le récit, des articles et des témoignages laissent entendre dès les premières pages qu'une catastrophe a eu lieu.`,
+  cast: [
+    [`Carrie White`, `16 ans, lycéenne timide et moquée de tous, élevée dans la peur du péché.`],
+    [`Margaret White`, `Sa mère, fondamentaliste religieuse, qui enferme sa fille dans un placard pour la faire prier.`],
+    [`Sue Snell`, `Lycéenne populaire qui participe aux moqueries, puis en éprouve de la honte.`],
+    [`Tommy Ross`, `Petit ami de Sue, sportif apprécié de tous.`],
+    [`Chris Hargensen`, `Meneuse cruelle, fille d'un avocat influent.`],
+    [`Billy Nolan`, `Petit ami de Chris, voyou de la ville.`],
+    [`Miss Desjardin`, `Professeure de sport.`],
+    [`M. Morton`, `Proviseur adjoint du lycée.`]
+  ],
+  parts: [
+    {
+      title: `Première partie`, name: `Jeux sanglants`,
+      items: [
+        { n: `1`, cue: `Les vestiaires du lycée, après le cours de sport.`, t: `Sous la douche, Carrie a ses premières règles. Sa mère ne lui a jamais rien expliqué : elle croit qu'elle se vide de son sang. Les autres filles, menées par Chris Hargensen et suivies par Sue Snell, la bombardent de serviettes hygiéniques en lui criant de « boucher ça ». Miss Desjardin intervient, d'abord agacée, puis comprend et conduit Carrie chez M. Morton, qui la renvoie chez elle. Dans le bureau, un cendrier tombe tout seul. Des extraits de documents évoquent déjà une « pluie de pierres » survenue des années plus tôt.` },
+        { n: `2`, cue: `Carrie rentre seule à pied.`, t: `Sur le chemin, Carrie rumine sa colère et, d'un simple regard, fait tomber de vélo un gamin qui se moque d'elle. Un long témoignage d'une ancienne voisine, Estelle Horan, raconte « le jour des pierres » : Carrie avait trois ans, sa mère l'avait surprise à parler de la poitrine de la voisine en maillot, et une pluie de glace puis de pierres s'était abattue sur la seule maison des White. Seule à la maison, Carrie se regarde dans le miroir avec dégoût ; le miroir se brise.` },
+        { n: `3`, cue: `Margaret White rentre du travail.`, t: `Prévenue par l'école, Margaret rentre plus tôt. Pour elle, les règles sont la marque du péché : elle traîne Carrie jusqu'au placard de prière. Pour la première fois, Carrie se rebelle et menace de « faire revenir les pierres ». Margaret la laisse sortir plus tôt que d'habitude, et Carrie comprend que sa mère a peur d'elle. Le soir, Sue confie à Tommy la honte qu'elle éprouve.` },
+        { n: `4`, cue: `Le lendemain, au lycée.`, t: `Miss Desjardin punit les filles : une semaine de retenue avec elle, sous peine d'être privées du bal de fin d'année. Chris refuse et lui tient tête ; Desjardin la plaque contre un casier. Chris perd sa place au bal, et son père avocat tente en vain de faire plier l'école. Elle rumine sa vengeance. Restée chez elle, Carrie s'exerce à déplacer des objets par la pensée et sent son pouvoir grandir.` },
+        { n: `5`, cue: `Sue Snell prend une décision.`, t: `Rongée par la culpabilité, Sue demande à Tommy d'inviter Carrie au bal à sa place, pour lui offrir une soirée normale. Tommy accepte à contrecœur. Carrie croit d'abord à une nouvelle blague, puis dit oui. Elle l'annonce à sa mère, qui hurle au péché : Carrie la fait taire grâce à son pouvoir et commence à coudre sa robe.` },
+        { n: `6`, cue: `Chris Hargensen et Billy Nolan.`, t: `Privée de bal, Chris convainc Billy de l'aider à humilier Carrie. Une nuit, avec sa bande, il se rend dans une ferme, tue deux cochons et recueille leur sang dans deux seaux. La première partie se referme sur ce piège en préparation.` }
+      ]
+    },
+    {
+      title: `Deuxième partie`, name: `La nuit du bal`,
+      items: [
+        { n: `7`, cue: `Le jour du bal.`, t: `Billy a installé les seaux au-dessus de la scène, juste au-dessus des trônes du roi et de la reine. Carrie se prépare dans la robe qu'elle a cousue, pendant que Margaret prie et la supplie de renoncer. Tommy vient la chercher. Sue, sans cavalier, reste chez elle ; Chris se cache derrière la scène et Billy attend sur le parking.` },
+        { n: `8`, cue: `L'arrivée au gymnase.`, t: `Carrie découvre le décor et passe une soirée inattendue : elle remet à sa place une fille moqueuse, Tommy est attentionné, et Miss Desjardin vient lui dire qu'elle est belle. Chez elle, Margaret, persuadée que le pouvoir de sa fille vient du démon, aiguise un couteau. Au vote du roi et de la reine, Carrie et Tommy l'emportent d'une seule voix. Ils montent sur les trônes. Derrière la scène, Chris tire la corde.` },
+        { n: `9`, cue: `Les seaux se renversent.`, t: `Le sang de porc inonde Carrie, et un seau assomme Tommy. Après un silence, la salle éclate de rire. Carrie s'enfuit, puis se retourne : elle verrouille les portes par la pensée et déclenche les arrosages automatiques. L'eau sur les câbles électriques électrocute les élèves, et le gymnase prend feu. Presque personne n'en sort vivant, Tommy compris.` },
+        { n: `10`, cue: `Carrie marche vers le centre-ville.`, t: `Couverte de sang, Carrie traverse Chamberlain et déchaîne sa colère : elle fait exploser des stations-service et une conduite de gaz, et la ville s'embrase. Les secours sont débordés. Témoignages et rapports reconstituent le chaos. Sue comprend que Carrie est à l'origine de tout et part vers la ville. Carrie entre dans une église pour prier.` },
+        { n: `11`, cue: `Carrie sort de l'église.`, t: `Elle arrache des câbles électriques et foudroie la foule de Carlin Street. Rentrée chez elle, elle retrouve sa mère, qui lui avoue l'avoir toujours vue comme le fruit du péché. Pendant une dernière prière, Margaret la poignarde à l'épaule ; Carrie arrête son cœur par la pensée. Mortellement blessée, elle rejoint le bar The Cavalier, où Chris et Billy tentent de l'écraser : elle prend le contrôle de leur voiture, qui s'écrase contre le bâtiment et prend feu. Sue la retrouve agonisante sur le parking. Par un dernier contact mental, Carrie comprend que Sue ne l'avait pas trahie, puis meurt. Sue s'enfuit et, dans un champ, se met à saigner.` }
+      ]
+    },
+    {
+      title: `Troisième partie`, name: `Décombres`,
+      items: [
+        { n: `12`, cue: `Après la nuit du bal.`, t: `Le bilan est vertigineux : des centaines de morts, une ville qui ne s'en relèvera pas. Une commission d'enquête conclut que le phénomène est lié à un gène de télékinésie et qu'un drame semblable reste improbable. Sue publie son témoignage, et Chamberlain se vide peu à peu. Le roman se clôt sur la lettre d'une femme qui raconte, émerveillée, que sa petite fille fait bouger les objets sans les toucher.` }
+      ]
+    }
+  ],
+  links: [
+    { t: `Chamberlain, la ville de Carrie, revient au détour d'autres livres : elle est citée dans Salem, dans la novella Le Corps (recueil Différentes saisons) et dans Jessie, et on la retrouve dans Cellulaire.` },
+    { t: `Dans L'Accident, un personnage compare les pouvoirs de Johnny Smith à ceux de « ce livre, Carrie » : dans l'univers de King, le roman existe aussi.` },
+    { t: `Carrie ouvre la lignée des personnages dotés d'un don chez King, avec Danny Torrance dans Shining et la petite Charlie McGee dans Charlie.`, to: `shining` },
+    { t: `Dans Ça, une pierre tombale au nom de Carrie White apparaît brièvement dans un cimetière du Maine.`, gate: `carrie` }
+  ],
+  conclusion: {
+    analyse: `Premier roman publié de King, Carrie est construit comme un dossier : récit, articles, témoignages et rapports d'enquête. Le lecteur connaît la catastrophe avant qu'elle arrive et cherche à comprendre comment on en est arrivé là. La télékinésie n'est que l'amplificateur d'une violence que tout le monde a laissée s'accumuler : les moqueries du lycée, l'indifférence des adultes, le fanatisme d'une mère.`,
+    emotions: `D'abord le malaise et la honte, dans la scène des vestiaires. Puis une pitié profonde pour Carrie, et une tension qui monte avec l'espoir fragile du bal : on voudrait que tout se passe bien, tout en sachant que non. Vient ensuite l'effroi, mêlé de vertige, quand la vengeance devient un massacre aveugle. La fin laisse une tristesse froide.`,
+    message: `Le harcèlement n'est jamais anodin : chaque moquerie et chaque silence nourrissent quelque chose. King montre aussi les ravages d'une éducation fondée sur la honte du corps et la peur du péché. Mais il refuse les camps trop simples : Sue tente sincèrement de réparer sa faute, et c'est cette bonne intention qui déclenche le drame. Le livre pose la question de la responsabilité collective, et de ce qui arrive quand une personne n'a plus aucun endroit où être protégée.`
+  }
+});
+
+</script>
+<script>
+BOOKS.push({
+  id: `marche-ou-creve`,
+  title: `Marche ou crève`,
+  original: `The Long Walk`,
+  year: 1979,
+  byline: `Stephen King, sous le nom de Richard Bachman`,
+  unit: `chapter`,
+  meta: `18 chapitres · 3 parties`,
+  cover: { bg: `#26282a`, fg: `#ece6d8`, motif: `road` },
+  art: `illustrations/marche-ou-creve.webp`,
+  note: `Découpage de l'édition Le Livre de Poche : 18 chapitres répartis en trois parties (Le départ, Sur la route, Le lapin). Les noms des marcheurs éliminés sont donnés quand le texte les nomme.`,
+  pitch: `Dans une Amérique sous régime militaire, cent adolescents prennent chaque année le départ de la Longue Marche, une épreuve suivie par tout le pays. La règle est simple : ne jamais descendre sous les 6,5 km/h. Chaque ralentissement vaut un avertissement ; au-delà de trois, on reçoit son « ticket », une balle. Le dernier encore debout gagne tout ce qu'il désire. Ray Garraty, seize ans, s'élance de la frontière canadienne, dans son Maine natal.`,
+  cast: [
+    [`Ray Garraty`, `16 ans, du Maine. Sa mère et sa petite amie, Jan, l'attendront sur le parcours, à Freeport.`],
+    [`Peter McVries`, `Marcheur au visage balafré, ironique et lucide.`],
+    [`Stebbins`, `Solitaire mystérieux qui marche toujours en queue de peloton.`],
+    [`Art Baker`, `Garçon calme et chaleureux, venu du Sud.`],
+    [`Hank Olson`, `Le fanfaron du départ.`],
+    [`Barkovitch`, `Provocateur que presque tout le monde déteste.`],
+    [`Scramm`, `Costaud, marié jeune, donné favori par les parieurs.`],
+    [`Abraham, Collie Parker, Pearson, Harkness`, `D'autres marcheurs du groupe de Garraty.`],
+    [`Le Commandant`, `Organisateur de la Marche, figure adulée du public.`]
+  ],
+  parts: [
+    {
+      title: `Première partie`, name: `Le départ`,
+      items: [
+        { n: `1`, t: `Le 1er mai au matin, à la frontière du Canada, Garraty quitte sa mère et rejoint les cent marcheurs. Il fait la connaissance de McVries, Olson, Baker et Barkovitch, et remarque Stebbins, à l'écart. À 9 heures, le Commandant donne le départ : chaque ralentissement vaut un avertissement, une heure de marche sans faute en efface un, et il n'y a pas de quatrième avertissement. Les premiers tombent vite ; Garraty en reçoit un pour avoir embrassé une spectatrice. McVries prévient : s'il tombe, personne ne le relèvera.` },
+        { n: `2`, t: `Garraty rencontre Harkness, qui veut écrire un livre sur la Marche. Les corps commencent à souffrir et Olson sent ses genoux se raidir. Curley, pris d'une crampe, est le premier à recevoir son ticket : les soldats l'abattent, et Stebbins enjambe le corps. On apprend que le record de distance avant la première élimination est battu. Dans les collines, Ewing, mal chaussé, est abattu à son tour.` },
+      ]
+    },
+    {
+      title: `Deuxième partie`, name: `Sur la route`,
+      items: [
+        { n: `3`, t: `La pluie arrive. Olson faiblit déjà ; McVries le rassure. Zuck, blessé au genou, est abattu, et Gribble traite le Commandant d'assassin. Un journaliste interroge les marcheurs. On entre à Caribou.` },
+        { n: `4`, t: `La mère du jeune Percy tente de récupérer son fils et se fait arrêter. Plusieurs garçons tombent dans une longue côte. Garraty somnole et rêve de Jan et de sa mère. À la nuit tombée, Stebbins raconte qu'il a vu passer la Marche quand il avait treize ans.` },
+        { n: `5`, t: `Les conversations deviennent absurdes pour tenir. On annonce un pont coupé qui imposerait une pause ; Olson exulte, mais le pont est réparé à temps. Barkovitch provoque Rank jusqu'à ce que celui-ci, fou de rage, soit abattu ; Baker et McVries le traitent d'assassin. À minuit, Garraty et McVries s'avouent qu'ils ne pensent pas gagner.` },
+        { n: `6`, t: `La nuit la plus longue de la vie de Garraty : les éliminations s'enchaînent, dont celle de Davidson. Il repense au seul mort qu'il ait vu avant, un ami tué par une voiture. À l'aube, McVries et Garraty se confient, rient et partagent des macarons. McVries frôle la mort en voulant défier les soldats ; Garraty l'en dissuade. Stebbins se dit sûr de gagner. Harkness, pris d'une crampe, se met à presque courir en tête.` },
+        { n: `7`, t: `La foule grossit au bord de la route. Scramm, marié et futur père, se dit certain de l'emporter. Gribble craque, se jette sur une spectatrice et est abattu. Plus loin, Harkness s'effondre : c'est le premier du groupe de Garraty à tomber. Percy tente de s'enfuir dans les bois et est abattu. Garraty révèle que son père a été emmené par les Escouades du régime. McVries affirme qu'ils sont tous là parce qu'une part d'eux veut mourir.` },
+        { n: `8`, t: `Cap des 100 miles, sous les caméras. Pris d'un fou rire, Garraty tombe à genoux ; McVries le relève et lui sauve la vie : ils sont quittes, mais il ne recommencera pas. Stebbins explique comment la foule est organisée, ce qui intrigue Garraty. McVries raconte l'origine de sa cicatrice, une blessure infligée par son ancienne petite amie. Il dit qu'ils ont tous été dupés.` },
+        { n: `9`, t: `Chaleur écrasante : plusieurs marcheurs tombent d'insolation. Olson, la langue noircie, ne mange plus. Un homme jette des tranches de pastèque aux marcheurs malgré la police ; Stebbins refuse d'en prendre, ce qui inquiète Garraty. Un violent orage éclate, puis une averse de grêle ; Jensen, paniqué, sort de la route et est abattu.` },
+        { n: `10`, t: `Le soir, Stebbins pousse Garraty à interroger Olson pour percer son secret. Olson, à bout, finit par se jeter sur les soldats et meurt en criant qu'il s'y est mal pris. Garraty, effondré, doit être arraché à son corps par McVries. Il repense à son père, qu'il n'a pas vraiment regretté.` },
+        { n: `11`, t: `Traversée d'Oldtown, puis arrivée sur l'autoroute du Maine, saluée par une salve de 400 coups de canon. Parker assure que les plus forts tiendront longtemps et qu'ils veulent tous vivre. Garraty somnole et revoit des souvenirs d'enfance, dont le jour où il a blessé son ami Jimmy avec une carabine à plomb.` },
+        { n: `12`, t: `Au matin, Scramm est atteint d'une pneumonie. Les marcheurs décident que le vainqueur aidera sa femme enceinte ; même Barkovitch et Stebbins acceptent. Stebbins insinue que la Marche est truquée. Scramm fait ses adieux, rejoint Mike, l'un des deux frères en blouson de cuir, malade lui aussi, et tous deux vont s'asseoir face aux soldats.` },
+        { n: `13`, t: `Une crampe oblige Garraty à s'asseoir ; il reçoit ses trois avertissements, mais repart à quelques secondes de la fin. Avec McVries, il prend la tête du peloton pour effacer ses avertissements. Ils racontent comment ils ont été sélectionnés. Abraham explique que c'est une dissertation provocatrice, écrite pour plaisanter, qui l'a mené ici.` },
+        { n: `14`, t: `Après Augusta, la foule devient une sorte de monstre. Parker avoue qu'il a peur et le mal du pays. Garraty affronte Barkovitch, à bout, et le fait pleurer avant d'en avoir honte. Quince est abattu. Barkovitch, devenu fou, s'arrache la gorge.` },
+        { n: `15`, t: `Pearson est tombé dans la nuit. McVries pense que Stebbins gagnera. Stebbins blesse Garraty en lui disant qu'il ne verra pas Jan dans la foule. Le talon de Garraty lâche, et il marche en chaussettes. À Freeport, il aperçoit enfin Jan et sa mère. Il se précipite vers elles au risque de sa vie ; McVries le ramène sur la route, et ils reçoivent tous deux leur troisième avertissement.` },
+        { n: `16`, t: `Après Portland, les survivants se jurent de ne plus s'entraider : les amitiés se défont. Parker attaque les soldats, en tue un et meurt en appelant les autres à le suivre. Baker tombe et se blesse à la tête, mais repart. La Marche franchit la frontière du New Hampshire sous les feux d'artifice. Juste avant l'aube, Abraham s'effondre.` },
+      ]
+    },
+    {
+      title: `Troisième partie`, name: `Le lapin`,
+      items: [
+        { n: `17`, t: `Ils ne sont plus qu'une poignée. Stebbins révèle qu'il est le « lapin » : un fils illégitime du Commandant, placé dans la Marche pour pousser les autres à aller plus loin que jamais. Les marcheurs entrent dans le Massachusetts et les derniers tombent un à un. Baker, à bout, fait ses adieux à Garraty et lui demande de ne pas le regarder mourir.` },
+        { n: `18`, t: `Restent Garraty, McVries et Stebbins. McVries s'assoit, apaisé ; Garraty, trop faible, ne peut pas le relever. Le soir, alors que Garraty est sûr que Stebbins va gagner, c'est Stebbins qui s'effondre. Garraty est le dernier. Mais il ne s'arrête pas : il aperçoit une silhouette sombre qui lui fait signe au loin, et se remet à marcher, puis à courir vers elle.` }
+      ]
+    }
+  ],
+  links: [
+    { t: `Peu de liens directs avec le reste de l'œuvre : c'est le tout premier roman écrit par King, commencé à l'université bien avant Carrie, puis publié sous le pseudonyme de Richard Bachman.` },
+    { t: `Garraty est originaire de Pownal, près de Freeport, et la Marche descend la Route 1 du Maine depuis la frontière canadienne, par Limestone, Caribou et Oldtown.` },
+    { t: `Son cousin dans l'œuvre de Bachman : Running Man, autre jeu télévisé mortel dans une Amérique autoritaire.` },
+    { t: `Misery devait lui aussi paraître sous le nom de Bachman, avant que le pseudonyme ne soit percé à jour.`, to: `misery` }
+  ],
+  conclusion: {
+    analyse: `Écrit par King quand il était étudiant, bien avant Carrie, puis publié sous le pseudonyme de Richard Bachman, Marche ou crève est une dystopie d'une simplicité terrible : une route, une règle, cent garçons. Presque tout passe par les dialogues et par des corps qui lâchent. Le monde autour (le régime, les Escouades, la foule avide) reste à peine esquissé, ce qui le rend d'autant plus inquiétant. La fin, ouverte, laisse Garraty vainqueur mais brisé, incapable de s'arrêter.`,
+    emotions: `Une tension continue, épuisante, presque physique : on compte les avertissements avec eux. L'attachement aux personnages rend chaque ticket douloureux, surtout pour McVries, Baker ou Olson. Il y a de vrais moments de fraternité et d'humour, qui rendent le reste encore plus cruel. Le dernier chapitre laisse un vertige glacé.`,
+    message: `Le livre interroge notre goût pour le spectacle de la souffrance : la foule, la télévision, les paris. Il montre une jeunesse qui se sacrifie volontairement à un système qui la fascine, et la façon dont la compétition détruit peu à peu la solidarité. Il laisse une question sans réponse : pourquoi sont-ils venus ? Gagner, ici, ne veut plus rien dire.`
+  }
+});
+
+</script>
+<script>
+BOOKS.push({
+  id: `misery`,
+  title: `Misery`,
+  original: `Misery`,
+  year: 1987,
+  unit: `chapter`,
+  meta: `119 chapitres · 4 parties`,
+  cover: { bg: `#dfe3e4`, fg: `#17191b`, motif: `keys` },
+  art: `illustrations/misery.webp`,
+  note: `Misery compte 119 chapitres, parfois longs d'une seule ligne, répartis en quatre parties dont la numérotation repart à 1. Ils sont regroupés ici par séquences.`,
+  pitch: `Paul Sheldon, auteur à succès de la saga sentimentale Misery, vient enfin d'achever un roman « sérieux ». Après un accident de voiture en pleine tempête de neige dans le Colorado, il se réveille les jambes brisées dans la maison isolée d'une ancienne infirmière qui l'a sauvé : Annie Wilkes, sa plus grande admiratrice. Elle est aux petits soins… tant qu'il ne la contrarie pas.`,
+  cast: [
+    [`Paul Sheldon`, `Écrivain, auteur des romans Misery, qu'il rêve de laisser derrière lui.`],
+    [`Annie Wilkes`, `Ancienne infirmière qui vit seule dans une ferme près de Sidewinder, admiratrice fervente de Paul.`],
+    [`Misery Chastain`, `L'héroïne de la saga de Paul, personnage de fiction dans le roman.`],
+    [`Ian et Geoffrey`, `Les deux hommes de la vie de Misery, dans les romans de Paul.`]
+  ],
+  parts: [
+    {
+      title: `Première partie`, name: `Annie`,
+      items: [
+        { n: `I·1–13`, label: `Chapitres 1 à 13`, t: `Paul émerge d'un brouillard de douleur : quelqu'un vient de lui faire du bouche-à-bouche. Il est alité chez Annie Wilkes, près de Sidewinder, les jambes broyées. Elle l'a tiré de sa voiture accidentée après qu'il eut fêté, ivre, la fin de son nouveau roman, Fast Cars. Plutôt que de l'emmener à l'hôpital, elle le soigne elle-même et le rend dépendant à un puissant antidouleur, le Novril. Paul comprend vite qu'elle est dangereusement instable : la grossièreté de son manuscrit la met en rage, elle l'oblige à avaler ses cachets avec l'eau sale d'un seau, et elle laisse échapper qu'elle a été jugée à Denver. Puis Annie termine le dernier Misery et découvre que Paul a fait mourir l'héroïne : folle de rage, elle part en l'enfermant, sans ses médicaments.` },
+        { n: `I·14–28`, label: `Chapitres 14 à 28`, t: `Annie abandonne Paul 51 heures, sans eau ni médicaments. À son retour, elle l'oblige à brûler l'unique exemplaire de Fast Cars. Puis elle l'installe dans un fauteuil roulant et lui offre une vieille machine à écrire, à laquelle manque la touche « n » : il va écrire, rien que pour elle, Le Retour de Misery. Paul comprend qu'elle le tuera le jour où sa voiture sera retrouvée. Il se voit en Shéhérazade, condamné à raconter pour survivre.` },
+        { n: `I·29–36`, label: `Chapitres 29 à 36`, t: `Paul demande un meilleur papier ; Annie, vexée, lui frappe le genou brisé avant de partir en ville. Torturé par la douleur, il crochète la serrure avec une épingle à cheveux, se traîne en fauteuil jusqu'à la salle de bain du rez-de-chaussée et y vole des boîtes de Novril. Il regagne sa chambre juste avant le retour d'Annie.` }
+      ]
+    },
+    {
+      title: `Deuxième partie`, name: `Misery`,
+      items: [
+        { n: `II·1–6`, label: `Chapitres 1 à 6`, t: `Premier chapitre du Retour de Misery : Paul a simplement effacé la mort de l'héroïne. Annie le rejette : c'est une tricherie, comme dans les feuilletons de son enfance où le héros s'en sortait de façon déloyale. Piqué au vif, Paul reprend tout et cherche une solution honnête : Misery aurait été enterrée vivante.` },
+        { n: `II·7–17`, label: `Chapitres 7 à 17`, t: `Annie approuve la nouvelle version. Un matin, une voiture arrive : elle menotte et bâillonne Paul. C'est un employé venu réclamer des impôts impayés ; Paul propose de les régler pour l'amadouer, puis efface les traces que son fauteuil a laissées sur la porte. Le roman avance, et Paul y prend un plaisir inattendu. Au printemps, Annie sombre dans une dépression terrifiante : elle se gave, se frappe, parle de mourir ensemble. Puis elle part s'isoler dans son refuge des collines, son « coin pour rire ». Seul, Paul sort de sa chambre : les portes sont verrouillées, la cour inondée ; il rapporte un peu de nourriture en prenant soin de ne laisser aucune trace.` },
+        { n: `II·18–20`, label: `Chapitres 18 à 20`, t: `Dans le salon, Paul découvre l'album de souvenirs d'Annie : coupures de presse et avis de décès. Il reconstitue la vérité : son père, une colocataire, des patients âgés, puis des nouveau-nés à l'hôpital de Boulder. Jugée à Denver, Annie a été acquittée faute de preuves. Les dernières pages parlent de la disparition de Paul. Il cache un couteau de boucher sous son matelas.` },
+        { n: `II·21–23`, label: `Chapitres 21 à 23`, t: `Annie revient et lui injecte un calmant. Elle a une bonne nouvelle : la fonte des neiges a emporté la voiture de Paul, comme elle a emporté autrefois le corps d'un jeune homme qu'elle avait tué. Elle sait que Paul est sorti et a trouvé le couteau. Pour qu'il ne recommence jamais, elle lui tranche le pied gauche à la hache et cautérise la plaie au chalumeau.` }
+      ]
+    },
+    {
+      title: `Troisième partie`, name: `Paul`,
+      items: [
+        { n: `III·1–10`, label: `Chapitres 1 à 10`, t: `Des semaines ont passé. Le récit alterne entre les chapitres du Retour de Misery, où Ian et Geoffrey partent en Afrique au pays d'une déesse des abeilles, et le présent. La machine à écrire perd ses touches une à une, jusqu'au « e ». Paul revient sur ce qui a suivi l'amputation, et sur le jour où Annie lui a tranché le pouce. Quand il sort de ses souvenirs, une voiture de police est garée devant la maison.` },
+        { n: `III·11–22`, label: `Chapitres 11 à 22`, t: `Paul compte les jours et approche de la fin du roman. Un jeune policier, Duane Kushner, se présente pendant qu'Annie tond la pelouse. Paul crie et lance un cendrier par la fenêtre ; le policier le reconnaît. Annie le tue sauvagement, d'abord avec un piquet de croix, puis avec la tondeuse. Elle enferme Paul dans la cave aux rats le temps de faire disparaître le corps et la voiture, en promettant de les tuer tous si d'autres policiers le voient.` },
+        { n: `III·23–33`, label: `Chapitres 23 à 33`, t: `Dans la cave, la vue du petit barbecue donne une idée à Paul : il vole le bidon d'allume-feu et le cache sur lui. Annie le remonte dans sa chambre. Deux policiers viennent l'interroger sur la disparition de Kushner ; Paul se tait, décidé à se venger lui-même. Les curieux et les journalistes recommencent à harceler Annie. Paul écrit à toute vitesse.` },
+        { n: `III·34–48`, label: `Chapitres 34 à 48`, t: `Paul achève Le Retour de Misery. Annie, ravie, lui offre caviar et champagne. Il tend son piège : il arrose une pile de feuilles de liquide inflammable et met le feu au « manuscrit » sous ses yeux. Annie se jette sur les flammes ; Paul l'assomme avec la machine à écrire et lui enfonce des pages brûlantes dans la gorge. Elle s'effondre ; il l'enferme dans la chambre. Les policiers arrivent et trouvent Paul… mais la chambre est vide.` }
+      ]
+    },
+    {
+      title: `Quatrième partie`, name: `La Déesse`,
+      items: [
+        { n: `IV·1–12`, label: `Chapitres 1 à 12`, t: `Neuf mois plus tard, à New York. Le vrai manuscrit était caché : Paul n'avait brûlé que des pages vierges, et Le Retour de Misery va paraître. Annie a été retrouvée morte dans sa grange, le crâne fracturé, une tronçonneuse près d'elle. Paul marche avec une prothèse, boit trop, et Annie le hante encore. Puis, un jour, une idée d'histoire lui vient, et il se remet à écrire, en pleurant.` }
+      ]
+    }
+  ],
+  links: [
+    { t: `Annie vit près de Sidewinder, au Colorado : le même village que celui qui se trouve au pied de l'Overlook, l'hôtel de Shining.`, to: `shining` },
+    { t: `Le roman fait allusion à ce qu'il reste de l'Overlook après les événements de Shining.`, gate: `shining` },
+    { t: `Paul Sheldon est cité dans Rose Madder, et Annie Wilkes dans Sac d'os.` },
+    { t: `Misery devait d'abord paraître sous le pseudonyme de Richard Bachman, comme Marche ou crève, mais le secret a été éventé pendant l'écriture.`, to: `marche-ou-creve` }
+  ],
+  conclusion: {
+    analyse: `Huis clos à deux personnages, Misery est à la fois un thriller d'une rare cruauté et une réflexion de King sur son métier. Prisonnier, Paul retrouve le goût d'écrire grâce à la contrainte même qui le détruit. Annie incarne le lecteur possessif qui croit posséder l'auteur et ses personnages. Les chapitres du Retour de Misery, insérés dans le récit, rendent palpable le pouvoir de la fiction, capable de faire tenir un homme debout.`,
+    emotions: `Claustrophobie, douleur presque physique, dégoût (la hache, le pouce, la tondeuse). On oscille entre terreur, pitié et une étrange fascination pour Annie. L'espoir renaît à chaque tentative de Paul, puis s'effondre. La fin libère sans guérir : on sort du livre épuisé.`,
+    message: `Le livre parle de dépendance : au Novril, à l'alcool, et même aux lecteurs. Il interroge la relation entre un artiste et son public, et montre que l'écriture peut être à la fois une prison et une planche de salut. King y affronte aussi ses propres démons de l'époque, l'addiction et la pression des fans.`
+  }
+});
+
+</script>
+<script>
+BOOKS.push({
+  id: `shining`,
+  title: `Shining`,
+  original: `The Shining`,
+  year: 1977,
+  unit: `chapter`,
+  meta: `58 chapitres · 5 parties`,
+  cover: { bg: `#16241d`, fg: `#e9e3d2`, motif: `room217` },
+  art: `illustrations/shining.webp`,
+  note: `Découpage de l'édition originale : 58 chapitres en 5 parties. Si la numérotation de votre édition diffère, fiez-vous à l'ordre des événements.`,
+  pitch: `Ancien professeur et écrivain qui lutte contre l'alcool et sa propre colère, Jack Torrance accepte un poste de gardien d'hiver à l'Overlook, un grand hôtel isolé dans les Rocheuses. Avec sa femme Wendy et leur fils Danny, cinq ans, il va passer des mois coupé du monde par la neige. Mais Danny possède un don, le « shining », et l'hôtel a une très longue mémoire.`,
+  cast: [
+    [`Jack Torrance`, `Ancien professeur et auteur de nouvelles, abstinent depuis plus d'un an, qui écrit une pièce de théâtre.`],
+    [`Wendy Torrance`, `Sa femme, aimante et lucide, marquée par une relation difficile avec sa propre mère.`],
+    [`Danny Torrance`, `5 ans. Il perçoit les pensées des autres et voit parfois des fragments d'avenir.`],
+    [`Tony`, `L'« ami imaginaire » de Danny, qui lui apparaît au loin et lui montre des visions.`],
+    [`Dick Hallorann`, `Chef cuisinier de l'Overlook, qui passe l'hiver en Floride.`],
+    [`Stuart Ullman`, `Gérant de l'hôtel, pointilleux et méprisant.`],
+    [`Al Shockley`, `Riche ami de Jack et ancien compagnon de beuverie, membre du conseil d'administration de l'hôtel.`],
+    [`Watson`, `Homme d'entretien de l'Overlook.`]
+  ],
+  parts: [
+    {
+      title: `Première partie`, name: `Préliminaires`,
+      items: [
+        { n: `1`, t: `Jack passe un entretien d'embauche avec Stuart Ullman, le gérant de l'Overlook, qu'il méprise d'emblée. Ullman ne l'engage que sur l'insistance d'Al Shockley. Il décrit l'hôtel, son isolement total l'hiver, et raconte le drame du précédent gardien, Grady : rendu fou par l'isolement, il a tué sa femme et ses deux filles avant de se suicider. Jack assure qu'il ne boit plus et qu'il compte profiter de l'hiver pour écrire sa pièce.` },
+        { n: `2`, t: `À Boulder, dans un appartement miteux, Wendy attend le retour de Jack pendant que Danny guette la voiture, assis sur le trottoir. Elle repense à ce qui les a menés là : Jack a perdu son poste de professeur au lycée de Stovington, dans le Vermont, après avoir frappé un élève, George Hatfield, qui crevait ses pneus. Danny demande si son père a fait à George ce qu'il lui a fait à lui. Wendy finit par pleurer seule dans sa chambre.` },
+        { n: `3`, t: `Watson, l'homme d'entretien, fait visiter le sous-sol à Jack. Il lui montre la vieille chaudière : la pression y monte sans cesse et doit être évacuée régulièrement, faute de quoi tout peut exploser. Bavard et grossier, il raconte aussi quelques anecdotes sur l'hôtel et les gens qui y sont morts, en se moquant de la peur qu'en a Ullman.` },
+        { n: `4`, t: `Sur le trottoir, Danny capte les pensées de ses parents : la peur du « DIVORCE », et celle que Jack recommence la « Mauvaise Chose », boire. On apprend que Jack, ivre, lui a cassé le bras deux ans plus tôt. Tony apparaît et lui montre une vision : un grand bâtiment sous la neige, un miroir où brille le mot REDRUM, et une silhouette armée d'un maillet qui le poursuit dans un couloir en hurlant de venir « prendre sa médecine ». Quand Jack arrive, Danny croit voir un maillet ensanglanté sur le siège de la voiture. Ce n'est qu'un sac de courses.` },
+        { n: `5`, t: `Jack appelle Al Shockley depuis une cabine pour le remercier, loin des oreilles de Wendy. Il se souvient de sa descente aux enfers : les nuits de beuverie avec Al, la nuit où leur voiture a percuté un vélo d'enfant sans qu'ils trouvent personne, et les heures passées un revolver à la main. Depuis, ils ont arrêté de boire tous les deux. Al lui laisse espérer que le lycée pourrait le reprendre au printemps. Dans la voiture, Danny voudrait raconter sa vision, mais son père est ailleurs.` },
+        { n: `6`, t: `La nuit, Wendy ne parvient pas à dormir. Elle repense à leur mariage, aux années d'alcool de Jack, au soir où il a cassé le bras de Danny et où elle a envisagé le divorce, puis au matin où il a arrêté de boire. Elle s'inquiète des absences de Danny et de Tony, et pense à sa propre mère, avec qui elle est brouillée.` },
+        { n: `7`, t: `Danny se réveille d'un cauchemar où la silhouette au maillet le traque. À la fenêtre, il appelle Tony, dont la voix lointaine lui souffle de ne pas y aller. En se rendormant, il revoit le mot REDRUM.` }
+      ]
+    },
+    {
+      title: `Deuxième partie`, name: `Jour de fermeture`,
+      items: [
+        { n: `8`, t: `La famille monte vers l'hôtel dans la vieille Volkswagen, par une route de montagne vertigineuse. Wendy est impressionnée, Danny inquiet. En apercevant l'Overlook, l'enfant reconnaît le bâtiment de ses visions.` },
+        { n: `9`, t: `C'est le dernier jour de la saison et le hall grouille de clients qui partent. Ullman accueille les Torrance. Danny découvre le terrain de roque, un jeu qui se joue avec des maillets, et les animaux taillés dans des haies près de l'aire de jeux. Il mesure combien ils vont être seuls tout l'hiver, et capte malgré lui les pensées crues d'une cliente.` },
+        { n: `10`, t: `Dick Hallorann, le chef cuisinier, fait visiter les cuisines et les réserves, pleines pour l'hiver. Il appelle Danny « doc », un surnom que personne ne lui a dit, et Danny l'entend lui proposer de venir en Floride… dans sa tête. Au bar, Hallorann prévient Jack qu'il n'y reste plus une goutte d'alcool.` },
+        { n: `11`, t: `Dans sa voiture, Hallorann explique à Danny qu'ils partagent un don, que sa grand-mère appelait le « shining ». Danny lui envoie un bonjour mental d'une force qui le sidère. Hallorann l'avertit : l'hôtel garde des traces du passé, et certaines personnes y voient des choses, comme une femme de chambre dans la chambre 217. Il lui fait promettre de ne jamais y entrer, et lui dit de l'appeler par la pensée en cas de besoin.` },
+        { n: `12`, t: `Ullman fait visiter l'hôtel aux Torrance : les étages, l'ascenseur, la suite présidentielle où ont dormi des présidents. Là, Danny voit des éclaboussures de sang et de cervelle sur le mur, que personne d'autre ne remarque. Ils passent devant la chambre 217, puis découvrent leur appartement.` },
+        { n: `13`, t: `Ullman et les derniers employés s'en vont. Debout sur le perron, Jack a l'étrange sensation de rapetisser pendant que l'hôtel, lui, grandit et devient menaçant. Il fait rentrer sa famille.` }
+      ]
+    },
+    {
+      title: `Troisième partie`, name: `Le nid de guêpes`,
+      items: [
+        { n: `14`, t: `Le 20 octobre, Jack refait la toiture quand une guêpe le pique : il découvre un nid sous les bardeaux. Seul là-haut, il repense à son alcoolisme, puis à George Hatfield, l'élève bègue qu'il a exclu de l'équipe de débat et qui l'a accusé d'avoir avancé le chronomètre. Il l'a tabassé en le surprenant à crever ses pneus. Persuadé d'aller mieux, Jack redescend chercher un insecticide.` },
+        { n: `15`, t: `Wendy et Danny rentrent de Sidewinder. Wendy se dit plus heureuse qu'elle ne l'a jamais été depuis son mariage. Jack offre à Danny le nid de guêpes, vidé à l'insecticide, comme son propre père l'avait fait pour lui. Wendy, qui déteste tout ce qui pique, n'est pas rassurée.` },
+        { n: `16`, t: `Jack écrit de nouveau. Un soir, Danny s'enferme dans la salle de bain et tombe en transe ; Jack enfonce la porte. L'enfant murmure « roque », « redrum », et parle de bégaiement et de chronomètre, ce qui trouble profondément Jack, qui ne lui a jamais parlé de George. La nuit, des guêpes sortent du nid supposé vide : Danny est piqué onze fois. Jack jure les avoir toutes tuées, et commence à moins aimer l'hôtel.` },
+        { n: `17`, t: `Les Torrance emmènent Danny chez le docteur Edmonds, à Sidewinder. Pendant l'examen, l'enfant tombe en transe : Tony lui montre l'hôtel la nuit, la silhouette au maillet et le mot REDRUM. Le médecin conclut que Tony est une invention de l'esprit d'un enfant intelligent, angoissé par les tensions de ses parents. Jack et Wendy repartent à moitié rassurés.` },
+        { n: `18`, t: `Au sous-sol, Jack découvre un vieil album de coupures de presse sur l'Overlook : ventes successives, propriétaires douteux comme le millionnaire Horace Derwent, liens avec la mafia, fêtes fastueuses, une invitation à un bal masqué, et le meurtre d'un truand dans la suite présidentielle en 1966. Fasciné, il y voit le sujet d'un livre.` },
+        { n: `19`, t: `Danny, la clé passe-partout en poche, s'arrête devant la chambre 217 malgré sa promesse à Hallorann. Il renonce, mais doit repasser devant une vieille lance à incendie enroulée au mur. L'embout tombe sur le tapis ; terrifié, Danny croit sentir le tuyau ramper derrière lui comme un serpent et s'enfuit jusqu'à l'escalier.` },
+        { n: `20`, t: `Par curiosité et par rancune, Jack téléphone à Ullman pour l'interroger sur le passé trouble de l'hôtel. Ullman se fâche. Peu après, Al Shockley rappelle Jack, furieux, et lui interdit d'écrire sur l'Overlook. Humilié, Jack cède en apparence, mais la colère couve.` },
+        { n: `21`, t: `Cette nuit-là, chacun veille de son côté. Jack regrette son appel et en veut à Al. Wendy envisage de partir avec Danny chez sa mère pour l'hiver. Danny perçoit l'inquiétude de ses parents et redoute le retour de la « Mauvaise Chose ».` },
+        { n: `22`, t: `En descendant à Sidewinder, Wendy propose à Danny de passer l'hiver ailleurs, chez sa mère. Danny explique que son père se sent bien à l'hôtel et a peur de ne pas retrouver de travail. Il ne veut pas aller chez sa grand-mère et supplie de rester avec Jack. Wendy accepte. Quand elle lui demande si Jack a recommencé à boire, il répond non… en pensant « pas encore ».` },
+        { n: `23`, t: `Jack taille les animaux de buis avant la neige. En traversant l'aire de jeux, il entend un bruit : le chien semble accroupi, prêt à bondir, le lapin est à quatre pattes, les lions se sont rapprochés du chemin. Quand il rouvre les yeux, tout est redevenu normal. Il met ça sur le compte de la fatigue et décide de ne rien dire à Wendy.` },
+        { n: `24`, t: `La neige se met à tomber et ne s'arrête plus ; la route disparaît. Sur le perron, chacun ressent un soulagement secret : la décision de rester ne leur appartient plus. Ils rentrent, comme avalés par l'hôtel.` },
+        { n: `25`, t: `Danny finit par céder et ouvre la chambre 217 avec la clé passe-partout. Dans la salle de bain, derrière le rideau de douche, gît une femme morte depuis longtemps, gonflée et livide. Elle se redresse et tend les mains vers lui. Danny s'enfuit, mais n'arrive pas à rouvrir la porte…` }
+      ]
+    },
+    {
+      title: `Quatrième partie`, name: `Bloqués par la neige`,
+      items: [
+        { n: `26`, t: `Au même moment, Wendy s'endort et Jack somnole au sous-sol, plongé dans les archives. Il a décidé d'écrire son livre sur l'hôtel malgré Al. Il rêve de son père, infirmier alcoolique qui battait sa mère à coups de canne en lui ordonnant de « prendre sa médecine ». Somnambule, il entend la voix de son père sortir de la radio et lui dire de tuer sa femme et son fils. Il fracasse l'appareil. Wendy le trouve devant la radio détruite : leur dernier moyen d'appeler à l'aide est la motoneige.` },
+        { n: `27`, t: `Wendy découvre Danny en haut de l'escalier, figé, suçant son pouce, le cou couvert d'ecchymoses. Persuadée que Jack l'a étranglé, elle s'enferme avec l'enfant et menace de le tuer s'il le touche encore. Puis elle se décide à affronter Jack, qu'elle entend chanter quelque part dans l'hôtel.` },
+        { n: `28`, t: `Blessé d'être accusé, Jack s'est réfugié au bar désert du Colorado Lounge. Il s'imagine commander à boire à un barman qu'il baptise Lloyd. Wendy le rejoint avec Danny. L'enfant sort de sa torpeur et crie que c'était « elle », la femme de la chambre 217.` },
+        { n: `29`, t: `Dans la cuisine, Jack fait boire à Danny un thé additionné de sherry. L'enfant raconte enfin tout : le shining, Hallorann, le sang dans la suite présidentielle, et la femme de la baignoire qui l'a saisi à la gorge. Wendy reproche à Jack ses vieux réflexes de buveur et son projet de livre. Jack décide d'aller voir la chambre 217.` },
+        { n: `30`, t: `Jack monte à la 217. La salle de bain semble vide, mais il croit percevoir une présence derrière le rideau de douche, et des bruits le suivent. Il refuse d'y croire et ressort précipitamment ; derrière lui, la poignée de la porte bouge. En redescendant, il décide de mentir.` },
+        { n: `31`, t: `Jack annonce à Wendy et Danny qu'il n'y a rien dans la chambre 217. Il sourit pour les rassurer… et n'a jamais eu autant besoin d'un verre.` },
+        { n: `32`, t: `Wendy veut faire descendre Danny au plus vite ; Jack lui oppose la neige et l'argent. Elle se souvient de la motoneige, et Jack promet d'aller la vérifier. Plus tard, il cherche des explications rationnelles aux bleus de Danny, rumine son humiliation et se surprend à imaginer étrangler Wendy. Il fait ensuite un cauchemar où il frappe George Hatfield avec un maillet de roque, avant de comprendre que c'est Danny qu'il frappe, pendant que l'hôtel rit.` },
+        { n: `33`, t: `Au matin, dans la remise, Jack prépare la motoneige, cette « guêpe mécanique » qu'il déteste. Il comprend que l'hôtel agit aussi sur lui, et que c'est Danny qu'il veut vraiment. Persuadé que partir serait une erreur, il arrache la magnéto et la jette dans la neige, puis va faire une bataille de boules de neige avec son fils.` },
+        { n: `34`, t: `Quelques jours après Thanksgiving, les bleus de Danny s'estompent. L'enfant joue dans l'aire de jeux enneigée et se sent piégé dans un tunnel de béton. En sortant, il voit les animaux de buis bouger : les lions avancent, le chien tourne la tête. Il fuit en raquettes vers l'hôtel, tombe sur le perron avec une douleur au mollet et se jette dans les bras de son père.` },
+        { n: `35`, t: `Dans le hall, Danny raconte que les animaux de buis l'ont poursuivi. Jack, qui les voit immobiles sous la neige, refuse d'y croire, mais la jambe de l'enfant dit autre chose. La tension monte entre Wendy et lui.` },
+        { n: `36`, t: `En pleine nuit, l'ascenseur se met en marche tout seul. Les Torrance le trouvent jonché de confettis, de serpentins et d'un masque de soirée. Jack s'entête à parler de court-circuit et de vieux restes de fête ; Wendy comprend qu'il a pris le parti de l'hôtel.` },
+        { n: `37`, t: `Danny s'aventure dans la salle de bal et contemple la vieille pendule sous sa cloche de verre. Tony lui apparaît une dernière fois, lointain et affaibli, et lui fait comprendre ce qui l'attend s'il reste. L'enfant comprend qu'il doit appeler à l'aide.` }
+      ]
+    },
+    {
+      title: `Cinquième partie`, name: `Questions de vie et de mort`,
+      items: [
+        { n: `38`, t: `En Floride, Hallorann est frappé par un appel mental d'une violence inouïe : Danny le supplie de venir. Sans hésiter, il laisse tout tomber et cherche à rejoindre le Colorado au plus vite.` },
+        { n: `39`, t: `Wendy trouve Danny assis dans l'escalier, la lèvre en sang : il a appelé Tony et est tombé d'une chaise. Tony ne peut plus venir, l'hôtel l'en empêche. Danny explique qu'il est la clé qui a remonté l'hôtel, que Jack a saboté la motoneige et qu'il va essayer de leur faire du mal. Il a appelé Hallorann, sans savoir s'il a été entendu. Wendy s'arme du plus grand couteau de la cuisine. Autour de Danny, l'hôtel murmure.` },
+        { n: `40`, t: `Au sous-sol, Jack s'enfonce dans les archives de l'hôtel et en oublie la chaudière, dont la pression grimpe dangereusement ; il la purge in extremis. Il sent que l'Overlook le veut, lui, et le manque d'alcool devient insupportable.` },
+        { n: `41`, t: `Danny se réveille d'un rêve où l'hôtel brûle et où son père en sort en flammes. Il cherche Jack par la pensée et se fait chasser par une voix monstrueuse. Dans le couloir, un homme déguisé en chien, le visage en sang, lui barre le passage. Danny tente d'appeler Hallorann, mais l'hôtel l'en empêche.` },
+        { n: `42`, t: `Après une nuit passée à chercher un vol, Hallorann embarque pour Denver. Il a prévenu les gardes forestiers, qui ne l'ont pas pris au sérieux. Au décollage, un nouvel appel de Danny le frappe, puis se coupe net.` },
+        { n: `43`, t: `Jack entre au Colorado Lounge : le bar est soudain plein de bouteilles, et Lloyd, le barman, le sert. Ici, la maison offre. Après plus d'un an d'abstinence, Jack boit. Autour de lui, la salle se remplit de convives masqués, venus d'une fête d'un autre temps.` },
+        { n: `44`, t: `Ivre, Jack déambule dans la fête. Un serveur renverse un verre sur lui et l'entraîne aux toilettes : c'est Grady, l'ancien gardien. Il explique à Jack qu'il doit « corriger » sa femme et son fils comme lui l'a fait, et que Danny essaie de faire venir quelqu'un de l'extérieur. Jack croise aussi l'homme déguisé en chien. Puis la fête s'évanouit, et il s'effondre.` },
+        { n: `45`, t: `Hallorann atterrit à Denver en pleine tempête. Il loue une voiture et prend la route des montagnes, sans plus rien capter de Danny.` },
+        { n: `46`, t: `À midi, Wendy descend préparer à manger. Au bar, qui empeste le gin, elle trouve Jack ivre mort. Il l'agrippe et l'étrangle en l'accusant de comploter contre lui. Elle l'assomme avec une bouteille. Avec l'aide de Danny, elle le traîne jusqu'au garde-manger et l'y enferme, pendant qu'il hurle des menaces.` },
+        { n: `47`, t: `Au milieu de l'après-midi, Danny entend encore les cris de Jack. Wendy met un disque pour couvrir le bruit, le serre contre elle et lui promet que quelqu'un viendra, et qu'au printemps ils iront pêcher tous les trois.` },
+        { n: `48`, t: `Enfermé dans le garde-manger, Jack enrage. La voix de Grady lui parle à travers la porte et doute de sa détermination. Jack promet de livrer Danny à l'hôtel et de s'occuper de sa femme. Le verrou s'ouvre.` },
+        { n: `49`, t: `Hallorann sort de la route en croisant un chasse-neige. Le conducteur, Howard Cottrell, le tire de là, lui prête ses gants et l'envoie chez un garagiste de Sidewinder qui pourra lui louer une motoneige ; lui aussi « sent » les choses. Arrivé à Sidewinder, Hallorann reçoit des images d'avertissement terrifiantes, dont le bruit sourd d'un maillet.` },
+        { n: `50`, t: `Danny comprend enfin : REDRUM, lu dans un miroir, veut dire MURDER, « meurtre ». Jack, libéré et armé d'un maillet de roque, part à leur recherche. Wendy est attaquée et grièvement blessée, mais se défend avec son couteau. Danny s'enfuit dans les étages.` },
+        { n: `51`, t: `Hallorann atteint l'Overlook en motoneige. En passant près des animaux de buis, il est attaqué par eux et doit se battre pour atteindre l'hôtel.` },
+        { n: `52`, t: `Grièvement blessée, Wendy s'est enfermée dans la salle de bain. Jack défonce la porte à coups de maillet ; elle lui entaille la main avec une lame de rasoir. Le bruit de la motoneige d'Hallorann détourne Jack, qui descend à sa rencontre.` },
+        { n: `53`, t: `Hallorann entre dans l'hôtel. Jack surgit et le frappe au maillet, lui brisant la mâchoire. Le laissant pour mort, il part à la recherche de Danny.` },
+        { n: `54`, t: `Caché au troisième étage, Danny voit enfin Tony de près : c'est lui-même, plus âgé. Daniel Anthony Torrance. Tony lui dit qu'il doit se souvenir de ce que son père a oublié.` },
+        { n: `55`, t: `Jack trouve Danny. L'enfant lui tient tête : ce n'est pas son papa, c'est l'hôtel. Un instant, le vrai Jack refait surface et lui dit de fuir, puis la chose qui l'habite se défigure à coups de maillet. Danny se souvient alors : la chaudière n'a pas été purgée. La créature se précipite au sous-sol.` },
+        { n: `56`, t: `Danny rejoint Wendy et Hallorann, blessés : la chaudière va sauter, il faut fuir. Ils sortent dans la neige. Au sous-sol, la chose qui était Jack tente de purger la chaudière et croit avoir gagné. L'Overlook explose et s'embrase.` },
+        { n: `57`, t: `Les animaux de buis, calcinés, ne bougent plus. Dans la remise, Hallorann sent l'hôtel lui ordonner de tuer la mère et l'enfant ; il jette le maillet et repart. Sur la motoneige, ils fuient pendant que le toit s'effondre. Plus bas, des secours viennent à leur rencontre.` },
+        { n: `58`, label: `Épilogue`, t: `L'été suivant, dans un hôtel du Maine où Hallorann est désormais chef, Wendy, encore dans un corset, se remet lentement. Elle va accepter un emploi proposé par Al Shockley. Hallorann promet à Danny qu'il sera toujours là pour lui. Au bout du ponton, l'enfant attrape un poisson, et ils rient ensemble au soleil.` }
+      ]
+    }
+  ],
+  links: [
+    { t: `Dick Hallorann apparaît dans Ça, bien avant l'Overlook : on le croise jeune, cuisinier dans l'armée, à Derry en 1930.` },
+    { t: `Sidewinder, le village au pied de l'Overlook, est aussi celui près duquel vit Annie Wilkes dans Misery.`, to: `misery` },
+    { t: `Dans Le Fléau, Mère Abigaël raconte que sa grand-mère appelait le don de prophétie « the shine », le même mot que pour Danny.` },
+    { t: `Docteur Sleep (2013) est la suite directe de Shining : on y retrouve Danny devenu adulte.`, gate: `shining` }
+  ],
+  conclusion: {
+    analyse: `Sous ses dehors de maison hantée, Shining est le portrait d'un homme qui se défait. L'Overlook n'invente rien : il exploite des failles déjà là, l'alcool, la colère héritée d'un père violent, la rancœur sociale, l'orgueil blessé. King alterne les points de vue de Jack, Wendy et Danny, et c'est ce qui rend le livre si poignant : on voit Jack lutter, perdre, et on comprend chaque étape de sa chute. La neige transforme l'hôtel en huis clos où la pression monte, au propre comme au figuré, avec cette chaudière qu'il faut purger chaque jour.`,
+    emotions: `Une angoisse lente, d'abord diffuse (les guêpes, la lance à incendie, les haies), puis oppressante. Beaucoup de tendresse pour Danny, si seul avec ce qu'il sait. Une vraie tristesse face à un père qui aime son fils et ne parvient pas à se sauver. Le final mêle terreur et soulagement, et l'épilogue apporte un apaisement fragile.`,
+    message: `L'alcoolisme et la violence familiale se transmettent comme une malédiction : Jack reproduit son père, et l'hôtel ne fait qu'amplifier ce qui était déjà en lui. Le livre parle aussi de responsabilité : Jack se voit victime des circonstances, mais ses choix comptent. Enfin, Danny et Hallorann portent l'espoir du roman : on peut vivre avec un don, ou une blessure, sans en devenir prisonnier, à condition de ne pas rester seul.`
+  }
+});
+
+</script>
+<script>
+BOOKS.push({
+  id: `simetierre`,
+  title: `Simetierre`,
+  original: `Pet Sematary`,
+  year: 1983,
+  unit: `chapter`,
+  meta: `62 chapitres et un épilogue · 3 parties`,
+  cover: { bg: `#2b2119`, fg: `#eadfcb`, motif: `markers` },
+  art: `illustrations/simetierre.webp`,
+  note: `Découpage de l'édition originale : 62 chapitres en 3 parties, plus un épilogue. Certains chapitres sont regroupés dans une même fiche.`,
+  pitch: `Louis Creed, médecin, s'installe avec sa femme Rachel, leur fille Ellie et leur bébé Gage à Ludlow, dans le Maine, dans une belle maison au bord d'une route où les camions passent à toute vitesse. Leur vieux voisin, Jud Crandall, leur fait découvrir un sentier qui mène à un cimetière d'animaux entretenu par les enfants du coin. Plus loin dans les bois, il existe un autre lieu, beaucoup plus ancien.`,
+  cast: [
+    [`Louis Creed`, `Médecin au service de santé de l'université du Maine.`],
+    [`Rachel Creed`, `Sa femme, hantée depuis l'enfance par la mort de sa sœur Zelda.`],
+    [`Ellie Creed`, `Leur fille de 5 ans.`],
+    [`Gage Creed`, `Leur fils, qui n'a pas encore deux ans.`],
+    [`Church`, `Le chat d'Ellie (de son vrai nom Winston Churchill).`],
+    [`Jud Crandall`, `Voisin octogénaire, qui devient pour Louis une sorte de père.`],
+    [`Norma Crandall`, `La femme de Jud, de santé fragile.`],
+    [`Irwin et Dory Goldman`, `Les parents de Rachel, qui méprisent Louis.`],
+    [`Victor Pascow`, `Un étudiant de l'université.`],
+    [`Steve Masterton`, `Collègue et ami de Louis à l'infirmerie.`]
+  ],
+  parts: [
+    {
+      title: `Première partie`, name: `Le Simetierre`,
+      items: [
+        { n: `1`, t: `Après un long voyage depuis Chicago, les Creed arrivent devant leur nouvelle maison de Ludlow. Louis, à bout de patience, a même rêvé de tout plaquer pour devenir médecin à Disney World. Mais la joie de sa famille devant la maison efface tout, et Gage prononce son premier vrai mot : « maison ».` },
+        { n: `2`, t: `Pendant que Louis cherche ses clés, Ellie tombe de la balançoire et s'écorche le genou, et Gage se fait piquer par une abeille. Le vieux voisin d'en face, Jud Crandall, traverse la route pour les aider. Un camion passe en trombe : Jud les prévient que cette route est dangereuse.` },
+        { n: `3–5`, label: `Chapitres 3 à 5`, t: `L'installation : les déménageurs, les cartons, la première soirée dans la maison. Les Creed font la connaissance de Norma, la femme de Jud, et Jud invite Louis à venir boire une bière. Ellie remarque un sentier bien entretenu qui part du champ derrière la maison et s'enfonce dans les bois.` },
+        { n: `6`, t: `Le soir, sur la véranda de Jud, Louis se sent immédiatement chez lui. Un énorme camion passe. Jud lui explique que le sentier mène à un cimetière d'animaux : la route « use beaucoup d'animaux ». Il conseille de faire castrer le chat d'Ellie, Church, pour qu'il traîne moins près de la route.` },
+        { n: `7–10`, label: `Chapitres 7 à 10`, t: `Jud emmène la famille jusqu'au cimetière des animaux, au bout du sentier : un cercle de tombes d'enfants sous un panneau maladroit, « SIMETIERRE », adossé à un énorme mur de branchages qu'il déconseille d'escalader. Ellie est bouleversée à l'idée que Church puisse mourir. De retour à la maison, Rachel refuse violemment d'aborder la mort avec sa fille, et le couple se dispute ; Louis devine un traumatisme lié à Zelda, la sœur de Rachel. Il se résout à faire opérer Church et se laisse un mot pour appeler le vétérinaire.` },
+        { n: `11`, t: `Au petit déjeuner, Ellie demande ce que signifie le mot sur le tableau ; Louis lui explique que Church n'aura plus envie de traverser la route. Le soulagement de sa fille le touche. Réconcilié avec Rachel, il part pour son premier jour de travail, sans oser lui reparler de Zelda.` },
+        { n: `12–15`, label: `Chapitres 12 à 15`, t: `Premier jour à l'infirmerie de l'université. On amène Victor Pascow, un étudiant renversé par une voiture, le crâne fracassé. Avant de mourir, il appelle Louis par son nom, alors qu'il ne le connaît pas, et lui parle du cimetière des animaux. Louis est profondément secoué ; il rentre chez lui et tente de reprendre le cours de sa vie.` },
+        { n: `16`, t: `En pleine nuit, Pascow apparaît dans la chambre, le crâne ensanglanté, et ordonne à Louis de le suivre. Louis se croit en train de rêver. Pascow le conduit à travers les bois jusqu'au cimetière des animaux et l'avertit de ne jamais franchir le mur de branchages, quoi qu'il arrive.` },
+        { n: `17–20`, label: `Chapitres 17 à 20`, t: `Au réveil, les pieds et les draps de Louis sont couverts de terre et d'aiguilles de pin ; il se persuade qu'il a été somnambule. L'automne passe. Le soir d'Halloween, Norma Crandall fait une crise cardiaque, et Louis lui porte secours à temps. Rachel est fière de son mari.` },
+        { n: `21`, t: `Grâce à Louis, Norma s'en tire bien. Thanksgiving approche : Rachel et les enfants partent à Chicago chez les Goldman, mais Louis reste. Ses beaux-parents le méprisent depuis toujours ; Rachel ignore qu'autrefois son père a voulu payer Louis pour qu'il renonce à l'épouser.` },
+        { n: `22`, t: `Le jour de Thanksgiving, Church est retrouvé mort, tué sur la route, devant chez Jud. Ellie l'adore. Plutôt que de l'enterrer au cimetière des animaux, Jud emmène Louis de l'autre côté du mur de branchages, pour une longue marche nocturne à travers les bois et un marécage, jusqu'à un ancien cimetière micmac au sommet d'une colline. Louis creuse le sol rocailleux et enterre le chat lui-même.` },
+        { n: `23–26`, label: `Chapitres 23 à 26`, t: `Le lendemain, Church revient. Vivant, mais changé : il sent la terre, se déplace maladroitement, et tue de petits animaux qu'il laisse déchiquetés. Jud finit par raconter : il a lui-même enterré son chien là-haut quand il était enfant, d'autres l'ont fait avec leurs bêtes, et un taureau nommé Hanratty en est revenu méchant. Selon de vieux récits, les Micmacs auraient abandonné ce lieu, jugé souillé par un Wendigo.` },
+        { n: `27–30`, label: `Chapitres 27 à 30`, t: `La famille rentre de Chicago. Ellie trouve que Church sent mauvais et n'aime plus le prendre dans ses bras. Louis garde le secret. L'hiver s'installe, Noël passe, et Church dépose régulièrement des proies déchiquetées. Louis se demande ce qu'il a fait, et pourquoi Jud l'a emmené là-bas.` },
+        { n: `31`, t: `Le soir du Nouvel An, les Crandall rendent visite aux Creed : c'est la dernière fois que Norma viendra. Peu après, Rachel appelle Louis en larmes : Norma est morte d'une attaque.` },
+        { n: `32`, t: `Louis passe la soirée avec Jud, qui s'enivre en évoquant Norma. Ellie pose des questions sur la mort, et Louis lui répond avec franchise. En l'entendant, Rachel trouve enfin la force de raconter l'agonie de sa sœur Zelda, morte d'une méningite quand Rachel était enfant et seule à la veiller.` },
+        { n: `33–35`, label: `Chapitres 33 à 35`, t: `Louis porte le cercueil de Norma. Sur le chemin du retour, Ellie pleure et demande pourquoi les gens meurent. Rachel raconte que Church a rapporté un rat mort et a grogné contre elle. L'hiver passe : Ellie fête ses six ans, Gage a sa première coupe de cheveux, puis le printemps arrive. Un jour où il reste seul avec son fils, Louis fait voler un cerf-volant avec lui dans un champ voisin et lui dit qu'il l'aime. Le soir, il surprend Church caché dans le placard de Gage, le chasse, puis regarde longuement son fils dormir.` }
+      ]
+    },
+    {
+      title: `Deuxième partie`, name: `Le cimetière micmac`,
+      items: [
+        { n: `36`, t: `Gage a été tué par un camion sur la route. Louis rejoue sans cesse les dernières secondes, en imaginant qu'il rattrape son fils à temps. Lors de la veillée funèbre, son beau-père, ivre, l'accuse d'être responsable de sa mort : les deux hommes se battent, le cercueil tombe, et Rachel s'enfuit en hurlant. Son ami Steve Masterton veille sur elle et sur Ellie.` },
+        { n: `37`, t: `De retour à la maison, Louis donne un calmant à Rachel. Ellie, mutique, ne lâche plus une photo d'elle et de Gage ; elle compte prier pour que Dieu lui rende son frère, comme Lazare. Seul avec Church, Louis boit et pense pour la première fois au cimetière micmac. Tard dans la nuit, on frappe à la porte : c'est Jud.` },
+        { n: `38–39`, label: `Chapitres 38 et 39`, t: `Après minuit, Jud raconte à Louis l'histoire de Timmy Baterman, mort en Italie pendant la guerre, que son père, Bill, a enterré dans le cimetière micmac. Timmy est revenu, mais ce n'était plus lui : une chose froide et cruelle, qui connaissait les secrets de chacun. Bill a fini par l'abattre, a mis le feu à la maison et s'est tué. Jud avoue que ce lieu, plus ancien que les Micmacs, a une emprise sur lui, et il craint qu'il ait voulu atteindre Louis à travers la mort de Gage. Louis promet que son fils restera où il est.` },
+        { n: `40`, t: `Louis rêve d'une autre vie, où il a rattrapé Gage à temps et où son fils grandit. Au réveil, c'est le jour de l'enterrement. Au cimetière de Pleasantview, Jud console Ellie, ce que Louis ne parvient pas à faire. Après la réception, Louis retourne seul sur la tombe de son fils. Il persuade ensuite Rachel de partir quelques jours à Chicago avec Ellie, chez ses parents.` },
+        { n: `41–42`, label: `Chapitres 41 et 42`, t: `Les places d'avion se trouvent sans peine. Irwin Goldman présente ses excuses à Louis, qui hésite un moment à renoncer à ce qu'il prépare. On apprend que le chauffeur du camion a tenté de se pendre. Rachel sent que son mari lui cache quelque chose, et Ellie fait un cauchemar qui l'inquiète.` },
+        { n: `43–45`, label: `Chapitres 43 à 45`, t: `Le lendemain, Louis conduit Rachel et Ellie à l'aéroport. Ellie, effrayée par un rêve de cercueil vide, voudrait rester et dit qu'elle a peur pour son père. Louis achète une lampe, des outils, une corde et une bâche, puis prend une chambre de motel : il a un plan, et il est prêt à tout si son fils revient changé. À Chicago, Ellie raconte qu'un certain « Paxcow » l'a prévenue que son père allait au cimetière des animaux. Rachel fait le lien avec Victor Pascow, n'arrive pas à joindre Louis, et finit par appeler Jud.` },
+        { n: `46`, t: `Après l'appel de Rachel, Jud va voir chez les Creed : Louis n'est pas là, la voiture non plus. Il comprend que Louis devra forcément passer devant chez lui pour rejoindre le sentier, et décide de l'attendre.` },
+        { n: `47`, t: `Louis dîne dans un restaurant de motel, en espérant presque que quelqu'un le reconnaisse et l'arrête. Personne ne le remarque. Il attend dans sa chambre, puis, à onze heures, il éteint la télévision et part.` },
+        { n: `48`, t: `À Chicago, Rachel décide de rentrer le soir même dans le Maine, malgré les réticences de ses parents. La compagnie aérienne lui trouve des correspondances serrées. Avant son départ, Ellie lui demande d'être prudente.` },
+        { n: `49–51`, label: `Chapitres 49 à 51`, t: `Dans la tempête, Louis escalade la grille du cimetière de Pleasantview et creuse la tombe de son fils, en se cachant des passants et d'une voiture de police. Vers une heure du matin, il ouvre le cercueil et découvre, bouleversé, l'état du corps. Il enveloppe Gage dans la bâche, rebouche la tombe et repart vers Ludlow. Rachel, elle, rate sa correspondance de quatre minutes et loue une voiture pour finir le trajet.` },
+        { n: `52–54`, label: `Chapitres 52 à 54`, t: `Vers une heure du matin, Rachel appelle Jud : elle rentre en voiture, rongée par l'angoisse. Jud lui demande de s'arrêter dans un motel de Portland et promet de tout lui expliquer le lendemain. Il veille en attendant Louis, mais s'assoupit : Louis passe devant chez lui sans le réveiller, Gage dans les bras, et franchit à nouveau le mur de branchages. Rachel ne s'arrête pas et remonte vers Ludlow dans la nuit.` },
+        { n: `55–57`, label: `Chapitres 55 à 57`, t: `Louis traverse les bois et le marécage avec le corps de son fils ; dans la brume, il sent passer près de lui une présence gigantesque. Au sommet de la colline, il enterre Gage sous un cairn. Sur la route, la voiture de Rachel tombe en panne à environ quatre-vingts kilomètres de chez elle. Louis rentre, blessé par une chute, et s'effondre de sommeil. Avant l'aube, quelqu'un entre dans la chambre et fouille sa trousse de médecin.` }
+      ]
+    },
+    {
+      title: `Troisième partie`, name: `Oz le Grand et Terrible`,
+      items: [
+        { n: `58`, t: `Jud se réveille juste avant l'aube et comprend qu'il a dormi trop longtemps. Des pas approchent, une odeur de tombe envahit la maison. Church entre, puis Gage, qui ricane et lui jette au visage les infidélités passées de Norma. Jud s'arme d'un couperet de cuisine. Gage le tue.` },
+        { n: `59`, t: `Rachel arrive enfin à Ludlow, épuisée. Une voix l'appelle depuis la maison de Jud. Elle entre. Gage l'y attend.` },
+        { n: `60`, t: `Louis se réveille, encore tout habillé. Il découvre des traces de petits pas boueux et s'aperçoit que sa trousse de médecin a été fouillée : un scalpel a disparu. Il comprend ce qui est revenu, et ce que cela a fait.` },
+        { n: `61`, t: `Louis prépare des seringues de morphine. Il tue d'abord Church, puis se rend chez Jud, où il découvre les corps de Jud et de Rachel. Gage l'attaque ; Louis lui fait l'injection. Il met le feu à la maison, puis emporte le corps de Rachel vers les bois, persuadé que cette fois, s'il fait vite, ce sera différent.` },
+        { n: `62`, t: `Inquiet, Steve Masterton passe à Ludlow et voit la maison de Jud en cendres. Il aperçoit Louis, les cheveux devenus blancs, qui porte un corps enveloppé vers le sentier. Steve sent à son tour l'appel du lieu, et s'enfuit.` },
+        { n: `É`, label: `Épilogue`, t: `Tard dans la nuit, Louis fait une réussite à la table de la cuisine. La porte s'ouvre, des pas lents approchent, et une main froide se pose sur son épaule. Une voix pleine de terre murmure : « Chéri. »` }
+      ]
+    }
+  ],
+  links: [
+    { t: `Ludlow, la ville des Creed, est aussi celle de Thad Beaumont, l'écrivain de La Part des ténèbres.` },
+    { t: `Le Wendigo des légendes micmaques rôde aussi dans La Petite Fille qui aimait Tom Gordon, et il est mentionné dans Le Corps.` }
+  ],
+  conclusion: {
+    analyse: `King a souvent dit que Simetierre était le livre qui l'effrayait le plus, et ce n'est pas à cause de ses morts-vivants : c'est un roman sur le deuil et sur l'impossibilité de l'accepter. Toute la première partie installe une famille heureuse et une série de présages (la route, les camions, le chat), si bien que la tragédie paraît à la fois inévitable et insupportable. Louis, médecin rationnel, est précisément celui qui finit par céder à l'irrationnel.`,
+    emotions: `Une mélancolie douce au début, puis une angoisse sourde, et un chagrin violent au cœur du livre. La dernière partie provoque une horreur pure, mêlée d'impuissance : on voit Louis courir à sa perte, et on comprend exactement pourquoi il le fait. La dernière page glace.`,
+    message: `La mort fait partie de la vie, et vouloir l'annuler mène au pire. Jud le résume : parfois, la mort vaut mieux. Le livre parle aussi de la façon dont on parle (ou pas) de la mort aux enfants, des tabous familiaux comme celui de Zelda, et de l'amour parental poussé jusqu'à l'aveuglement.`
+  }
+});
+
+</script>
+<script>
+(() => {
+  const app = document.getElementById("app");
+  const books = window.BOOKS.slice().sort((a, b) => a.year - b.year);
+  const byId = Object.fromEntries(books.map(b => [b.id, b]));
+
+  /* What to read next. Each id is the one the book will get once its summaries are written,
+     so a status saved now carries over. `gate`: hidden until that book is marked as read. */
+  const RECS = [
+    { id: "docteur-sleep", title: "Docteur Sleep", original: "Doctor Sleep", year: 2013, cover: { bg: "#151b2b", fg: "#e6e2f0", motif: "moon" }, from: "shining", gate: "shining",
+      why: "La suite directe de Shining.",
+      pitch: "Danny Torrance a grandi. Adulte, il se bat contre les mêmes démons que son père, et son don le met sur la route d'une fillette au « shining » plus puissant encore que le sien." },
+    { id: "ca", title: "Ça", original: "It", year: 1986, cover: { bg: "#1f262b", fg: "#ece6d8", motif: "balloon" }, from: "shining",
+      why: "On y croise Dick Hallorann, des années avant l'Overlook.",
+      pitch: "À Derry, dans le Maine, sept enfants affrontent une créature qui prend la forme de leurs pires peurs. Vingt-sept ans plus tard, devenus adultes, ils doivent revenir." },
+    { id: "charlie", title: "Charlie", original: "Firestarter", year: 1980, cover: { bg: "#2a1710", fg: "#f0dcc8", motif: "flame" }, from: "carrie",
+      why: "Une autre enfant dont le don dépasse tout contrôle.",
+      pitch: "Charlie McGee, une fillette, peut allumer des incendies par la pensée. Avec son père, elle fuit une agence gouvernementale secrète, la Boutique, qui veut se servir d'elle." },
+    { id: "running-man", title: "Running Man", original: "The Running Man", year: 1982, cover: { bg: "#1c2226", fg: "#e4e8ea", motif: "screen" }, from: "marche-ou-creve",
+      why: "L'autre dystopie de Richard Bachman : encore un jeu télévisé où l'on joue sa vie.",
+      pitch: "Dans une Amérique ruinée, Ben Richards, chômeur prêt à tout pour soigner sa fille, participe au jeu télévisé le plus suivi du pays : survivre trente jours à des chasseurs lancés à ses trousses." },
+    { id: "dome", title: "Dôme", original: "Under the Dome", year: 2009, cover: { bg: "#253238", fg: "#eef0ea", motif: "dome" }, from: "brume",
+      why: "Une ville coupée du monde, et ce que la peur fait de ses habitants.",
+      pitch: "Un matin d'automne, un dôme invisible et infranchissable s'abat sur la petite ville de Chester's Mill, dans le Maine. Coupés du monde, les habitants voient vite le pouvoir changer de mains." },
+    { id: "jessie", title: "Jessie", original: "Gerald's Game", year: 1992, cover: { bg: "#d9d3c9", fg: "#1b1815", motif: "cuffs" }, from: "misery",
+      why: "Un huis clos aussi étouffant : une femme prisonnière d'une chambre isolée.",
+      pitch: "Un jeu de couple dans un chalet au bord d'un lac tourne au drame : Jessie se retrouve menottée au lit, seule, sans que personne ne sache où elle est." },
+    { id: "part-des-tenebres", title: "La Part des ténèbres", original: "The Dark Half", year: 1989, cover: { bg: "#16161b", fg: "#e8e4da", motif: "sparrows" }, from: "misery",
+      why: "Encore un écrivain aux prises avec ce qu'il a créé, et un détour par Ludlow, la ville de Simetierre.",
+      pitch: "Thad Beaumont, écrivain, « enterre » publiquement George Stark, le pseudonyme sous lequel il signait des polars violents. Mais Stark n'a aucune intention de disparaître." },
+    { id: "salem", title: "Salem", original: "'Salem's Lot", year: 1975, cover: { bg: "#221d1a", fg: "#ebe2d2", motif: "house" }, from: "simetierre",
+      why: "Le Maine des premiers King : une petite ville où le mal s'installe.",
+      pitch: "Un écrivain revient dans la petite ville de son enfance, Jerusalem's Lot, au moment où un mystérieux antiquaire s'y installe. Bientôt, des habitants disparaissent." },
+    { id: "le-fleau", title: "Le Fléau", original: "The Stand", year: 1978, cover: { bg: "#cdc3ad", fg: "#1a1814", motif: "crow" }, from: "brume",
+      why: "La fin du monde, cette fois à l'échelle de tout un pays.",
+      pitch: "Un virus échappé d'un laboratoire militaire tue presque toute la population. Les rares survivants, guidés par des rêves, se rassemblent en deux camps que tout oppose." },
+    { id: "differentes-saisons", title: "Différentes saisons", original: "Different Seasons", year: 1982, cover: { bg: "#1f2724", fg: "#ece6d6", motif: "seasons" }, from: "marche-ou-creve",
+      why: "Dans Le Corps, quatre garçons marchent à leur tour des kilomètres, le long d'une voie ferrée.",
+      pitch: "Quatre longues nouvelles, une par saison. Parmi elles, Le Corps, adapté au cinéma sous le titre Stand by Me, et Rita Hayworth et la rédemption de Shawshank, devenu le film Les Évadés." },
+    { id: "institut", title: "L'Institut", original: "The Institute", year: 2019, cover: { bg: "#14262b", fg: "#e1e8ea", motif: "dots" }, from: "carrie",
+      why: "Des enfants aux pouvoirs hors du commun, et ceux qui veulent s'en servir.",
+      pitch: "Luke Ellis, 12 ans, surdoué, est enlevé en pleine nuit chez lui. Il se réveille à l'Institut, un centre secret où d'autres enfants dotés de pouvoirs subissent des tests." },
+    { id: "danse-macabre", title: "Danse macabre", original: "Night Shift", year: 1978, cover: { bg: "#232a1a", fg: "#ece4cc", motif: "corn" }, from: "brume",
+      why: "D'autres nouvelles, dont deux autour de Jerusalem's Lot, la ville de Salem.",
+      pitch: "Le premier recueil de nouvelles de King : une vingtaine d'histoires courtes, dont Les Enfants du maïs." },
+    { id: "dead-zone", title: "Dead Zone", original: "The Dead Zone", year: 1979, cover: { bg: "#2a1d2a", fg: "#efe4dc", motif: "wheel" }, from: "carrie",
+      why: "Un autre don qui pèse sur celui qui le porte.",
+      pitch: "Johnny Smith sort d'un coma de près de cinq ans avec un don : en touchant quelqu'un, il voit son passé ou son avenir. Le livre est aussi paru sous le titre L'Accident." },
+    { id: "ligne-verte", title: "La Ligne verte", original: "The Green Mile", year: 1996, cover: { bg: "#211f1b", fg: "#ebe5d6", motif: "corridor" }, from: "simetierre",
+      why: "Le surnaturel au cœur d'une histoire profondément humaine.",
+      pitch: "1932, dans le couloir de la mort d'un pénitencier du Sud. Le gardien-chef Paul Edgecombe voit arriver John Coffey, un colosse condamné pour le meurtre de deux fillettes. Le roman est d'abord paru en six épisodes." },
+    { id: "22-11-63", title: "22/11/63", original: "11/22/63", year: 2011, cover: { bg: "#6e2b27", fg: "#f1e6d6", motif: "watch" }, from: "shining",
+      why: "Un autre professeur d'anglais au centre du récit, et un détour par Derry, la ville de Ça.",
+      pitch: "Jake Epping, professeur d'anglais dans le Maine, découvre au fond d'un snack un passage vers 1958. Le patron, Al, lui confie une mission : empêcher l'assassinat de John F. Kennedy." },
+    { id: "nuit-noire", title: "Nuit noire, étoiles mortes", original: "Full Dark, No Stars", year: 2010, cover: { bg: "#0f1114", fg: "#d9dce0", motif: "stars" }, from: "misery",
+      why: "Une noirceur toute humaine, sans monstre ni fantôme.",
+      pitch: "Quatre longs récits très sombres : un fermier qui décide de se débarrasser de sa femme, une romancière agressée sur une route déserte, un homme malade à qui l'on propose un marché, une épouse qui découvre un secret dans son garage." },
+    { id: "cujo", title: "Cujo", original: "Cujo", year: 1981, cover: { bg: "#b5843a", fg: "#1c140a", motif: "paw" }, from: "misery",
+      why: "Un autre huis clos sous tension, dans une voiture en panne en plein soleil.",
+      pitch: "À Castle Rock, une mère et son petit garçon se retrouvent coincés dans leur voiture en panne, en plein été, face à un saint-bernard devenu enragé." }
+  ].filter(r => !byId[r.id]);
+  const recById = Object.fromEntries(RECS.map(r => [r.id, r]));
+
+  const local = {
+    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  };
+
+  /* ---------- Reading state ----------
+     One entry per book: { status, startedAt, finishedAt, last }.
+     The artifact's db ("shelf/<bookId>") is the source of truth and follows the owner
+     across devices; localStorage only caches it so the first frame is already right. */
+  const STATUSES = [
+    { key: "en-cours", label: "En cours", pile: "En cours", empty: "Aucun livre en cours. Ouvrez un livre et choisissez « En cours »." },
+    { key: "a-lire", label: "À lire", pile: "À lire", empty: "Plus rien en attente dans la bibliothèque." },
+    { key: "lu", label: "Lu", pile: "Lus", empty: "Aucun livre terminé pour l'instant." }
+  ];
+  let shelf = {};
+  try { shelf = JSON.parse(local.get("csp.shelf") || "{}") || {}; } catch (e) { shelf = {}; }
+  const entry = id => shelf[id] || {};
+  const statusOf = id => entry(id).status || "a-lire";
+  let db = null;
+  let mode = "local"; // "local": this device only · "sync": owner, saved to db · "readonly": someone else's shelf · "cloud": the site, signed in
+  const queues = {};
+  let view = { refresh() {} };
+  const refresh = () => view.refresh();
+
+  function save(id, patch) {
+    if (mode === "readonly" && "status" in patch) return;
+    const next = { ...entry(id), ...patch };
+    for (const k of Object.keys(next)) if (next[k] === null || next[k] === undefined) delete next[k];
+    shelf = { ...shelf, [id]: next };
+    local.set("csp.shelf", JSON.stringify(shelf));
+    refresh();
+    if (mode === "cloud" || signedInBefore()) return cloudQueue(id);
+    if (mode !== "sync") return;
+    queues[id] = (queues[id] || Promise.resolve())
+      .then(() => db.doc("shelf/" + id).set({ ...shelf[id] }))
+      .catch(e => {
+        if (e && ["invalid_argument", "revoked", "not_granted", "capability_disabled"].includes(e.code)) { mode = "readonly"; refresh(); }
+      });
+  }
+
+  function removeEntry(id) {
+    if (mode === "readonly") return;
+    const next = { ...shelf };
+    delete next[id];
+    shelf = next;
+    local.set("csp.shelf", JSON.stringify(shelf));
+    refresh();
+    if (mode === "cloud" || signedInBefore()) return cloudQueue(id);
+    if (mode !== "sync") return;
+    queues[id] = (queues[id] || Promise.resolve())
+      .then(() => db.doc("shelf/" + id).delete())
+      .catch(() => {});
+  }
+
+  function setStatus(id, key) {
+    if (entry(id).status === key) return;
+    const today = new Date().toISOString().slice(0, 10);
+    if (key === "a-lire") save(id, { status: key, startedAt: null, finishedAt: null });
+    else if (key === "en-cours") save(id, { status: key, startedAt: today, finishedAt: null });
+    else save(id, { status: key, finishedAt: today });
+  }
+
+  const fmtDate = iso => {
+    const [y, m, d] = String(iso).split("-").map(Number);
+    return new Date(y, m - 1, d).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }).replace(/^1 /, "1er ");
+  };
+
+  (async () => {
+    const c = window.claude;
+    if (!c || typeof c.use !== "function") return;
+    let store = null;
+    try { store = await c.use("db"); } catch (e) { store = null; }
+    if (!store) return;
+    let owner = false;
+    try { const u = await c.use("user"); owner = u ? await u.isOwner() : false; } catch (e) { owner = false; }
+    db = store;
+    mode = owner ? "sync" : "readonly";
+    db.collection("shelf").onSnapshot(snap => {
+      const next = {};
+      snap.docs.forEach(d => { if (byId[d.id] || recById[d.id]) next[d.id] = { ...d.data() }; });
+      shelf = next;
+      local.set("csp.shelf", JSON.stringify(shelf));
+      refresh();
+    }, () => {});
+    refresh();
+  })();
+
+  /* ---------- The site's shelf (Supabase) ----------
+     Outside claude.ai the site build sets window.CSP_SUPABASE; once signed in, the shelf lives in a
+     Supabase table (one row per book, readable and writable only by its owner) and follows them
+     from computer to phone. localStorage stays the first copy: every change is saved there, its
+     book id queued in "csp.pending", and the queue is sent whenever the network allows. */
+  const SB = window.CSP_SUPABASE;
+  const cloud = { client: null, user: null, ready: false };
+  let pending = new Set();
+  try { pending = new Set(JSON.parse(local.get("csp.pending") || "[]")); } catch (e) {}
+  const keepPending = () => local.set("csp.pending", JSON.stringify([...pending]));
+  // Signed in on this device, but Supabase could not be reached at load: changes still wait in the queue.
+  const signedInBefore = () => mode === "local" && !!SB && !!local.get("sb-" + new URL(SB.url).hostname.split(".")[0] + "-auth-token");
+  let flushing = Promise.resolve();
+
+  function cloudQueue(id) {
+    pending.add(id);
+    keepPending();
+    cloudFlush();
+  }
+
+  // Sends every queued book, one at a time; a book that fails stays queued for the next try.
+  function cloudFlush() {
+    flushing = flushing.then(async () => {
+      if (mode !== "cloud") return;
+      for (const id of [...pending]) {
+        const t = cloud.client.from("shelf");
+        const { error } = shelf[id]
+          ? await t.upsert({ user_id: cloud.user.id, book_id: id, data: shelf[id], updated_at: new Date().toISOString() })
+          : await t.delete().eq("book_id", id);
+        if (error) return;
+        pending.delete(id);
+        keepPending();
+      }
+    }).catch(() => {});
+    return flushing;
+  }
+
+  // Takes the stored shelf, except books this device changed and has not sent yet.
+  async function cloudPull() {
+    if (mode !== "cloud") return;
+    await cloudFlush();
+    const { data, error } = await cloud.client.from("shelf").select("book_id, data");
+    if (error || mode !== "cloud") return;
+    if (!data.length && Object.keys(shelf).length && !local.get("csp.cloud-seeded")) {
+      // A first sign-in with an empty account: this device's shelf becomes the account's.
+      local.set("csp.cloud-seeded", "1");
+      Object.keys(shelf).forEach(id => pending.add(id));
+      keepPending();
+      return cloudFlush();
+    }
+    local.set("csp.cloud-seeded", "1");
+    const next = {};
+    data.forEach(r => { if (byId[r.book_id] || recById[r.book_id]) next[r.book_id] = { ...r.data }; });
+    pending.forEach(id => { if (shelf[id]) next[id] = shelf[id]; else delete next[id]; });
+    shelf = next;
+    local.set("csp.shelf", JSON.stringify(shelf));
+    refresh();
+  }
+
+  let pullTimer = 0;
+  const pullSoon = () => { clearTimeout(pullTimer); pullTimer = setTimeout(cloudPull, 300); };
+
+  function cloudSession(session) {
+    const user = session ? session.user : null;
+    if ((user && user.id) === (cloud.user && cloud.user.id)) return;
+    cloud.user = user;
+    if (user) {
+      mode = "cloud";
+      pullSoon();
+      cloud.client.channel("shelf").on("postgres_changes", { event: "*", schema: "public", table: "shelf" }, pullSoon).subscribe();
+    } else {
+      mode = "local";
+      cloud.client.removeAllChannels();
+      local.set("csp.cloud-seeded", "");
+    }
+    refresh();
+  }
+
+  (async () => {
+    if (!SB || (window.claude && typeof window.claude.use === "function")) return;
+    try {
+      const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm");
+      cloud.client = createClient(SB.url, SB.key);
+    } catch (e) {
+      return; // Supabase out of reach (offline, paused): the shelf stays on this device for now.
+    }
+    cloud.ready = true;
+    cloud.client.auth.onAuthStateChange((event, session) => setTimeout(() => cloudSession(session)));
+    window.addEventListener("online", pullSoon);
+    document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") pullSoon(); });
+    refresh();
+  })();
+
+  // The slip under the home page's colophon: sign in, or say the shelf is synced.
+  function syncSlip() {
+    if (!cloud.ready) return null;
+    if (cloud.user) {
+      return h("div", { class: "sync sync-on" },
+        h("p", { class: "sync-title" }, "Carnet synchronisé"),
+        h("p", null, "Vos lectures suivent ", h("b", null, cloud.user.email), " sur l'ordinateur comme sur le téléphone. ",
+          h("button", { class: "link-btn", type: "button", onclick: () => cloud.client.auth.signOut() }, "Se déconnecter"))
+      );
+    }
+    const email = h("input", { type: "email", name: "email", autocomplete: "username", placeholder: "Adresse e-mail", required: true, "aria-label": "Adresse e-mail" });
+    const pass = h("input", { type: "password", name: "password", autocomplete: "current-password", placeholder: "Mot de passe", required: true, minlength: "8", "aria-label": "Mot de passe" });
+    const msg = h("p", { class: "sync-msg", role: "status" });
+    const say = t => { msg.textContent = fr(t); };
+    const run = async create => {
+      if (!email.reportValidity() || !pass.reportValidity()) return;
+      say(create ? "Création du compte…" : "Connexion…");
+      const auth = cloud.client.auth;
+      const creds = { email: email.value.trim(), password: pass.value };
+      const { data, error } = create ? await auth.signUp(creds) : await auth.signInWithPassword(creds);
+      if (error) return say(/invalid login/i.test(error.message) ? "Adresse ou mot de passe incorrect."
+        : /not confirmed/i.test(error.message) ? "Confirmez d'abord votre adresse avec le lien reçu par e-mail."
+        : /signups? not allowed|disabled/i.test(error.message) ? "La création de compte est fermée sur ce site."
+        : "Impossible pour l'instant : " + error.message);
+      if (create && !data.session) say("Un e-mail de confirmation vient de partir : ouvrez le lien, puis revenez vous connecter ici.");
+    };
+    return h("div", { class: "sync" },
+      h("p", { class: "sync-title" }, "Synchroniser ce carnet"),
+      h("p", null, "Connectez-vous pour retrouver vos lectures sur tous vos appareils."),
+      h("form", { onsubmit: e => { e.preventDefault(); run(false); } },
+        email, pass,
+        h("div", { class: "sync-actions" },
+          h("button", { class: "btn btn-accent", type: "submit" }, "Se connecter"),
+          h("button", { class: "btn", type: "button", onclick: () => run(true) }, "Créer mon compte")
+        ),
+        msg
+      )
+    );
+  }
+
+  // Claude, for the express recap. Stays null where this view cannot ask (the feature then stays hidden).
+  let ask = null;
+  let askBlocked = false;
+  (async () => {
+    const c = window.claude;
+    if (!c || typeof c.use !== "function") return;
+    try { ask = await c.use("sample"); } catch (e) { ask = null; }
+    if (ask) refresh();
+  })();
+  const canAsk = () => !!ask && !askBlocked;
+
+  // French typography: thin no-break space before ; : ! ? » and after «, curly apostrophes.
+  const fr = s => String(s)
+    .replace(/'/g, "’")
+    .replace(/ ([;:!?»])/g, " $1")
+    .replace(/« /g, "« ");
+
+  function h(tag, attrs, ...kids) {
+    const el = document.createElement(tag);
+    if (attrs) for (const [k, v] of Object.entries(attrs)) {
+      if (v === null || v === undefined || v === false) continue;
+      if (k === "class") el.className = v;
+      else if (k === "text") el.textContent = fr(v);
+      else if (k === "html") el.innerHTML = v;
+      else if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
+      else el.setAttribute(k, v === true ? "" : v);
+    }
+    for (const kid of kids.flat(Infinity)) {
+      if (kid === null || kid === undefined || kid === false) continue;
+      el.append(kid instanceof Node ? kid : document.createTextNode(fr(kid)));
+    }
+    return el;
+  }
+
+  /* ---------- Cover motifs ---------- */
+  let uid = 0;
+  const motifs = {
+    drop: () => `<svg viewBox="0 0 200 200" aria-hidden="true"><line x1="100" y1="-10" x2="100" y2="62" stroke="currentColor" stroke-width="1" opacity=".45"/><path d="M100 70 C100 70 77 106 77 124 a23 23 0 0 0 46 0 C123 106 100 70 100 70 Z" fill="#c8453b"/><path d="M100 168 C100 168 94 177 94 181 a6 6 0 0 0 12 0 C106 177 100 168 100 168 Z" fill="#c8453b" opacity=".75"/></svg>`,
+    room217: () => `<svg viewBox="0 0 200 200" aria-hidden="true"><rect x="58" y="14" width="84" height="182" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="69" y="27" width="62" height="66" fill="none" stroke="currentColor" stroke-width=".8" opacity=".55"/><rect x="69" y="104" width="62" height="80" fill="none" stroke="currentColor" stroke-width=".8" opacity=".55"/><rect x="82" y="40" width="36" height="17" rx="1.5" fill="#c9a65a"/><text x="100" y="53" text-anchor="middle" font-family="Courier Prime, Courier New, monospace" font-size="13" font-weight="700" fill="#1b1a12">217</text><circle cx="129" cy="112" r="3.4" fill="#c9a65a"/></svg>`,
+    road: () => `<svg viewBox="0 0 200 200" aria-hidden="true"><line x1="-20" y1="64" x2="220" y2="64" stroke="currentColor" stroke-width=".7" opacity=".35"/><path d="M100 64 L6 206 M100 64 L194 206" stroke="currentColor" stroke-width="1.3" fill="none" opacity=".85"/><g fill="#d6b04a"><rect x="99.3" y="70" width="1.4" height="5"/><rect x="98.9" y="82" width="2.2" height="9"/><rect x="98.3" y="100" width="3.4" height="14"/><rect x="97.3" y="126" width="5.4" height="21"/><rect x="95.8" y="162" width="8.4" height="32"/></g></svg>`,
+    fog: () => { const id = "fb" + (++uid); return `<svg viewBox="0 0 200 200" aria-hidden="true"><defs><filter id="${id}" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="7"/></filter></defs><g filter="url(#${id})" fill="#ffffff"><ellipse cx="50" cy="40" rx="90" ry="10" opacity=".28"/><ellipse cx="150" cy="80" rx="100" ry="13" opacity=".38"/><ellipse cx="60" cy="122" rx="115" ry="15" opacity=".48"/><ellipse cx="130" cy="166" rx="125" ry="18" opacity=".55"/></g><path d="M18 210 C40 170 58 186 62 160 C66 140 52 132 60 118" stroke="#23292c" stroke-width="5" stroke-linecap="round" fill="none" opacity=".35" filter="url(#${id})"/></svg>`; },
+    markers: () => `<svg viewBox="0 0 200 200" aria-hidden="true"><g transform="rotate(-5 100 58)"><rect x="34" y="42" width="132" height="30" fill="none" stroke="#c9b089" stroke-width="1.3"/><text x="100" y="62" text-anchor="middle" font-family="Courier Prime, Courier New, monospace" font-size="12.5" letter-spacing="1.6" fill="#c9b089">PET SEMATARY</text></g><path d="M-10 178 Q100 162 210 180" stroke="currentColor" stroke-width="1" fill="none" opacity=".5"/><g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none" opacity=".9"><path d="M38 175 L43 128 M30 141 L53 144"/><path d="M80 170 L77 110 M64 125 L91 122"/><path d="M121 169 L125 136 M113 147 L136 150"/><path d="M160 174 L155 121 M144 135 L168 131"/></g></svg>`,
+    pending: () => `<svg viewBox="0 0 200 200" aria-hidden="true"><rect x="28" y="40" width="144" height="120" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="4 5" opacity=".45"/><text x="100" y="105" text-anchor="middle" font-family="Courier Prime, Courier New, monospace" font-size="13" letter-spacing="2.5" fill="currentColor" opacity=".7">À VENIR</text></svg>`,
+    /* Covers for the suggested books, ready for when their summaries are written */
+    balloon: () => `<svg viewBox="0 0 200 200" aria-hidden="true"><path d="M100 136 C92 152 108 164 100 180 C94 192 104 200 100 212" stroke="currentColor" stroke-width="1" fill="none" opacity=".7"/><path d="M100 128 C78 128 64 106 64 84 C64 60 80 42 100 42 C120 42 136 60 136 84 C136 106 122 128 100 128 Z" fill="#c8453b"/><path d="M95 127 L105 127 L100 136 Z" fill="#c8453b"/><ellipse cx="85" cy="68" rx="7" ry="13" fill="#ffffff" opacity=".22" transform="rotate(-24 85 68)"/></svg>`,
+    flame: () => `<svg viewBox="0 0 200 200" aria-hidden="true"><path d="M100 36 C112 66 140 84 136 122 C133 150 117 166 100 166 C83 166 66 152 64 126 C62 102 78 90 84 72 C88 88 95 94 100 96 C98 78 93 58 100 36 Z" fill="#e07436"/><path d="M100 102 C108 116 120 128 116 146 C113 158 106 163 100 163 C92 163 84 155 84 143 C84 131 94 123 100 102 Z" fill="#f2b552"/><line x1="40" y1="178" x2="160" y2="178" stroke="currentColor" stroke-width="1" opacity=".45"/></svg>`,
+    screen: () => `<svg viewBox="0 0 200 200" aria-hidden="true"><rect x="38" y="50" width="124" height="94" rx="16" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M100 144 V162 M74 162 H126" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="100" cy="97" r="23" fill="none" stroke="#d64b3f" stroke-width="1.5"/><path d="M100 66 V86 M100 108 V128 M69 97 H89 M111 97 H131" stroke="#d64b3f" stroke-width="1.5"/><circle cx="100" cy="97" r="2.6" fill="#d64b3f"/></svg>`,
+    dome: () => `<svg viewBox="0 0 200 200" aria-hidden="true"><path d="M24 152 A76 76 0 0 1 176 152 Z" fill="#a9d4dc" opacity=".09"/><path d="M24 152 A76 76 0 0 1 176 152" fill="none" stroke="#a9d4dc" stroke-width="1.3" opacity=".9"/><line x1="6" y1="152" x2="194" y2="152" stroke="currentColor" stroke-width="1" opacity=".55"/><g fill="currentColor" opacity=".88"><rect x="52" y="130" width="14" height="22"/><path d="M70 152 V122 L80 112 L90 122 V152 Z"/><path d="M95 152 V108 H98 V94 L101 86 L104 94 V108 H107 V152 Z"/><rect x="112" y="126" width="16" height="26"/><path d="M132 152 V136 L139 129 L146 136 V152 Z"/></g></svg>`,
+    cuffs: () => `<svg viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="currentColor"><circle cx="68" cy="120" r="27" stroke-width="5"/><circle cx="132" cy="120" r="27" stroke-width="5"/><ellipse cx="90" cy="86" rx="7" ry="4.5" stroke-width="2.4"/><ellipse cx="100" cy="86" rx="7" ry="4.5" stroke-width="2.4"/><ellipse cx="110" cy="86" rx="7" ry="4.5" stroke-width="2.4"/></g><rect x="62" y="82" width="18" height="12" rx="2" fill="currentColor"/><rect x="120" y="82" width="18" height="12" rx="2" fill="currentColor"/></svg>`,
+    sparrows: () => {
+      const bird = "M-16 0 C-10 -7 -4 -7 0 -1 C4 -7 10 -7 16 0 C10 -3 4 -1 0 5 C-4 -1 -10 -3 -16 0 Z";
+      const flock = [[60, 58, 1.1], [104, 46, .8], [142, 70, 1.3], [80, 96, .9], [126, 108, 1], [54, 130, .7], [152, 140, .75], [98, 150, 1.2]];
+      return `<svg viewBox="0 0 200 200" aria-hidden="true"><g fill="currentColor">${flock.map(([x, y, s]) => `<path d="${bird}" transform="translate(${x} ${y}) scale(${s})"/>`).join("")}</g></svg>`;
+    },
+    house: () => `<svg viewBox="0 0 200 200" aria-hidden="true"><path d="M-10 176 Q100 132 210 176 V210 H-10 Z" fill="currentColor" opacity=".14"/><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M66 154 V108 L100 80 L134 108 V154"/><path d="M80 108 L100 92 L120 108"/><path d="M118 95 V74 H126 V101"/><rect x="74" y="130" width="12" height="24"/><rect x="112" y="132" width="12" height="12" stroke-width="1"/></g><rect x="94" y="112" width="12" height="16" fill="#e0b552"/></svg>`,
+    moon: () => `<svg viewBox="0 0 200 200" aria-hidden="true"><path d="M116 46 A54 54 0 1 0 154 138 A44 44 0 1 1 116 46 Z" fill="#e8dcb0"/><g fill="currentColor" opacity=".8"><circle cx="58" cy="54" r="1.6"/><circle cx="150" cy="60" r="1.2"/><circle cx="162" cy="96" r="1.8"/><circle cx="44" cy="120" r="1.1"/><circle cx="72" cy="164" r="1.4"/></g></svg>`,
+    crow: () => `<svg viewBox="0 0 200 200" aria-hidden="true"><line x1="-10" y1="150" x2="210" y2="146" stroke="currentColor" stroke-width="1" opacity=".55"/><g fill="currentColor"><path d="M60 128 C64 104 92 90 120 92 C136 93 146 100 150 108 C140 116 126 130 104 136 C88 140 74 138 60 128 Z"/><circle cx="146" cy="86" r="14"/><path d="M156 79 L181 88 L156 95 Z"/><path d="M66 126 L26 151 L35 157 L78 136 Z"/></g><g stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M104 135 L101 148"/><path d="M117 131 L119 148"/></g><circle cx="149" cy="83" r="2.7" fill="#b8322a"/></svg>`,
+    seasons: () => {
+      const hues = ["#9cc58a", "#e3b54f", "#c8643a", "#dfe6ea"];
+      return `<svg viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="38" fill="none" stroke="currentColor" stroke-width=".8" opacity=".35"/>${hues.map((c, i) => `<circle cx="100" cy="100" r="58" fill="none" stroke="${c}" stroke-width="6.5" stroke-linecap="round" pathLength="100" stroke-dasharray="19 81" stroke-dashoffset="${-(i * 25 + 3)}" transform="rotate(-90 100 100)"/>`).join("")}<circle cx="100" cy="100" r="3" fill="currentColor"/></svg>`;
+    },
+    dots: () => {
+      let out = `<svg viewBox="0 0 200 200" aria-hidden="true"><g fill="currentColor" opacity=".55">`;
+      for (let r = 0; r < 5; r++) for (let c = 0; c < 5; c++) if (!(r === 1 && c === 3)) out += `<circle cx="${52 + c * 24}" cy="${52 + r * 24}" r="4.2"/>`;
+      return out + `</g><circle cx="124" cy="76" r="21" fill="none" stroke="#7fd0dc" stroke-width=".8" opacity=".35"/><circle cx="124" cy="76" r="12" fill="none" stroke="#7fd0dc" stroke-width="1.2" opacity=".75"/><circle cx="124" cy="76" r="5" fill="#7fd0dc"/></svg>`;
+    },
+    corn: () => `<svg viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round"><g stroke-width="2.2"><path d="M64 198 C66 150 60 104 66 58"/><path d="M100 198 C98 142 104 92 100 36"/><path d="M138 198 C136 152 142 108 136 64"/></g><g stroke-width="1.5" opacity=".85"><path d="M65 160 C52 150 42 152 32 164"/><path d="M63 118 C76 104 86 104 94 112"/><path d="M65 84 C54 74 46 74 38 82"/><path d="M99 168 C114 156 126 158 134 168"/><path d="M101 130 C86 118 76 118 70 126"/><path d="M101 76 C114 64 124 64 132 72"/><path d="M137 170 C150 160 160 162 170 174"/><path d="M139 126 C152 114 162 116 168 124"/><path d="M137 92 C128 82 120 82 112 90"/></g><g stroke-width="1" opacity=".7"><path d="M66 58 L60 46 M66 58 L66 44 M66 58 L72 47"/><path d="M100 36 L94 24 M100 36 L100 22 M100 36 L106 25"/><path d="M136 64 L130 52 M136 64 L136 50 M136 64 L142 53"/></g></g><ellipse cx="111" cy="100" rx="6.5" ry="17" fill="#d9b24a" transform="rotate(20 111 100)"/><path d="M103 116 C106 104 108 94 116 84" stroke="currentColor" stroke-width="1.2" fill="none" opacity=".7"/></svg>`,
+    wheel: () => {
+      const cx = 100, cy = 106, R = 56, pt = (a, r) => `${(cx + r * Math.cos(a * Math.PI / 180)).toFixed(1)} ${(cy + r * Math.sin(a * Math.PI / 180)).toFixed(1)}`;
+      let out = `<svg viewBox="0 0 200 200" aria-hidden="true">`;
+      for (let i = 0; i < 12; i++) {
+        const a = -105 + i * 30, fill = i === 0 ? `fill="#d24b3f"` : i % 2 ? `fill="currentColor" opacity=".14"` : `fill="none"`;
+        out += `<path d="M${cx} ${cy} L${pt(a, R)} A${R} ${R} 0 0 1 ${pt(a + 30, R)} Z" ${fill}/>`;
+      }
+      out += `<g stroke="currentColor" stroke-width=".7" opacity=".6">`;
+      for (let i = 0; i < 12; i++) out += `<line x1="${cx}" y1="${cy}" x2="${pt(-105 + i * 30, R).replace(" ", `" y2="`)}"/>`;
+      return out + `</g><circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="${cx}" cy="${cy}" r="7" fill="currentColor"/><path d="M92 36 L108 36 L100 54 Z" fill="#e0b65a"/></svg>`;
+    },
+    corridor: () => {
+      let bars = "";
+      [0.06, 0.17, 0.27, 0.36, 0.44, 0.51, 0.57, 0.63, 0.68].forEach(t => {
+        const w = (1.8 * (1 - t) + .4).toFixed(2), yt = (18 + 56 * t).toFixed(1), yb = (196 - 92 * t).toFixed(1);
+        bars += `<line x1="${(30 + 62 * t).toFixed(1)}" y1="${yt}" x2="${(30 + 62 * t).toFixed(1)}" y2="${yb}" stroke-width="${w}"/><line x1="${(170 - 62 * t).toFixed(1)}" y1="${yt}" x2="${(170 - 62 * t).toFixed(1)}" y2="${yb}" stroke-width="${w}"/>`;
+      });
+      return `<svg viewBox="0 0 200 200" aria-hidden="true"><path d="M30 196 L170 196 L108 104 L92 104 Z" fill="#7fae6a" opacity=".9"/><g stroke="currentColor" fill="none"><path d="M30 18 L92 74 M170 18 L108 74" stroke-width=".8" opacity=".4"/><rect x="92" y="74" width="16" height="30" stroke-width="1"/><g opacity=".8">${bars}</g></g></svg>`;
+    },
+    watch: () => {
+      let ticks = "";
+      for (let i = 0; i < 12; i++) {
+        const a = i * 30 * Math.PI / 180, s = Math.sin(a), c = Math.cos(a);
+        ticks += `<line x1="${(100 + 35 * s).toFixed(1)}" y1="${(114 - 35 * c).toFixed(1)}" x2="${(100 + 41 * s).toFixed(1)}" y2="${(114 - 41 * c).toFixed(1)}"/>`;
+      }
+      return `<svg viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#e2c27a"><circle cx="100" cy="51" r="7" stroke-width="2.4"/><circle cx="100" cy="114" r="50" stroke-width="3"/><circle cx="100" cy="114" r="44" stroke-width=".8" opacity=".55"/><g stroke-width="1.6">${ticks}</g></g><rect x="96" y="58" width="8" height="7" fill="#e2c27a"/><g stroke="currentColor" stroke-linecap="round"><path d="M100 114 L105.7 92.7" stroke-width="3"/><path d="M100 114 L100 148" stroke-width="1.8"/></g><circle cx="100" cy="114" r="3.2" fill="#e2c27a"/></svg>`;
+    },
+    stars: () => {
+      const star = (x, y, R) => Array.from({ length: 10 }, (_, i) => {
+        const a = (i * 36 - 90) * Math.PI / 180, r = i % 2 ? R * .42 : R;
+        return `${(x + r * Math.cos(a)).toFixed(1)},${(y + r * Math.sin(a)).toFixed(1)}`;
+      }).join(" ");
+      const sky = [[58, 58, 18, .62], [138, 42, 12, .45], [72, 134, 11, .42], [124, 160, 14, .52], [168, 118, 9, .36]];
+      return `<svg viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round">${sky.map(([x, y, R, o]) => `<polygon points="${star(x, y, R)}" opacity="${o}"/>`).join("")}<polygon points="${star(136, 96, 27)}" stroke-dasharray="3.5 3.5" opacity=".95"/></g></svg>`;
+    },
+    paw: () => `<svg viewBox="0 0 200 200" aria-hidden="true"><g fill="currentColor" transform="translate(100 112) scale(1.22) translate(-100 -112)"><path d="M100 104 C121 104 138 124 136 141 C134 156 117 153 100 151 C83 153 66 156 64 141 C62 124 79 104 100 104 Z"/><ellipse cx="62" cy="96" rx="11" ry="14" transform="rotate(-28 62 96)"/><ellipse cx="86" cy="74" rx="11" ry="15" transform="rotate(-9 86 74)"/><ellipse cx="114" cy="74" rx="11" ry="15" transform="rotate(9 114 74)"/><ellipse cx="138" cy="96" rx="11" ry="14" transform="rotate(28 138 96)"/></g></svg>`,
+    keys: () => {
+      const rows = [["Q","W","E","R","T","Y"],["A","S","D","F","G","H"],["Z","X","C","V","B",""]];
+      let out = `<svg viewBox="0 0 200 200" aria-hidden="true">`;
+      rows.forEach((row, r) => {
+        const y = 52 + r * 46, x0 = 100 - (row.length - 1) * 15 + r * 7;
+        row.forEach((k, i) => {
+          const x = x0 + i * 30;
+          if (k) out += `<circle cx="${x}" cy="${y}" r="12.5" fill="#17191b"/><text x="${x}" y="${y + 4.4}" text-anchor="middle" font-family="Courier Prime, Courier New, monospace" font-size="12.5" font-weight="700" fill="#dfe3e4">${k}</text>`;
+          else out += `<circle cx="${x}" cy="${y}" r="12.5" fill="none" stroke="#9e2b25" stroke-width="1.4" stroke-dasharray="3 3"/>`;
+        });
+      });
+      return out + `</svg>`;
+    }
+  };
+
+  /* A book's page takes on its cover's colours: [glow at the top of the page, accent for its
+     details]. Keyed by motif like the drawings above, so a new motif needs an entry here too. */
+  const AMBIENCE = {
+    drop: ["#4a1219", "#d8574b"],
+    room217: ["#1b3a2b", "#d1b067"],
+    road: ["#3b3524", "#ddb84f"],
+    fog: ["#46545b", "#e4ebed"],
+    markers: ["#40301f", "#d0b78f"],
+    keys: ["#2f383d", "#d24d42"],
+    balloon: ["#1f2c33", "#d8574b"],
+    flame: ["#3b1c0f", "#e8894a"],
+    screen: ["#1f2a30", "#e05a4c"],
+    dome: ["#22353b", "#a9d4dc"],
+    cuffs: ["#2e2b28", "#cfc8bb"],
+    sparrows: ["#1e1e26", "#d9d4c8"],
+    house: ["#2e2318", "#e0b552"],
+    moon: ["#1a2138", "#e8dcb0"],
+    crow: ["#36302a", "#d0584a"],
+    seasons: ["#2a2a20", "#e3b54f"],
+    dots: ["#163038", "#7fd0dc"],
+    corn: ["#2c3220", "#d9b24a"],
+    wheel: ["#2f1f33", "#e0b65a"],
+    corridor: ["#1d3322", "#8cc07a"],
+    watch: ["#3e1916", "#e2c27a"],
+    stars: ["#1a1d24", "#c9cfd8"],
+    paw: ["#3d2c14", "#e0a64e"]
+  };
+  function setView(name, book) {
+    const style = document.body.style;
+    const colours = book && AMBIENCE[book.cover.motif];
+    document.body.dataset.view = name;
+    if (colours) {
+      style.setProperty("--book-glow", colours[0]);
+      style.setProperty("--book-accent", colours[1]);
+    } else {
+      style.removeProperty("--book-glow");
+      style.removeProperty("--book-accent");
+    }
+  }
+
+  function cover(book) {
+    const c = h("div", {
+      class: "cover",
+      "data-motif": book.cover.motif,
+      "data-long": book.title.length > 10 ? "" : null,
+      style: `--cv-bg:${book.cover.bg};--cv-fg:${book.cover.fg}`,
+      role: "img",
+      "aria-label": `Couverture : ${book.title}`
+    });
+    c.append(h("span", { class: "cv" },
+      h("span", { class: "cv-author" }, "Stephen King"),
+      h("span", { class: "cv-motif", html: motifs[book.cover.motif]() }),
+      h("span", { class: "cv-title" }, h("span", { class: "cv-rule" }), book.title)
+    ));
+    return c;
+  }
+
+  /* ---------- Items ---------- */
+  const UNIT = {
+    chapter: ["Chapitre", "Chapitres", "chapitres"],
+    section: ["Section", "Sections", "sections"],
+    sequence: ["Séquence", "Séquences", "séquences"]
+  };
+  function describe(book, it) {
+    const prefix = it.n.includes("·") ? it.n.split("·")[0] : null;
+    const n = prefix ? it.n.split("·")[1] : it.n;
+    const isNum = /^\d+$/.test(n);
+    const isRange = /^\d+–\d+$/.test(n);
+    const u = UNIT[book.unit];
+    let num = isNum || isRange ? n : "Ép.";
+    let word, full;
+    if (isRange) { word = u[1]; full = it.label || `${u[1]} ${n}`; }
+    // A plain number speaks for itself in the list; "Chapitre" is only spelled out in `full`.
+    else if (isNum) { word = it.label || ""; full = it.label ? `${u[0]} ${n} · ${it.label}` : `${u[0]} ${n}`; }
+    else { word = it.label || n; full = word; }
+    if (prefix) full = `Partie ${prefix} · ${full}`;
+    return { num, word, full };
+  }
+  function allItems(book) {
+    const list = [];
+    book.parts.forEach((p, pi) => p.items.forEach(it => list.push({ ...it, part: p, pi })));
+    return list.map((it, i) => ({ ...it, i, id: `${book.id}-${i}`, d: describe(book, it) }));
+  }
+
+  /* ---------- Progress ----------
+     "Chapitre 12 sur 18": the total is the book's highest chapter number. Books whose numbering
+     restarts with each part (Misery) have no single total, so they keep the plain label. */
+  function chapterTotal(book) {
+    const ns = book.parts.flatMap(p => p.items.map(it => it.n));
+    if (ns.some(n => n.includes("·"))) return null;
+    const nums = ns.map(n => /^(?:\d+–)?(\d+)$/.exec(n)).filter(Boolean).map(m => +m[1]);
+    return nums.length ? Math.max(...nums) : null;
+  }
+  function progressLabel(book, it) {
+    const total = chapterTotal(book);
+    return /^(?:\d+–)?\d+$/.test(it.n) && total ? `${it.d.full} sur ${total}` : it.d.full;
+  }
+  // Share of the book's fiches reached, the last opened one included.
+  const progressShare = (book, i) => (i + 1) / allItems(book).length;
+  // One tick per fiche, filled up to the last one opened.
+  function progressBar(book, i) {
+    const count = allItems(book).length;
+    const bar = h("span", {
+      class: "progress",
+      role: "progressbar",
+      "aria-label": "Progression dans le livre",
+      "aria-valuemin": "0", "aria-valuemax": String(count), "aria-valuenow": String(i + 1)
+    });
+    for (let j = 0; j < count; j++) bar.append(h("span", { class: j <= i ? "on" : null }));
+    return bar;
+  }
+
+  /* ---------- Views ---------- */
+  // Shelf card for a book waiting or finished (a book in progress gets nowCard).
+  function bookCard(b) {
+    const e = entry(b.id);
+    const line = statusOf(b.id) === "lu" && e.finishedAt
+      ? h("span", { class: "done-tag" }, "Terminé le " + fmtDate(e.finishedAt))
+      : null;
+    return h("li", { class: "shelf-item" },
+      h("a", { class: "book-link", href: "#" + b.id },
+        h("span", { class: "book-year" }, String(b.year)),
+        cover(b),
+        h("span", { class: "book-caption" },
+          h("strong", null, b.title),
+          h("span", null, b.meta),
+          line
+        )
+      )
+    );
+  }
+
+  // A book in progress, given the full width of its pile: where the reader stopped, and one way back in.
+  function nowCard(b) {
+    const e = entry(b.id);
+    const items = allItems(b);
+    const lastItem = Number.isInteger(e.last) ? items[e.last] : null;
+    // Part-numbered fiches (Misery) already name their part in the label.
+    const where = lastItem && lastItem.part.title && !lastItem.n.includes("·") ? `${lastItem.part.title} · ${lastItem.part.name}` : null;
+    const facts = [
+      e.startedAt ? "Commencé le " + fmtDate(e.startedAt) : null,
+      lastItem ? `${Math.round(progressShare(b, lastItem.i) * 100)} % du livre` : null
+    ].filter(Boolean).join(" · ");
+    return h("li", { class: "now" },
+      h("a", { class: "now-cover book-link", href: "#" + b.id, "aria-label": b.title }, cover(b)),
+      h("div", { class: "now-head" },
+        h("p", { class: "eyebrow" }, `Stephen King · ${b.year}`),
+        h("h3", null, h("a", { href: "#" + b.id }, b.title)),
+        lastItem
+          ? h("p", { class: "now-where" }, h("b", null, progressLabel(b, lastItem)), where ? " · " + where : null)
+          : null
+      ),
+      h("div", { class: "now-body" },
+        lastItem ? progressBar(b, lastItem.i) : null,
+        facts ? h("p", { class: "now-facts" }, facts) : null,
+        h("div", { class: "now-actions" },
+          lastItem
+            ? h("a", { class: "btn btn-accent btn-solid", href: `#${b.id}/reprendre` }, "Reprendre la lecture")
+            : h("a", { class: "btn btn-accent btn-solid", href: "#" + b.id }, "Ouvrir le livre"),
+          h("a", { class: "now-all", href: "#" + b.id }, "Tous les chapitres")
+        )
+      )
+    );
+  }
+
+  // A recommended book added to the piles: no summaries yet, so no page — just its status.
+  function pendingCard(r) {
+    const status = entry(r.id).status;
+    const select = h("select", {
+        "aria-label": `Statut de ${r.title}`,
+        onchange: e => { const v = e.target.value; if (v === "retirer") removeEntry(r.id); else setStatus(r.id, v); }
+      },
+      [["a-lire", "À lire"], ["en-cours", "En cours"], ["lu", "Lu"], ["retirer", "Retirer de mes piles"]]
+        .map(([v, l]) => h("option", { value: v, selected: v === status }, l))
+    );
+    return h("li", { class: "shelf-item" },
+      h("div", { class: "book-link" },
+        h("span", { class: "book-year" }, String(r.year)),
+        cover(r.cover ? r : { title: r.title, cover: { bg: "#2e3134", fg: "#d8d3c7", motif: "pending" } }),
+        h("span", { class: "book-caption" },
+          h("strong", null, r.title),
+          h("span", null, "Résumés à venir : demandez-les à Claude"),
+          mode !== "readonly" ? h("span", { class: "pending-tools" }, select) : null
+        )
+      )
+    );
+  }
+
+  // The three best-placed suggestions show first; the rest wait behind a button.
+  const RECS_FIRST = 3;
+  let recsOpen = false;
+  function recsSection() {
+    const rank = { "lu": 0, "en-cours": 1, "a-lire": 2 };
+    const recs = RECS
+      .filter(r => !entry(r.id).status && (!r.gate || statusOf(r.gate) === "lu"))
+      .sort((a, z) => rank[statusOf(a.from)] - rank[statusOf(z.from)]);
+    if (!recs.length) return null;
+    const hidden = recs.length - RECS_FIRST;
+    const more = hidden > 0
+      ? h("p", { class: "recs-more" },
+          h("button", { class: "link-btn", type: "button", "aria-expanded": String(recsOpen), onclick: () => { recsOpen = !recsOpen; refresh(); } },
+            recsOpen ? "Afficher moins de suggestions" : `Voir ${hidden > 1 ? `les ${hidden} autres suggestions` : "l'autre suggestion"}`))
+      : null;
+    return h("section", { class: "recs", "aria-labelledby": "recs-title" },
+      h("div", { class: "pile-head" }, h("h2", { id: "recs-title" }, "Que lire ensuite ?")),
+      h("p", { class: "recs-intro" }, "Des romans de King choisis pour prolonger ceux de votre bibliothèque. Ajoutez-en un à votre pile ; ses résumés pourront être rédigés quand vous le commencerez."),
+      h("ol", { class: "rec-list" }, (recsOpen ? recs : recs.slice(0, RECS_FIRST)).map(r => {
+        const src = byId[r.from];
+        const lead = statusOf(r.from) === "lu" ? `Parce que vous avez lu ${src.title}` : `Dans la lignée de ${src.title}`;
+        return h("li", { class: "rec" },
+          r.cover ? h("div", { class: "rec-cover" }, cover(r)) : null,
+          h("h3", null, r.title),
+          h("p", { class: "rec-meta" }, `${r.original} · ${r.year}`),
+          h("p", { class: "rec-why" }, `${lead} · ${r.why}`),
+          h("p", { class: "rec-pitch" }, r.pitch),
+          mode !== "readonly"
+            ? h("div", { class: "rec-action" }, h("button", { class: "btn btn-accent", type: "button", onclick: () => setStatus(r.id, "a-lire") }, "Ajouter à « À lire »"))
+            : null
+        );
+      })),
+      more
+    );
+  }
+
+  // Books in progress get a wide panel; everything else (and recs without summaries yet) stays on the shelf.
+  function pileList(p) {
+    const shelfOf = list => list.length ? h("ol", { class: "shelf" }, list.map(x => x.kind === "book" ? bookCard(x.b) : pendingCard(x.b))) : null;
+    if (p.key !== "en-cours") return shelfOf(p.list);
+    const wide = p.list.filter(x => x.kind === "book");
+    return [
+      wide.length ? h("ol", { class: "now-list" }, wide.map(x => nowCard(x.b))) : null,
+      shelfOf(p.list.filter(x => x.kind !== "book"))
+    ];
+  }
+
+  function renderHome() {
+    document.title = "Chapitres en suspens";
+    setView("home", null);
+    const all = [
+      ...books.map(b => ({ kind: "book", b, status: statusOf(b.id) })),
+      ...RECS.filter(r => entry(r.id).status).map(r => ({ kind: "rec", b: r, status: entry(r.id).status }))
+    ].sort((a, z) => a.b.year - z.b.year);
+    const piles = STATUSES.map(s => ({ ...s, list: all.filter(x => x.status === s.key) }));
+    const tally = h("p", { class: "tally", "aria-label": "Où j'en suis" },
+      piles.map(p => h("span", { class: p.key === "en-cours" ? "is-reading" : null },
+        h("b", null, String(p.list.length)), " " + (p.key === "lu" ? (p.list.length > 1 ? "lus" : "lu") : p.label.toLowerCase())
+      ))
+    );
+    app.replaceChildren(h("div", { class: "wrap" },
+      h("header", { class: "masthead" },
+        h("p", { class: "eyebrow" }, "Carnet de lectures · Stephen King"),
+        h("h1", { html: "Chapitres <em>en suspens</em>" }),
+        h("p", { class: "lede" }, "Les résumés de vos livres, chapitre par chapitre, pour reprendre une lecture là où vous l'avez laissée. Chaque résumé reste caché tant que vous ne cliquez pas dessus : rien ne vous gâche la suite."),
+        tally
+      ),
+      piles.map(p => h("section", { class: "pile", "data-status": p.key, "aria-labelledby": "pile-" + p.key },
+        h("div", { class: "pile-head" },
+          h("h2", { id: "pile-" + p.key }, p.pile),
+          h("span", { class: "pile-count" }, p.list.length ? `${p.list.length} livre${p.list.length > 1 ? "s" : ""}` : "")
+        ),
+        p.list.length
+          ? pileList(p)
+          : h("p", { class: "pile-empty" }, p.empty)
+      )),
+      recsSection(),
+      h("p", { class: "colophon" }, "Les résumés suivent le découpage des éditions originales. Le statut de chaque livre se règle depuis sa page. Un nouveau livre à ajouter ? Il suffit de le demander à Claude."),
+      syncSlip()
+    ));
+  }
+
+  function renderBook(book) {
+    document.title = `${book.title} · Chapitres en suspens`;
+    setView("book", book);
+    const items = allItems(book);
+    const nodes = [];
+    const storedLast = () => { const v = entry(book.id).last; return Number.isInteger(v) && items[v] ? v : null; };
+    let lastIndex = storedLast();
+
+    const resumeBox = h("div", { class: "resume" });
+    function paintResume() {
+      resumeBox.replaceChildren();
+      resumeBox.hidden = lastIndex === null;
+      if (lastIndex === null) return;
+      resumeBox.append(...[
+        h("span", null, "Dernière fiche ouverte : " + progressLabel(book, items[lastIndex])),
+        h("button", { class: "link-btn", type: "button", onclick: () => goTo(lastIndex) }, "Y retourner"),
+        canAsk() && lastIndex > 0
+          ? h("button", { class: "link-btn", type: "button", onclick: () => { const i = lastIndex; goTo(i); runHelp(i, "express"); } }, "Résumé express jusque-là")
+          : null,
+        canAsk()
+          ? h("button", { class: "link-btn", type: "button", onclick: () => { const i = lastIndex; goTo(i); runHelp(i, "cast"); } }, "Qui est qui à ce stade")
+          : null
+      ].filter(Boolean));
+    }
+
+    const linksBox = h("ul", { class: "links" });
+    function paintLinks() {
+      linksBox.replaceChildren(...(book.links || []).map(l => {
+        if (l.gate && statusOf(l.gate) !== "lu") {
+          return h("li", { class: "locked" }, `Un autre lien dévoile la fin de ${byId[l.gate].title} : il apparaîtra quand vous aurez marqué ce livre comme lu.`);
+        }
+        return h("li", null, l.t, l.to && byId[l.to] ? h("a", { href: "#" + l.to }, `Voir ${byId[l.to].title} →`) : null);
+      }));
+    }
+
+    const statusBox = h("div", { class: "status-box" });
+    function paintStatus() {
+      const e = entry(book.id);
+      const current = statusOf(book.id);
+      const dates = [
+        e.startedAt ? "Commencé le " + fmtDate(e.startedAt) : null,
+        e.finishedAt ? "Terminé le " + fmtDate(e.finishedAt) : null
+      ].filter(Boolean).join(" · ");
+      const control = mode === "readonly"
+        ? h("span", { class: "status-read" }, "Statut : " + STATUSES.find(s => s.key === current).label)
+        : h("div", { class: "status", role: "radiogroup", "aria-label": "Statut de lecture" },
+            ["a-lire", "en-cours", "lu"].map(key => h("button", {
+              type: "button", role: "radio", "aria-checked": String(key === current),
+              onclick: () => setStatus(book.id, key)
+            }, STATUSES.find(s => s.key === key).label))
+          );
+      // replaceChildren/append would print a null as the text "null": leave it out instead.
+      statusBox.replaceChildren(...[control, dates ? h("span", { class: "status-dates" }, dates) : null].filter(Boolean));
+    }
+
+    function setOpen(i, open) {
+      const n = nodes[i];
+      n.li.classList.toggle("open", open);
+      n.btn.setAttribute("aria-expanded", String(open));
+      n.body.hidden = !open;
+      n.action.textContent = open ? "Masquer" : "Afficher";
+    }
+    // Everything before the last opened fiche counts as read.
+    function paintFlags() {
+      nodes.forEach((n, j) => {
+        const passed = lastIndex !== null && j < lastIndex;
+        n.flag.hidden = j !== lastIndex;
+        n.seen.hidden = !passed;
+        n.li.classList.toggle("passed", passed);
+        n.btn.setAttribute("aria-label", items[j].d.full + (passed ? " · lu" : ""));
+      });
+    }
+    function markLast(i) {
+      lastIndex = i;
+      paintFlags();
+      paintResume();
+      if (entry(book.id).last !== i) save(book.id, { last: i });
+    }
+    function goTo(i) {
+      setOpen(i, true);
+      markLast(i);
+      nodes[i].li.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+      nodes[i].btn.focus({ preventScroll: true });
+    }
+
+    /* Two helps written by Claude from the summaries the reader has reached, and nothing past them:
+       an express recap of the story so far, and who is who at that point. */
+    const HELPS = {
+      express: {
+        head: target => "Résumé express · jusqu'à " + target,
+        waiting: "Claude relit vos résumés…",
+        cut: "Le résumé a été coupé avant la fin.",
+        task: `Écris un « Précédemment dans ${book.title} » en français : un seul paragraphe de 5 à 7 phrases, au présent, qui rappelle l'essentiel de l'histoire jusqu'à ce point : la situation, les personnages importants et où ils en sont, les tensions encore en suspens. Insiste sur ce qui aide à reprendre la lecture.`,
+        format: "- Pas de titre, pas de liste, pas de mise en forme : seulement le paragraphe."
+      },
+      cast: {
+        head: target => "Qui est qui · " + target,
+        waiting: "Claude fait le point sur les personnages…",
+        cut: "La liste a été coupée avant la fin.",
+        task: "Dresse la liste des personnages qui comptent à ce stade de sa lecture, du plus important au moins important, 8 au maximum. Pour chacun, dis en une phrase courte qui il est et où il en est à ce point de l'histoire.",
+        format: "- Ne cite aucun personnage qui n'apparaît pas encore dans les résumés lus.\n- Une ligne par personnage, sous la forme « Nom | phrase ». Rien d'autre : pas de titre, pas d'introduction, pas de puces."
+      }
+    };
+    function paintExpressButtons() {
+      nodes.forEach((n, j) => {
+        n.expressBtn.hidden = !canAsk() || j < 1;
+        n.castBtn.hidden = !canAsk();
+      });
+    }
+    // "Nom | phrase" lines become a list of names; anything else is left out.
+    function castList(text) {
+      const rows = String(text).split("\n")
+        .map(line => line.replace(/\*\*/g, "").replace(/^\s*[-•*]\s*/, "").split("|"))
+        .filter(parts => parts.length >= 2 && parts[0].trim());
+      return rows.length
+        ? h("dl", { class: "express-cast" }, rows.map(([name, ...rest]) => [h("dt", null, name.trim()), h("dd", null, rest.join("|").trim())]))
+        : null;
+    }
+    let running = null;
+    async function runHelp(i, kind) {
+      if (!canAsk()) return;
+      if (running) running.abort();
+      const ctl = new AbortController();
+      running = ctl;
+      const help = HELPS[kind];
+      const n = nodes[i];
+      const target = items[i].d.full;
+      const out = h("div", null, h("p", { class: "express-text waiting" }, help.waiting));
+      const note = h("p", { class: "express-note" });
+      note.hidden = true;
+      const stop = h("button", { class: "link-btn", type: "button", onclick: () => ctl.abort() }, "Arrêter");
+      const close = h("button", { class: "link-btn", type: "button", onclick: () => { ctl.abort(); n.express.hidden = true; } }, "Fermer");
+      n.express.replaceChildren(h("p", { class: "express-head" }, h("span", null, help.head(target)), stop, close), out, note);
+      n.express.hidden = false;
+      const show = t => out.replaceChildren((kind === "cast" && castList(t)) || h("p", { class: "express-text" }, t));
+
+      const read = items.slice(0, i + 1).map(it =>
+        `[${it.d.full}${it.part.title ? ` · ${it.part.title} : ${it.part.name}` : ""}]` +
+        (it.cue ? ` (repère : ${it.cue})` : "") + "\n" + it.t
+      ).join("\n\n");
+      const prompt =
+`Tu aides un lecteur qui reprend « ${book.title} » de Stephen King après plusieurs semaines de pause. Il a lu jusqu'à : ${target} (inclus).
+
+Personnages (présentation sans révélation) :
+${book.cast.map(([nm, d]) => `- ${nm} : ${d}`).join("\n")}
+
+Résumés de ce qu'il a lu, dans l'ordre :
+
+${read}
+
+${help.task}
+
+Règles strictes :
+- Utilise UNIQUEMENT les informations des résumés ci-dessus et de la présentation des personnages.
+- N'ajoute rien de ce que tu sais par ailleurs sur ce livre, ses adaptations ou sa suite.
+- Ne fais aucune allusion à ce qui se passe après « ${target} » : ni hypothèse, ni présage, ni sous-entendu.
+${help.format}`;
+
+      try {
+        const { text, truncated } = await ask(prompt, {
+          modelTier: "quick",
+          cache: { gcTime: 86400000 },
+          signal: ctl.signal,
+          onText: ({ text }) => show(text)
+        });
+        show(text);
+        if (truncated) { note.textContent = help.cut; note.hidden = false; }
+      } catch (e) {
+        const code = e && e.code;
+        if (["not_granted", "sampling_disabled", "not_declared", "capability_disabled", "capability_removed"].includes(code)) {
+          askBlocked = true;
+          paintExpressButtons();
+          paintResume();
+        }
+        const messages = {
+          not_granted: "L'aide de Claude n'est pas autorisée sur cette page.",
+          sampling_disabled: "L'aide de Claude n'est pas disponible pour ce compte.",
+          rate_limited: "Trop de demandes pour le moment : réessayez un peu plus tard.",
+          session_expired: "Reconnectez-vous à claude.ai, puis réessayez.",
+          refused: "Claude n'a pas pu répondre cette fois-ci.",
+          empty_completion: "Claude n'a pas pu répondre cette fois-ci.",
+          cancelled: "Arrêté."
+        };
+        const msg = messages[code] || (["not_declared", "capability_disabled", "capability_removed"].includes(code)
+          ? "L'aide de Claude n'est pas disponible ici."
+          : "La réponse a été interrompue. Vous pouvez réessayer.");
+        if (e && e.text && code !== "refused") { show(e.text); note.textContent = msg; note.hidden = false; }
+        else out.replaceChildren(h("p", { class: "express-text" }, msg));
+      } finally {
+        stop.hidden = true;
+        if (running === ctl) running = null;
+      }
+    }
+
+    const partsEl = [];
+    let current = null, list = null;
+    items.forEach((it, i) => {
+      if (it.part !== current) {
+        current = it.part;
+        list = h("ol", { class: "items" });
+        partsEl.push(h("section", { class: "part" },
+          it.part.title ? h("h3", null, h("span", { class: "part-num" }, it.part.title), h("span", { class: "part-name" }, it.part.name)) : null,
+          list
+        ));
+      }
+      const bodyId = it.id + "-body";
+      const action = h("span", { class: "item-action", "aria-hidden": "true" }, "Afficher");
+      const flag = h("span", { class: "flag" }, "dernière fiche");
+      flag.hidden = i !== lastIndex;
+      const seen = h("span", { class: "seen" }, "lu");
+      seen.hidden = !(lastIndex !== null && i < lastIndex);
+      const btn = h("button", {
+          class: "item-toggle", type: "button", "aria-expanded": "false", "aria-controls": bodyId,
+          onclick: () => {
+            const open = !nodes[i].li.classList.contains("open");
+            setOpen(i, open);
+            if (open) markLast(i);
+          }
+        },
+        h("span", { class: "item-num" }, it.d.num || "·"),
+        h("span", { class: "item-label" }, it.d.word ? h("span", { class: "item-word" }, it.d.word) : null, seen, flag),
+        action
+      );
+      btn.setAttribute("aria-label", it.d.full);
+      const express = h("div", { class: "express", "aria-live": "polite" });
+      express.hidden = true;
+      const expressBtn = h("button", { class: "link-btn", type: "button", onclick: () => { markLast(i); runHelp(i, "express"); } }, "Résumé express jusqu'ici");
+      expressBtn.hidden = !canAsk() || i < 1;
+      const castBtn = h("button", { class: "link-btn", type: "button", onclick: () => { markLast(i); runHelp(i, "cast"); } }, "Qui est qui à ce stade");
+      castBtn.hidden = !canAsk();
+      const body = h("div", { class: "item-body", id: bodyId },
+        it.cue ? h("p", { class: "cue" }, h("b", null, "Repère"), " · " + it.cue) : null,
+        h("p", { class: "item-text" }, it.t),
+        h("div", { class: "item-tools" },
+          i > 0 ? h("button", { class: "link-btn", type: "button", onclick: () => { for (let j = 0; j <= i; j++) setOpen(j, true); markLast(i); } }, "Afficher aussi tout ce qui précède") : null,
+          expressBtn,
+          castBtn
+        ),
+        express
+      );
+      body.hidden = true;
+      const li = h("li", { class: "item", id: it.id }, btn, body);
+      nodes.push({ li, btn, body, action, flag, seen, express, expressBtn, castBtn });
+      list.append(li);
+    });
+
+    const jump = h("select", { id: "jump-" + book.id, onchange: e => { if (e.target.value !== "") goTo(+e.target.value); e.target.value = ""; } },
+      h("option", { value: "" }, "Choisir…"),
+      items.map(it => h("option", { value: String(it.i) }, it.d.full))
+    );
+
+    const endingBody = h("div", { class: "ending-body" },
+      h("div", null, h("h3", null, "Analyse"), h("p", null, book.conclusion.analyse)),
+      h("div", null, h("h3", null, "Ce que le livre fait ressentir"), h("p", null, book.conclusion.emotions)),
+      h("div", null, h("h3", null, "Ce qu'il veut nous dire"), h("p", null, book.conclusion.message))
+    );
+    endingBody.hidden = true;
+    const endingBtn = h("button", { class: "btn btn-accent", type: "button", "aria-expanded": "false", onclick: () => {
+      const show = endingBody.hidden;
+      endingBody.hidden = !show;
+      endingBody.classList.toggle("reveal", show);
+      endingBtn.setAttribute("aria-expanded", String(show));
+      endingBtn.textContent = show ? "Masquer la conclusion" : "Afficher la conclusion";
+    } }, "Afficher la conclusion");
+
+    paintFlags();
+    paintResume();
+    paintStatus();
+    paintLinks();
+    view = {
+      refresh() {
+        lastIndex = storedLast();
+        paintFlags();
+        paintResume();
+        paintStatus();
+        paintLinks();
+        paintExpressButtons();
+      },
+      // "Reprendre" from the home page: open the last fiche and bring it into view.
+      resume() { if (lastIndex !== null) goTo(lastIndex); }
+    };
+    const art = book.art ? [h("div", { class: "book-art", "aria-hidden": "true", style: `background-image: url("${book.art}")` })] : [];
+    app.replaceChildren(...art, h("div", { class: "wrap" },
+      h("nav", { class: "topbar" }, h("a", { class: "back", href: "#" }, "← La bibliothèque")),
+      h("header", { class: "book-head" },
+        h("div", { class: "book-mark", "aria-hidden": "true", html: motifs[book.cover.motif]() }),
+        cover(book),
+        h("div", { class: "head-text" },
+          h("p", { class: "eyebrow" }, `${book.byline || "Stephen King"} · ${book.year}`),
+          h("h1", null, book.title),
+          h("p", { class: "book-meta" }, `Titre original : ${book.original} · ${book.meta}`),
+          statusBox,
+          h("p", { class: "pitch" }, book.pitch),
+          resumeBox
+        )
+      ),
+      h("div", { class: "reading" },
+        h("details", { class: "cast" },
+          h("summary", null, "Personnages", h("small", null, "sans révélation")),
+          h("dl", null, book.cast.map(([n, d]) => [h("dt", null, n), h("dd", null, d)]))
+        ),
+        book.links && book.links.length
+          ? h("details", { class: "cast" },
+              h("summary", null, "Dans l'univers de King", h("small", null, "liens avec ses autres livres")),
+              linksBox
+            )
+          : null,
+        h("section", { class: "chapters", "aria-labelledby": "ch-title" },
+          h("div", { class: "chapters-head" },
+            h("h2", { id: "ch-title" }, UNIT[book.unit][1]),
+            h("div", { class: "tools" },
+              h("label", { for: "jump-" + book.id }, "Aller à"),
+              jump,
+              h("button", { class: "btn", type: "button", onclick: () => nodes.forEach((_, i) => setOpen(i, false)) }, "Tout masquer")
+            )
+          ),
+          h("p", { class: "note" }, book.note),
+          partsEl
+        ),
+        h("section", { class: "ending", "aria-labelledby": "end-title" },
+          h("h2", { id: "end-title" }, "Conclusion"),
+          h("p", { class: "ending-lock" }, "Analyse du livre, émotions qu'il suscite et ce qu'il veut transmettre. Elle révèle toute l'histoire, fin comprise."),
+          endingBtn,
+          endingBody
+        )
+      )
+    ));
+  }
+
+  function route() {
+    const [id, action] = decodeURIComponent(location.hash.replace(/^#/, "")).split("/");
+    if (id && byId[id]) renderBook(byId[id]);
+    else { view = { refresh: renderHome }; renderHome(); }
+    window.scrollTo(0, 0);
+    if (action === "reprendre" && byId[id]) {
+      // Drop the action from the address so "back" and a reload land on the book itself.
+      // (A sandboxed frame may refuse it; the action then simply stays in the address.)
+      try { history.replaceState(null, "", "#" + id); } catch (e) {}
+      view.resume();
+    }
+  }
+  window.addEventListener("hashchange", route);
+  route();
+})();
+</script>
+
+

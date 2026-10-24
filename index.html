@@ -40,6 +40,7 @@
   --glow-amount: 100%;
   --mark-opacity: .12;
   --art-opacity: 1;
+  --mote: color-mix(in srgb, var(--gilt) 55%, var(--ink));
   --ornament: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='14' viewBox='0 0 180 14'%3E%3Cpath d='M0 7H74M106 7H180' stroke='%23000' stroke-width='.8'/%3E%3Cpath d='M90 1.5l5.5 5.5-5.5 5.5-5.5-5.5z' fill='none' stroke='%23000' stroke-width='1'/%3E%3Ccircle cx='80' cy='7' r='1.3'/%3E%3Ccircle cx='100' cy='7' r='1.3'/%3E%3C/svg%3E");
   --font-display: "Bodoni Moda", "Bodoni 72", Didot, Georgia, serif;
   --font-body: "Spectral", Georgia, "Times New Roman", serif;
@@ -72,6 +73,7 @@
     --glow-amount: 22%;
     --mark-opacity: .1;
     --art-opacity: .5;
+    --mote: #fffaf0;
   }
   :root:not([data-theme="dark"]) body[data-view="book"] { --accent: color-mix(in srgb, var(--book-accent, var(--gilt)) 52%, #000); }
 }
@@ -95,6 +97,7 @@
   --glow-amount: 22%;
   --mark-opacity: .1;
   --art-opacity: .5;
+  --mote: #fffaf0;
 }
 :root[data-theme="light"] body[data-view="book"] { --accent: color-mix(in srgb, var(--book-accent, var(--gilt)) 52%, #000); }
 
@@ -163,7 +166,7 @@ h1, h2, h3 { text-wrap: balance; }
 .eyebrow { margin: 0; color: var(--muted); font-size: 1rem; text-wrap: balance; }
 
 /* Fleuron: two rules around a lozenge, in the page's accent */
-.masthead::after, .pile-head::after, .head-text h1::after, .part h3::after {
+.pile-head::after, .head-text h1::after, .part h3::after {
   content: "";
   display: block;
   width: 180px;
@@ -193,6 +196,10 @@ h1, h2, h3 { text-wrap: balance; }
   margin: 0;
 }
 .masthead h1 em { display: block; font-style: italic; }
+/* The title page's own fleuron, drawn in parts so it can be traced on arrival */
+.fleuron { display: block; width: 180px; height: 14px; margin: 8px auto 0; color: var(--accent); }
+.fleuron svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.fleuron path, .fleuron circle { transform-box: fill-box; }
 .lede { margin: 4px 0 0; color: var(--ink-soft); font-size: var(--step-1); font-style: italic; line-height: 1.5; max-width: 38rem; }
 .tally {
   margin: 4px 0 0;
@@ -242,11 +249,6 @@ h1, h2, h3 { text-wrap: balance; }
 .book-caption strong { font-family: var(--font-display); font-weight: 500; font-size: 1.3rem; line-height: 1.15; }
 .book-caption span { color: var(--muted); }
 .book-caption .done-tag { color: var(--ink-soft); }
-.book-link .cover { transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s; }
-.book-link:hover .cover, .book-link:focus-visible .cover {
-  transform: translateY(-5px) rotate(-.6deg);
-  box-shadow: 0 22px 34px -14px var(--shadow), 0 2px 0 rgba(0,0,0,.2);
-}
 .book-link:focus-visible { outline: none; }
 .book-link:focus-visible .cover { outline: 2px solid var(--focus); outline-offset: 4px; }
 
@@ -272,10 +274,10 @@ h1, h2, h3 { text-wrap: balance; }
   outline-offset: 5px;
 }
 .now-cover { grid-area: cover; position: relative; isolation: isolate; }
-.now-cover::after {
+/* The ribbon hangs from inside the book's block, so it follows the book when it is pulled out */
+.now-cover .volume::after {
   content: "";
   position: absolute;
-  z-index: -1;
   top: 60%;
   right: 24%;
   width: 12px;
@@ -307,7 +309,7 @@ h1, h2, h3 { text-wrap: balance; }
   }
   .now-head { gap: 12px; }
   .now-head h3 { font-size: 3.4rem; }
-  .now-cover::after { width: 14px; height: calc(40% + 30px); }
+  .now-cover .volume::after { width: 14px; height: calc(40% + 30px); }
 }
 
 .colophon {
@@ -382,6 +384,78 @@ h1, h2, h3 { text-wrap: balance; }
 }
 .cover[data-long] .cv-title { font-size: 12cqi; }
 .cv-rule { display: block; width: 22cqi; height: 1px; background: currentColor; opacity: .5; margin-bottom: 4cqi; }
+
+/* ---------- Books in volume ----------
+   On the shelf, a cover is the front board of a whole book: spine, fore-edge, head and foot are
+   drawn around it in CSS 3D (cqi: the book's width). Hovering pulls the book off the shelf, and
+   with a mouse it leans toward the pointer; a touch just lifts it. */
+.book-link { container-type: inline-size; }
+.vol-slot { position: relative; display: block; }
+.vol-shadow {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: -14px;
+  height: 30px;
+  background: radial-gradient(closest-side, var(--shadow), transparent);
+  opacity: 0;
+  transform: scale(.8);
+  transition: opacity .45s, transform .45s cubic-bezier(.2, .7, .2, 1);
+  pointer-events: none;
+}
+/* At rest a book stands three-quarter on, its fore-edge showing; pulled out, it turns to face you. */
+.volume {
+  --d: 13cqi;
+  --rest: -22deg;
+  --pull: -6deg;
+  position: relative;
+  display: block;
+  transform-style: preserve-3d;
+  transform-origin: 50% 100%;
+  transform: perspective(1100px) rotateY(var(--rest));
+  transition: transform .55s cubic-bezier(.2, .7, .2, 1);
+}
+.volume > .cover { transform: translateZ(calc(var(--d) / 2)); }
+.vol-spine, .vol-fore, .vol-head, .vol-foot { position: absolute; pointer-events: none; backface-visibility: hidden; }
+.vol-spine, .vol-fore { top: 0; height: 100%; width: var(--d); left: calc(50% - var(--d) / 2); }
+.vol-spine {
+  transform: rotateY(-90deg) translateZ(50cqi);
+  background:
+    linear-gradient(180deg, transparent 7%, rgba(202, 167, 94, .75) 7% 7.6%, transparent 7.6% 8.8%, rgba(202, 167, 94, .75) 8.8% 9.2%, transparent 9.2% 90.8%, rgba(202, 167, 94, .75) 90.8% 91.2%, transparent 91.2% 92.4%, rgba(202, 167, 94, .75) 92.4% 93%, transparent 93%),
+    linear-gradient(90deg, rgba(0, 0, 0, .4), rgba(255, 255, 255, .16) 38%, rgba(255, 255, 255, .06) 60%, rgba(0, 0, 0, .35)),
+    var(--cv-bg);
+  border-radius: 2px;
+}
+.vol-fore {
+  top: 1.2cqi;
+  height: calc(100% - 2.4cqi);
+  transform: rotateY(90deg) translateZ(calc(50cqi - 1.2cqi));
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, .3), transparent 25% 75%, rgba(0, 0, 0, .35)),
+    repeating-linear-gradient(90deg, #e9e0c9 0 1px, #c9bc9b 1px 2px);
+}
+.vol-head, .vol-foot {
+  left: 0;
+  width: calc(100% - 1.2cqi);
+  height: var(--d);
+  top: calc(50% - var(--d) / 2);
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, .3), transparent 25% 75%, rgba(0, 0, 0, .35)),
+    repeating-linear-gradient(180deg, #e9e0c9 0 1px, #c9bc9b 1px 2px);
+}
+.vol-head { transform: rotateX(90deg) translateZ(calc(75cqi - 1.2cqi)); }
+.vol-foot { transform: rotateX(-90deg) translateZ(calc(75cqi - 1.2cqi)); }
+@media (prefers-reduced-motion: no-preference) {
+  a.book-link:hover .volume, a.book-link:focus-visible .volume {
+    transform: perspective(1100px) translate3d(0, -10px, 44px) rotateY(calc(var(--pull) + var(--ty, 0deg))) rotateX(var(--tx, 0deg));
+    transition-duration: .35s;
+  }
+  a.book-link:hover .vol-shadow, a.book-link:focus-visible .vol-shadow { opacity: 1; transform: none; }
+  @media (hover: none) {
+    a.book-link:active .volume { transform: perspective(1100px) translate3d(0, -6px, 18px) rotateY(var(--rest)); transition-duration: .15s; }
+    a.book-link:active .vol-shadow { opacity: 1; transform: none; }
+  }
+}
 
 /* ---------- Book page: a title page, centred ---------- */
 .topbar { padding-block: 22px 8px; }
@@ -648,8 +722,11 @@ h1, h2, h3 { text-wrap: balance; }
 .part-num { font-family: var(--font-body); font-size: .8rem; letter-spacing: .3em; text-transform: uppercase; color: var(--accent); }
 .part-name { font-family: var(--font-display); font-style: italic; font-size: 2.3rem; line-height: 1.2; }
 
+/* The number column, wider for books numbered in ranges ("14–28") */
+.chapters { --num: 4.4rem; --num-gap: 12px; }
+.chapters.ranged { --num: 5.6rem; }
 .items { list-style: none; margin: 0; padding: 0; }
-.item { border-top: 1px solid var(--line); scroll-margin-top: 16px; }
+.item { position: relative; border-top: 1px solid var(--line); scroll-margin-top: 16px; }
 .item:last-child { border-bottom: 1px solid var(--line); }
 .item-toggle {
   width: 100%;
@@ -658,9 +735,9 @@ h1, h2, h3 { text-wrap: balance; }
   cursor: pointer;
   text-align: left;
   display: grid;
-  grid-template-columns: 4.4rem minmax(0, 1fr) auto;
+  grid-template-columns: var(--num) minmax(0, 1fr) auto auto;
   align-items: baseline;
-  gap: 12px;
+  gap: var(--num-gap);
   padding: 13px 0;
 }
 .item-num {
@@ -685,7 +762,7 @@ h1, h2, h3 { text-wrap: balance; }
 .item-toggle:hover .item-num { color: var(--ink); }
 .item-toggle:hover .item-action { color: var(--ink); }
 .item.open .item-action { color: var(--accent); }
-.item-body { padding: 0 0 24px calc(4.4rem + 12px); }
+.item-body { padding: 0 0 24px calc(var(--num) + var(--num-gap)); }
 .cue { color: var(--muted); margin: 0 0 8px; }
 .cue b { color: var(--accent); font-weight: 400; }
 .item-text { margin: 0; max-width: 62ch; font-size: 1.12rem; line-height: 1.72; }
@@ -698,8 +775,64 @@ h1, h2, h3 { text-wrap: balance; }
   padding: .06em .1em 0 0;
   color: var(--accent);
 }
-.item.open .item-text, .ending-body.reveal > * { animation: ink .6s ease-out both; }
-@keyframes ink { from { opacity: 0; filter: blur(3px); } to { opacity: 1; filter: none; } }
+.item.open .item-text, .ending-body.reveal > * { animation: ink .5s ease-out both; }
+@keyframes ink { from { opacity: 0; transform: translateY(4px); } }
+
+/* ---------- Sealed chapters ----------
+   A closed chapter carries a wax seal in the ribbon's red. Opening it breaks the seal in two and
+   brings the summary up word by word, like ink taking to the paper; closing it presses a fresh
+   seal. The veil over the next chapter is drawn lines, never the summary itself. */
+.seal { position: relative; display: block; width: 24px; height: 24px; align-self: center; color: var(--ribbon); }
+.seal > span { position: absolute; inset: 0; }
+.seal svg { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, .45)); }
+.seal-half { opacity: 0; transform-origin: 50% 100%; }
+.seal-l { clip-path: polygon(0 0, 53% 0, 46% 24%, 55% 41%, 47% 58%, 56% 76%, 49% 100%, 0 100%); }
+.seal-r { clip-path: polygon(53% 0, 100% 0, 100% 100%, 49% 100%, 56% 76%, 47% 58%, 55% 41%, 46% 24%); }
+.item.open .seal-whole { opacity: 0; }
+.item.breaking .seal-l { animation: seal-break-l .55s cubic-bezier(.5, 0, .75, .4) both; }
+.item.breaking .seal-r { animation: seal-break-r .55s cubic-bezier(.5, 0, .75, .4) both; }
+.item.stamping .seal-whole { animation: seal-stamp .4s cubic-bezier(.2, .7, .2, 1) both; }
+@keyframes seal-break-l {
+  0% { opacity: 1; transform: none; }
+  25% { opacity: 1; transform: translate(-6%, 0) rotate(-5deg); }
+  100% { opacity: 0; transform: translate(-37%, 46%) rotate(-30deg); }
+}
+@keyframes seal-break-r {
+  0% { opacity: 1; transform: none; }
+  25% { opacity: 1; transform: translate(6%, 0) rotate(4deg); }
+  100% { opacity: 0; transform: translate(33%, 58%) rotate(26deg); }
+}
+@keyframes seal-stamp { from { opacity: 0; transform: scale(1.4); } 60% { opacity: 1; transform: scale(.94); } to { transform: none; } }
+.item-text.inking { animation: none !important; }
+.item-text.inking .w { animation: ink-word .3s ease-out both; animation-delay: var(--d); }
+@keyframes ink-word { from { opacity: 0; } }
+
+/* The next chapter to read waits under a sealed veil, its own big seal in place of the small one */
+.veil { display: none; }
+.item.next:not(.open) .veil, .item.unveiling .veil {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  margin-left: calc(var(--num) + var(--num-gap));
+  padding: 8px 0 22px;
+  cursor: pointer;
+}
+.item.next .item-toggle > .seal { visibility: hidden; }
+/* Opened, the veil lifts off the summary coming up beneath it while its seal breaks */
+.item.unveiling .veil { position: absolute; left: 0; right: 0; pointer-events: none; }
+.item.unveiling .veil .seal-l { animation: seal-break-l .6s cubic-bezier(.5, 0, .75, .4) both; }
+.item.unveiling .veil .seal-r { animation: seal-break-r .6s cubic-bezier(.5, 0, .75, .4) both; }
+.item.unveiling .veil-lines i, .item.unveiling .veil-cue { animation: veil-lift .45s ease-out both; }
+@keyframes veil-lift { to { opacity: 0; transform: translateY(-6px); } }
+.veil-lines { position: relative; width: 100%; max-width: 62ch; display: grid; gap: 13px; color: var(--ink); }
+.veil-lines i { display: block; height: .62em; border-radius: 4px; background: currentColor; opacity: .13; filter: blur(3.5px); }
+.veil-lines i:nth-child(2) { width: 93%; }
+.veil-lines i:nth-child(3) { width: 61%; }
+.veil .seal { position: absolute; top: 50%; left: 50%; width: 52px; height: 52px; margin: -26px 0 0 -26px; transition: transform .3s cubic-bezier(.2, .7, .2, 1); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .veil:hover .seal { transform: scale(1.07) rotate(-4deg); }
+}
+.veil-cue { color: var(--muted); font-style: italic; font-size: .9rem; }
 .item-tools { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 16px; }
 @media (max-width: 520px) {
   .masthead { padding-block: 64px 48px; }
@@ -707,9 +840,9 @@ h1, h2, h3 { text-wrap: balance; }
   /* two books a row on a phone; the boards still meet across the 30px gap */
   .shelf { grid-template-columns: repeat(auto-fit, minmax(0, 148px)); gap: 64px 30px; }
   .book-caption::before { left: -16px; right: -16px; }
-  .item-toggle { grid-template-columns: 3.2rem minmax(0, 1fr) auto; gap: 8px; }
+  .chapters { --num: 3.2rem; --num-gap: 8px; }
+  .chapters.ranged { --num: 4.3rem; }
   .item-num { font-size: 1.4rem; }
-  .item-body { padding-left: calc(3.2rem + 8px); }
 }
 
 .ending {
@@ -727,8 +860,116 @@ h1, h2, h3 { text-wrap: balance; }
 .ending-body h3 { font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: var(--step-2); margin: 0 0 6px; }
 .ending-body p { margin: 0 auto; max-width: 62ch; }
 
+/* ---------- Page turns ----------
+   Shelf to book: the cover grows into the book's painting, cropped like a window opening wider,
+   while its title slides up to the page title and the rest of the page fades into the book's
+   colours. Coming back plays the same pair in reverse. */
+::view-transition-group(turn-picture),
+::view-transition-group(turn-title) {
+  animation-duration: .62s;
+  animation-timing-function: cubic-bezier(.65, 0, .2, 1);
+}
+::view-transition-old(turn-picture),
+::view-transition-new(turn-picture) { height: 100%; object-fit: cover; animation-duration: .62s; }
+/* The cover keeps its shape: the book grows and melts into the scene opening around it, early
+   on the way in, late on the way back, so it is never shown blown up. */
+:root[data-turn="open"]::view-transition-old(turn-picture),
+:root[data-turn="close"]::view-transition-new(turn-picture) { object-fit: contain; }
+:root[data-turn="open"]::view-transition-old(turn-picture) { animation: turn-cover-out .62s linear both; }
+:root[data-turn="open"]::view-transition-new(turn-picture) { animation: turn-art-in .62s linear both; }
+:root[data-turn="close"]::view-transition-old(turn-picture) { animation: turn-art-out .62s linear both; }
+:root[data-turn="close"]::view-transition-new(turn-picture) { animation: turn-cover-in .62s linear both; }
+::view-transition-old(turn-title),
+::view-transition-new(turn-title) { height: 100%; object-fit: contain; }
+::view-transition-old(turn-title) { animation: turn-out-quick .62s ease-out both; }
+::view-transition-new(turn-title) { animation: turn-in-late .62s ease-out both; }
+::view-transition-old(root) { animation: turn-out-quick .5s ease-out both; }
+::view-transition-new(root) { animation: turn-in .5s ease-out both; }
+@keyframes turn-cover-out { 0%, 15% { opacity: 1; } 60%, 100% { opacity: 0; } }
+@keyframes turn-art-in { 0%, 5% { opacity: 0; } 55%, 100% { opacity: 1; } }
+@keyframes turn-art-out { 0%, 35% { opacity: 1; } 85%, 100% { opacity: 0; } }
+@keyframes turn-cover-in { 0%, 40% { opacity: 0; } 90%, 100% { opacity: 1; } }
+@keyframes turn-in { 0%, 20% { opacity: 0; } 75%, 100% { opacity: 1; } }
+@keyframes turn-out-quick { from { opacity: 1; } 45%, to { opacity: 0; } }
+@keyframes turn-in-late { 0%, 40% { opacity: 0; } to { opacity: 1; } }
+
+/* ---------- Arrival on the shelf ----------
+   The first time the shelf is shown, its title sets itself letter by letter, the fleuron is
+   drawn out from its lozenge and the book in hand fills its progress tick by tick. A redraw
+   during the entrance (a sync landing) picks every animation up where it was, through --since. */
+.arriving .masthead h1 { animation: title-rise .7s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(0ms - var(--since)); }
+.arriving .ltr { animation: ltr-in .5s ease-out both; animation-delay: calc(var(--d) - var(--since)); }
+.arriving .fl-z { transform-origin: center; animation: fl-z .5s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(850ms - var(--since)); }
+.arriving .fl-d { animation: ltr-in .3s ease-out both; animation-delay: calc(1100ms - var(--since)); }
+.arriving .fl-l, .arriving .fl-r { animation: fl-rule .65s cubic-bezier(.3, .6, .2, 1) both; animation-delay: calc(1150ms - var(--since)); }
+.arriving .fl-l { transform-origin: 100% 50%; }
+.arriving .fl-r { transform-origin: 0 50%; }
+.arriving .progress > span.on { animation: tick .4s ease-out both; animation-delay: calc(var(--d) - var(--since)); }
+@keyframes title-rise { from { transform: translateY(14px); } }
+@keyframes ltr-in { from { opacity: 0; } }
+@keyframes fl-z { from { opacity: 0; transform: scale(0) rotate(-90deg); } }
+@keyframes fl-rule { from { transform: scaleX(0); } }
+@keyframes tick { from { opacity: .18; } }
+
+/* ---------- The reading lamp ----------
+   The glow at the top of the page wavers like a bedside lamp, and a few motes of dust drift
+   where it falls, behind the page. Both run on the compositor: opacity and transform only. */
+body::after { animation: lamp 9s linear infinite; }
+@keyframes lamp {
+  0%, 100% { opacity: 1; }
+  12% { opacity: .84; } 13.5% { opacity: .97; } 15% { opacity: .9; } 17% { opacity: 1; }
+  46% { opacity: .93; } 52% { opacity: 1; }
+  71% { opacity: .86; } 72% { opacity: .98; } 74% { opacity: .91; } 77% { opacity: 1; }
+}
+.dust { position: fixed; inset: 0 0 auto; height: 75vh; z-index: 0; overflow: hidden; pointer-events: none; }
+.dust i {
+  position: absolute;
+  width: var(--s);
+  height: var(--s);
+  border-radius: 50%;
+  background: var(--mote);
+  opacity: 0;
+  animation: mote var(--t) ease-in-out var(--w) infinite alternate;
+}
+@keyframes mote {
+  from { opacity: 0; transform: translate(0, 0); }
+  30%, 70% { opacity: var(--o); }
+  to { opacity: 0; transform: translate(var(--x), var(--y)); }
+}
+
+/* ---------- Finishing touches ---------- */
+/* The painting lags a little behind the scroll */
+@supports (animation-timeline: scroll()) {
+  .book-art { animation: art-drift linear both; animation-timeline: scroll(root); animation-range: 0 700px; }
+}
+@keyframes art-drift { to { transform: translateY(210px); } }
+/* The ribbon of the book in hand stirs */
+.now-cover .volume::after { transform-origin: 50% 0; animation: ribbon-sway 5.5s ease-in-out infinite alternate; }
+@keyframes ribbon-sway { from { transform: rotate(-1.4deg); } to { transform: rotate(1.8deg) skewX(-1.5deg); } }
+/* A chapter just passed gets its "lu" stamped in, with a ring of red ink */
+.seen.stamped { position: relative; animation: stamp .45s cubic-bezier(.2, .7, .2, 1) both; animation-delay: var(--d); }
+.seen.stamped::after {
+  content: "";
+  position: absolute;
+  inset: -4px -8px;
+  border: 1.5px solid var(--mark);
+  border-radius: 46% 54% 42% 58%;
+  opacity: 0;
+  animation: blot .6s ease-out both;
+  animation-delay: var(--d);
+}
+@keyframes stamp { from { opacity: 0; transform: scale(1.9) rotate(-12deg); } 55% { opacity: 1; transform: scale(.92) rotate(-3deg); } to { transform: none; } }
+@keyframes blot { from { opacity: 0; transform: scale(.6); } 30% { opacity: .6; } to { opacity: 0; transform: scale(1.35) rotate(-6deg); } }
+/* Real fog drifting across Brume's cover, behind its title: two banks, each looping seamlessly */
+.cv-fog { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.cv-fog i { position: absolute; inset: 0 auto 0 0; width: 200%; background-size: 50% 100%; background-repeat: repeat-x; animation: fog-drift 46s linear infinite; }
+.cv-fog i:first-child { background-image: radial-gradient(44% 15% at 50% 40%, rgba(255, 255, 255, .2), transparent 70%), radial-gradient(22% 9% at 18% 74%, rgba(255, 255, 255, .17), transparent 70%); }
+.cv-fog i:last-child { background-image: radial-gradient(46% 13% at 50% 62%, rgba(255, 255, 255, .18), transparent 70%), radial-gradient(18% 8% at 85% 26%, rgba(255, 255, 255, .15), transparent 70%); animation-duration: 31s; animation-direction: reverse; }
+@keyframes fog-drift { to { transform: translateX(-50%); } }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }
 </style>
 
@@ -1204,6 +1445,14 @@ BOOKS.push({
 <script>
 (() => {
   const app = document.getElementById("app");
+  const loaded = performance.now();
+
+  /* Dust in the lamplight: a few motes adrift where the glow falls, behind the page. Placed by a
+     fixed recipe rather than at random, so the page looks the same at every visit. */
+  document.body.insertAdjacentHTML("beforeend", `<div class="dust" aria-hidden="true">${Array.from({ length: 14 }, (_, i) => {
+    const v = (a, b, m) => ((i * a + b) % m);
+    return `<i style="left:${v(37, 11, 97)}%;top:${v(53, 7, 88)}%;--s:${(1.4 + v(5, 2, 4) * .45).toFixed(2)}px;--o:${(.22 + v(7, 3, 5) * .06).toFixed(2)};--t:${16 + v(11, 5, 19)}s;--w:-${v(13, 3, 17)}s;--x:${v(29, 13, 81) - 40}px;--y:-${24 + v(17, 9, 40)}px"></i>`;
+  }).join("")}</div>`);
   const books = window.BOOKS.slice().sort((a, b) => a.year - b.year);
   const byId = Object.fromEntries(books.map(b => [b.id, b]));
 
@@ -1651,12 +1900,94 @@ BOOKS.push({
       role: "img",
       "aria-label": `Couverture : ${book.title}`
     });
+    if (book.cover.motif === "fog") c.append(h("span", { class: "cv-fog", "aria-hidden": "true" }, h("i"), h("i")));
     c.append(h("span", { class: "cv" },
       h("span", { class: "cv-author" }, "Stephen King"),
       h("span", { class: "cv-motif", html: motifs[book.cover.motif]() }),
       h("span", { class: "cv-title" }, h("span", { class: "cv-rule" }), book.title)
     ));
     return c;
+  }
+  // A cover on the shelf, as a whole book standing there.
+  function volume(book) {
+    return h("span", { class: "vol-slot" },
+      h("span", { class: "vol-shadow" }),
+      h("span", { class: "volume", style: `--cv-bg:${book.cover.bg};--cv-fg:${book.cover.fg}` },
+        cover(book),
+        h("span", { class: "vol-spine" }),
+        h("span", { class: "vol-fore" }),
+        h("span", { class: "vol-head" }),
+        h("span", { class: "vol-foot" })
+      )
+    );
+  }
+  // With a mouse, a book pulled off the shelf leans toward the pointer.
+  let tilted = null, tiltFrame = 0;
+  function tilt(e) {
+    const link = e.pointerType === "mouse" && !calm() && e.target.closest && e.target.closest("a.book-link");
+    const vol = link && link.querySelector(".volume");
+    if (tilted && tilted !== vol) { tilted.style.removeProperty("--tx"); tilted.style.removeProperty("--ty"); }
+    tilted = vol;
+    if (!vol) return;
+    const r = vol.parentNode.getBoundingClientRect();
+    const x = Math.max(-.5, Math.min(.5, (e.clientX - r.left) / r.width - .5));
+    const y = Math.max(-.5, Math.min(.5, (e.clientY - r.top) / r.height - .5));
+    cancelAnimationFrame(tiltFrame);
+    tiltFrame = requestAnimationFrame(() => {
+      vol.style.setProperty("--ty", (x * 18).toFixed(1) + "deg");
+      vol.style.setProperty("--tx", (-y * 12).toFixed(1) + "deg");
+    });
+  }
+  app.addEventListener("pointermove", tilt, { passive: true });
+  app.addEventListener("pointerleave", tilt, { passive: true });
+
+  /* The wax seal of a closed chapter: drawn once, then reused whole and as the two halves it
+     breaks into. Embossed with the edition's lozenge, in the ribbon's red (currentColor). */
+  const WAX = "M0 -16.9C1.6 -16.6 3 -16 4.6 -15.6C6.1 -15.2 8.1 -15.4 9.4 -14.6C10.6 -13.7 11.1 -11.8 12.1 -10.5C13.2 -9.3 14.8 -8.5 15.5 -7.1C16.3 -5.7 16.5 -3.9 16.5 -2.4C16.6 -.8 15.9 .6 15.9 2.3C15.9 4 17.1 6 16.7 7.6C16.3 9.2 14.7 10.6 13.5 11.7C12.2 12.8 10.7 13.6 9.2 14.3C7.7 14.9 6 15.1 4.5 15.4C3 15.7 1.5 16 0 16.1C-1.5 16.2 -3.1 16.3 -4.7 16.2C-6.4 16 -8.2 15.8 -9.6 15C-11.1 14.3 -12.5 13 -13.4 11.6C-14.4 10.3 -14.9 8.6 -15.6 7.1C-16.2 5.6 -16.7 4.1 -17.1 2.5C-17.5 .9 -18.1 -1 -17.8 -2.6C-17.6 -4.2 -16.5 -5.7 -15.6 -7.1C-14.8 -8.5 -13.6 -9.6 -12.7 -11C-11.7 -12.4 -11.3 -14.6 -10 -15.6C-8.8 -16.6 -6.7 -17 -5.1 -17.2C-3.4 -17.5 -1.6 -17.2 0 -16.9Z";
+  const LOZENGE = "M0 -5.6L5.6 0L0 5.6L-5.6 0Z";
+  document.body.insertAdjacentHTML("beforeend", `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><radialGradient id="csp-wax-light" cx="34%" cy="28%" r="78%"><stop offset="0" stop-color="#fff" stop-opacity=".12"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".45"/></radialGradient></defs><symbol id="csp-seal" viewBox="-20 -20 40 40"><path d="${WAX}" fill="currentColor"/><path d="${WAX}" fill="url(#csp-wax-light)"/><circle r="11.4" fill="none" stroke="#000" stroke-opacity=".32" stroke-width="1.4"/><circle r="11.4" cx=".5" cy=".6" fill="none" stroke="#fff" stroke-opacity=".14" stroke-width=".8"/><g fill="none" stroke-width="1.2"><path d="${LOZENGE}" stroke="#000" stroke-opacity=".4" transform="translate(-.4 -.5)"/><path d="${LOZENGE}" stroke="#fff" stroke-opacity=".22" transform="translate(.4 .5)"/></g><circle cx="-8.2" r="1.3" fill="#000" fill-opacity=".35"/><circle cx="8.2" r="1.3" fill="#000" fill-opacity=".35"/><ellipse cx="-6" cy="-9.5" rx="5" ry="2.2" transform="rotate(-30 -6 -9.5)" fill="#fff" opacity=".09"/></symbol></svg>`);
+  const WAX_USE = `<svg viewBox="0 0 40 40"><use href="#csp-seal"/></svg>`;
+  const seal = () => h("span", { class: "seal", "aria-hidden": "true",
+    html: `<span class="seal-whole">${WAX_USE}</span><span class="seal-half seal-l">${WAX_USE}</span><span class="seal-half seal-r">${WAX_USE}</span>` });
+
+  // Opening breaks the seal (and inks the summary in, if it is on screen); closing presses a new one.
+  function unseal(n, open) {
+    n.li.classList.remove("breaking", "unveiling", "stamping");
+    clearTimeout(n.unveiled);
+    if (calm()) return;
+    void n.li.offsetWidth; // let the same animation play again
+    // The next chapter breaks the big seal on its veil; any other, the small one in its row.
+    const veiled = open && n.li.classList.contains("next");
+    n.li.classList.add(!open ? "stamping" : veiled ? "unveiling" : "breaking");
+    if (veiled) n.unveiled = setTimeout(() => n.li.classList.remove("unveiling"), 700);
+    if (open && inView(n.li)) inkIn(n.text);
+  }
+  // A chapter just passed: its "lu" lands like a stamp, one after another when several pass at once.
+  function stamp(el, k) {
+    const d = Math.min(k, 12) * 45;
+    el.classList.remove("stamped");
+    void el.offsetWidth;
+    el.style.setProperty("--d", d + "ms");
+    el.classList.add("stamped");
+    setTimeout(() => el.classList.remove("stamped"), d + 700);
+  }
+  // Word by word, each one surfacing a little after the last; back to plain text once done.
+  function inkIn(p) {
+    const text = p.textContent;
+    const parts = text.split(/(\s+)/);
+    const step = Math.min(12, 340 / Math.max(1, Math.ceil(parts.length / 2)));
+    let k = 0;
+    p.replaceChildren(...parts.map((s, j) => {
+      if (j % 2 || !s) return s;
+      const w = document.createElement("span");
+      w.className = "w";
+      w.style.setProperty("--d", Math.round(80 + k++ * step) + "ms");
+      w.textContent = s;
+      return w;
+    }));
+    p.classList.add("inking");
+    clearTimeout(p.inkDone);
+    p.inkDone = setTimeout(() => { p.classList.remove("inking"); p.textContent = text; }, 80 + k * step + 360);
   }
 
   /* ---------- Items ---------- */
@@ -1710,7 +2041,8 @@ BOOKS.push({
       "aria-label": "Progression dans le livre",
       "aria-valuemin": "0", "aria-valuemax": String(count), "aria-valuenow": String(i + 1)
     });
-    for (let j = 0; j < count; j++) bar.append(h("span", { class: j <= i ? "on" : null }));
+    // --d: when this tick lights up in the shelf's entrance
+    for (let j = 0; j < count; j++) bar.append(h("span", { class: j <= i ? "on" : null, style: `--d:${600 + Math.round(j * Math.min(30, 900 / count))}ms` }));
     return bar;
   }
 
@@ -1724,7 +2056,7 @@ BOOKS.push({
     return h("li", { class: "shelf-item" },
       h("a", { class: "book-link", href: "#" + b.id },
         h("span", { class: "book-year" }, String(b.year)),
-        cover(b),
+        volume(b),
         h("span", { class: "book-caption" },
           h("strong", null, b.title),
           h("span", null, b.meta),
@@ -1746,7 +2078,7 @@ BOOKS.push({
       lastItem ? `${Math.round(progressShare(b, lastItem.i) * 100)} % du livre` : null
     ].filter(Boolean).join(" · ");
     return h("li", { class: "now" },
-      h("a", { class: "now-cover book-link", href: "#" + b.id, "aria-label": b.title }, cover(b)),
+      h("a", { class: "now-cover book-link", href: "#" + b.id, "aria-label": b.title }, volume(b)),
       h("div", { class: "now-head" },
         h("p", { class: "eyebrow" }, `Stephen King · ${b.year}`),
         h("h3", null, h("a", { href: "#" + b.id }, b.title)),
@@ -1780,7 +2112,7 @@ BOOKS.push({
     return h("li", { class: "shelf-item" },
       h("div", { class: "book-link" },
         h("span", { class: "book-year" }, String(r.year)),
-        cover(r.cover ? r : { title: r.title, cover: { bg: "#2e3134", fg: "#d8d3c7", motif: "pending" } }),
+        volume(r.cover ? r : { title: r.title, cover: { bg: "#2e3134", fg: "#d8d3c7", motif: "pending" } }),
         h("span", { class: "book-caption" },
           h("strong", null, r.title),
           h("span", null, "Résumés à venir : demandez-les à Claude"),
@@ -1837,8 +2169,19 @@ BOOKS.push({
     ];
   }
 
+  // The shelf's title, letter by letter for its entrance; read out whole (aria-label on the h1).
+  function lettered() {
+    let k = 0;
+    const letters = text => [...text].map(ch => ch === " " ? " " : h("span", { class: "ltr", style: `--d:${80 + k++ * 34}ms` }, ch));
+    return [h("span", { "aria-hidden": "true" }, letters("Chapitres ")), h("em", { "aria-hidden": "true" }, letters("en suspens"))];
+  }
+  const FLEURON = `<svg viewBox="0 0 180 14"><path class="fl-l" d="M0 7H74" stroke="currentColor" stroke-width=".8"/><path class="fl-r" d="M106 7H180" stroke="currentColor" stroke-width=".8"/><path class="fl-z" d="M90 1.5l5.5 5.5-5.5 5.5-5.5-5.5z" fill="none" stroke="currentColor"/><circle class="fl-d" cx="80" cy="7" r="1.3" fill="currentColor"/><circle class="fl-d" cx="100" cy="7" r="1.3" fill="currentColor"/></svg>`;
+
   function renderHome() {
     document.title = "Chapitres en suspens";
+    // The entrance plays once, in the first moments after the page opens on the shelf.
+    const since = Math.round(performance.now() - loaded);
+    const entering = since < 2600 && !calm();
     setView("home", null);
     const all = [
       ...books.map(b => ({ kind: "book", b, status: statusOf(b.id) })),
@@ -1850,12 +2193,13 @@ BOOKS.push({
         h("b", null, String(p.list.length)), " " + (p.key === "lu" ? (p.list.length > 1 ? "lus" : "lu") : p.label.toLowerCase())
       ))
     );
-    app.replaceChildren(h("div", { class: "wrap" },
+    app.replaceChildren(h("div", { class: entering ? "wrap arriving" : "wrap", style: entering ? `--since:${since}ms` : null },
       h("header", { class: "masthead" },
         h("p", { class: "eyebrow" }, "Carnet de lectures · Stephen King"),
-        h("h1", { html: "Chapitres <em>en suspens</em>" }),
+        entering ? h("h1", { "aria-label": "Chapitres en suspens" }, lettered()) : h("h1", { html: "Chapitres <em>en suspens</em>" }),
         h("p", { class: "lede" }, "Les résumés de vos livres, chapitre par chapitre, pour reprendre une lecture là où vous l'avez laissée. Chaque résumé reste caché tant que vous ne cliquez pas dessus : rien ne vous gâche la suite."),
-        tally
+        tally,
+        h("span", { class: "fleuron", "aria-hidden": "true", html: FLEURON })
       ),
       piles.map(p => h("section", { class: "pile", "data-status": p.key, "aria-labelledby": "pile-" + p.key },
         h("div", { class: "pile-head" },
@@ -1929,16 +2273,21 @@ BOOKS.push({
 
     function setOpen(i, open) {
       const n = nodes[i];
+      const was = n.li.classList.contains("open");
       n.li.classList.toggle("open", open);
       n.btn.setAttribute("aria-expanded", String(open));
       n.body.hidden = !open;
       n.action.textContent = open ? "Masquer" : "Afficher";
+      if (open !== was) unseal(n, open);
     }
     // Everything before the last opened fiche counts as read.
     function paintFlags() {
+      let stamps = 0;
       nodes.forEach((n, j) => {
         const passed = lastIndex !== null && j < lastIndex;
+        n.li.classList.toggle("next", j === (lastIndex === null ? 0 : lastIndex + 1));
         n.flag.hidden = j !== lastIndex;
+        if (passed && n.seen.hidden && !calm()) stamp(n.seen, stamps++);
         n.seen.hidden = !passed;
         n.li.classList.toggle("passed", passed);
         n.btn.setAttribute("aria-label", items[j].d.full + (passed ? " · lu" : ""));
@@ -2093,7 +2442,8 @@ ${help.format}`;
         },
         h("span", { class: "item-num" }, it.d.num || "·"),
         h("span", { class: "item-label" }, it.d.word ? h("span", { class: "item-word" }, it.d.word) : null, seen, flag),
-        action
+        action,
+        seal()
       );
       btn.setAttribute("aria-label", it.d.full);
       const express = h("div", { class: "express", "aria-live": "polite" });
@@ -2102,9 +2452,10 @@ ${help.format}`;
       expressBtn.hidden = !canAsk() || i < 1;
       const castBtn = h("button", { class: "link-btn", type: "button", onclick: () => { markLast(i); runHelp(i, "cast"); } }, "Qui est qui à ce stade");
       castBtn.hidden = !canAsk();
+      const text = h("p", { class: "item-text" }, it.t);
       const body = h("div", { class: "item-body", id: bodyId },
         it.cue ? h("p", { class: "cue" }, h("b", null, "Repère"), " · " + it.cue) : null,
-        h("p", { class: "item-text" }, it.t),
+        text,
         h("div", { class: "item-tools" },
           i > 0 ? h("button", { class: "link-btn", type: "button", onclick: () => { for (let j = 0; j <= i; j++) setOpen(j, true); markLast(i); } }, "Afficher aussi tout ce qui précède") : null,
           expressBtn,
@@ -2113,8 +2464,13 @@ ${help.format}`;
         express
       );
       body.hidden = true;
-      const li = h("li", { class: "item", id: it.id }, btn, body);
-      nodes.push({ li, btn, body, action, flag, seen, express, expressBtn, castBtn });
+      // Drawn lines under a seal, never the summary: nothing to read or copy before the click.
+      const veil = h("div", { class: "veil", "aria-hidden": "true", onclick: () => btn.click() },
+        h("span", { class: "veil-lines" }, h("i"), h("i"), h("i"), seal()),
+        h("span", { class: "veil-cue" }, "Brisez le sceau pour lire la suite")
+      );
+      const li = h("li", { class: "item", id: it.id }, btn, veil, body);
+      nodes.push({ li, btn, body, text, action, flag, seen, express, expressBtn, castBtn });
       list.append(li);
     });
 
@@ -2179,7 +2535,7 @@ ${help.format}`;
               linksBox
             )
           : null,
-        h("section", { class: "chapters", "aria-labelledby": "ch-title" },
+        h("section", { class: items.some(it => /–/.test(it.d.num)) ? "chapters ranged" : "chapters", "aria-labelledby": "ch-title" },
           h("div", { class: "chapters-head" },
             h("h2", { id: "ch-title" }, UNIT[book.unit][1]),
             h("div", { class: "tools" },
@@ -2201,7 +2557,8 @@ ${help.format}`;
     ));
   }
 
-  function route() {
+  // `later`: during a page turn, hand back the jump to the last fiche so it runs once the turn has played.
+  function route(later) {
     const [id, action] = decodeURIComponent(location.hash.replace(/^#/, "")).split("/");
     if (id && byId[id]) renderBook(byId[id]);
     else { view = { refresh: renderHome }; renderHome(); }
@@ -2210,10 +2567,99 @@ ${help.format}`;
       // Drop the action from the address so "back" and a reload land on the book itself.
       // (A sandboxed frame may refuse it; the action then simply stays in the address.)
       try { history.replaceState(null, "", "#" + id); } catch (e) {}
+      const v = view;
+      if (later) return () => { if (view === v) v.resume(); };
       view.resume();
     }
+    return null;
   }
-  window.addEventListener("hashchange", route);
+
+  /* ---------- Page turns ----------
+     Between the shelf and a book, the cover and the book's painting morph into each other (and
+     the cover's title into the page title) as a view transition. Back on the shelf, the reader
+     lands where they left it, with the book in view. Without view transitions, or when the
+     reader asks for less motion, the page simply changes as before. */
+  const calm = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const hashBook = () => { const id = decodeURIComponent(location.hash.replace(/^#/, "")).split("/")[0]; return byId[id] ? id : null; };
+  let shown = hashBook(); // the book on screen, null for the shelf
+  let shelfY = 0;         // where the reader was on the shelf
+  let turns = 0;
+  const inView = el => { const r = el.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight; };
+  const shelfCover = id => {
+    const link = [...app.querySelectorAll("a.book-link")].find(a => a.getAttribute("href") === "#" + id);
+    return link && link.querySelector(".cover");
+  };
+
+  // On a book page: its painting (or its cover, for a book without one) and its title.
+  // On the shelf: that book's cover and the title printed on it, if it is in view.
+  function turnParts(id) {
+    if (document.body.dataset.view === "book") return [app.querySelector(".book-art") || app.querySelector(".book-head .cover"), app.querySelector(".head-text h1")];
+    const c = shelfCover(id);
+    return c && inView(c) ? [c, c.querySelector(".cv-title")] : [];
+  }
+  function nameTurn(parts, on) {
+    ["turn-picture", "turn-title"].forEach((name, k) => { if (parts[k]) parts[k].style.viewTransitionName = on ? name : ""; });
+  }
+
+  // A painting is fetched as soon as the pointer or the focus reaches its book, so the cover
+  // rarely has to wait for it; a turn still waits a moment rather than open onto an empty frame.
+  const warmed = new Set();
+  function warm(id) {
+    const art = id && byId[id] && byId[id].art;
+    if (!art) return null;
+    const img = new Image();
+    img.src = art;
+    warmed.add(id);
+    return img;
+  }
+  const warmLink = e => {
+    const a = e.target.closest && e.target.closest('a[href^="#"]');
+    const id = a && a.getAttribute("href").slice(1).split("/")[0];
+    if (id && !warmed.has(id)) warm(id);
+  };
+  ["pointerover", "pointerdown", "focusin"].forEach(t => app.addEventListener(t, warmLink, { passive: true }));
+  function artReady(id) {
+    const img = warm(id);
+    return img ? Promise.race([img.decode().catch(() => {}), new Promise(r => setTimeout(r, 400))]) : null;
+  }
+
+  function land(from, to) {
+    const resume = route(true);
+    if (!to) {
+      // The book may have changed piles meanwhile: then bring it into view.
+      window.scrollTo(0, shelfY);
+      const c = shelfCover(from);
+      if (c && !inView(c)) c.scrollIntoView({ block: "center" });
+    }
+    return resume;
+  }
+
+  function turn() {
+    const from = shown, to = hashBook();
+    if (!from) shelfY = window.scrollY;
+    shown = to;
+    if (!document.startViewTransition || calm() || from === to) {
+      const resume = land(from, to);
+      if (resume) resume();
+      return;
+    }
+    const root = document.documentElement, n = ++turns;
+    root.dataset.turn = !from ? "open" : !to ? "close" : "swap";
+    nameTurn(turnParts(from || to), true);
+    let after = [], resume = null;
+    const t = document.startViewTransition(async () => {
+      resume = land(from, to);
+      await artReady(to);
+      after = turnParts(to || from);
+      nameTurn(after, true);
+    });
+    t.finished.finally(() => {
+      nameTurn(after, false);
+      if (n === turns) delete root.dataset.turn; // a newer turn may already be playing
+      if (resume) resume();
+    });
+  }
+  window.addEventListener("hashchange", turn);
   route();
 })();
 </script>

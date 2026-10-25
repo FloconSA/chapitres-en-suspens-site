@@ -1173,37 +1173,78 @@ body[data-view="home"] .lake {
 .lk-house-glow { top: 0; aspect-ratio: 120 / 140; }
 .lk-house svg, .lk-house-glow svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .lk-house-glow svg + svg { animation: glint 3.4s ease-in-out infinite alternate; }
-/* The raft (The Raft): planks on drums, a ladder, and near it the black, rainbow-sheened patch,
-   drifting */
+/* The raft (The Raft): planks on drums, a ladder, and near it the black patch, a disc of oil seen
+   from the shore (scaled flat), its edge shifting and its sheen marbled like a film of oil, drifting.
+   On a computer both can be moved (see "The lake you can touch"); the patch then follows the raft. */
 .lk-raft { position: absolute; left: 2.5%; top: 31vh; width: clamp(90px, 11vw, 160px); aspect-ratio: 140 / 96; }
 .lk-raft svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .lk-slick {
+  --sd: clamp(84px, 9.5vw, 140px);
   position: absolute;
-  left: 11%;
-  top: 41vh;
-  width: clamp(70px, 8vw, 120px);
-  aspect-ratio: 5.2;
-  border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(0, 0, 0, .92), rgba(0, 0, 0, .78) 55%, rgba(0, 0, 0, .3) 82%, transparent);
+  left: 15.5%;
+  top: 42vh;
+  width: var(--sd);
+  height: var(--sd);
+  margin: calc(var(--sd) / -2) 0 0 calc(var(--sd) / -2);
+  transform: scaleY(.24);
   animation: slick-drift 70s ease-in-out infinite alternate;
 }
-.lk-slick::before {
-  content: "";
-  position: absolute;
-  inset: 12% 10%;
-  border-radius: 50%;
-  background: conic-gradient(from 40deg, #5b3a8f, #1f6b63, #9b7a2a, #7a2c56, #2b4f8f, #5b3a8f);
-  -webkit-mask-image: radial-gradient(closest-side, transparent 35%, #000 60%, transparent 92%);
-  mask-image: radial-gradient(closest-side, transparent 35%, #000 60%, transparent 92%);
-  filter: blur(1.5px);
-  animation: slick-sheen 6s ease-in-out infinite alternate;
+.lk-slick > i, .sl-iris { position: absolute; border-radius: 50%; }
+.sl-core { inset: 0; background: radial-gradient(closest-side, rgba(0, 0, 0, .94), rgba(0, 0, 0, .82) 52%, rgba(0, 0, 0, .34) 80%, transparent); }
+.sl-lobe {
+  left: -12%;
+  top: 6%;
+  width: 64%;
+  height: 64%;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, .86), rgba(0, 0, 0, .5) 60%, transparent);
+  animation: sl-lobe 11s ease-in-out infinite alternate;
 }
-@keyframes slick-drift { to { transform: translateX(-2.5vw); } }
-@keyframes slick-sheen { from { opacity: .25; } to { opacity: .6; } }
+.sl-lobe + .sl-lobe { left: auto; top: auto; right: -14%; bottom: 4%; animation-duration: 14s; animation-direction: alternate-reverse; }
+.sl-iris {
+  inset: 4%;
+  overflow: hidden;
+  opacity: .32;
+  -webkit-mask-image: radial-gradient(closest-side, #000 25%, rgba(0, 0, 0, .7) 60%, transparent 92%);
+  mask-image: radial-gradient(closest-side, #000 25%, rgba(0, 0, 0, .7) 60%, transparent 92%);
+}
+.sl-iris i { position: absolute; inset: -22%; background: var(--iris) center / cover; animation: sl-turn 80s linear infinite; }
+.sl-iris i + i { inset: -6%; opacity: .55; animation-duration: 53s; animation-direction: reverse; }
+@keyframes slick-drift { to { translate: -2.5vw 0; } }
+@keyframes sl-lobe { to { transform: translate(14%, 16%) scale(.82); } }
+@keyframes sl-turn { to { transform: rotate(1turn); } }
 /* Georgie's paper boat (It), bobbing near the moon's path */
 .lk-boat { position: absolute; left: 89%; top: 86vh; width: clamp(34px, 3.6vw, 52px); aspect-ratio: 40 / 36; animation: boat-bob 5s ease-in-out infinite alternate; }
 .lk-boat svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 @keyframes boat-bob { from { transform: rotate(-3deg); } to { transform: rotate(3deg) translateY(1px); } }
+/* A storm drain on the right bank: Georgie's boat can be sent into it (computer only) */
+.lk-drain { display: none; position: absolute; right: 0; top: 63vh; z-index: 2; width: clamp(130px, 14vw, 220px); aspect-ratio: 200 / 120; }
+.lk-drain svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+@media (min-width: 601px) { .lk-drain { display: block; } }
+.dr-eyes { opacity: 0; }
+
+/* The lake you can touch (computer, script): raft, boat and patch are moved by the script and bob
+   on their own; the water's rings are drawn only while it stirs; the balloon the drain lets out;
+   the night closing in around the patch while it is watched. */
+.lk-waves, .lk-balloon-up, .lk-trance { display: none; }
+.lake.live .lk-waves { display: block; position: absolute; left: 0; top: 0; pointer-events: none; }
+.lake.live .lk-raft, .lake.live .lk-boat { z-index: 3; will-change: transform; }
+.lake.live .lk-raft > svg { animation: raft-bob 6.5s ease-in-out infinite alternate; }
+.lake.live .lk-boat { animation: none; transform-origin: 50% 61.1%; }
+.lake.live .lk-boat > svg { animation: boat-bob 5s ease-in-out infinite alternate; }
+.lake.live .lk-slick { animation: none; will-change: transform; }
+@keyframes raft-bob { from { transform: rotate(-.5deg); } to { transform: rotate(.5deg) translateY(.6px); } }
+.lake.live .lk-balloon-up { display: block; position: absolute; left: 0; top: 0; width: clamp(20px, 2.2vw, 32px); aspect-ratio: 20 / 56; opacity: 0; will-change: transform, opacity; }
+.lk-balloon-up svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.lake.live .lk-trance.on {
+  display: block;
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(circle at var(--tx, 50%) var(--ty, 50%), transparent 3vmin, rgba(1, 4, 7, .55) 15vmin, rgba(1, 4, 7, .82) 48vmin);
+}
+html.lk-grab { cursor: grab; }
+html.lk-point { cursor: pointer; }
+html.lk-grabbing, html.lk-grabbing * { cursor: grabbing !important; -webkit-user-select: none; user-select: none; }
 
 /* Phones: the text spans the lake, so the moon steps aside from the title, the balloon rises in
    front of the text along the edge of the screen, and the boat waits by the dock, under the lantern
@@ -1276,6 +1317,13 @@ body[data-view="home"] .wrap { padding-bottom: 0; }
 .ts-board small { font-family: var(--font-body); font-style: italic; font-size: .82rem; opacity: .88; }
 .ts-board strong { font-family: var(--font-display); font-weight: 600; font-size: 1.3rem; line-height: 1.15; letter-spacing: .14em; text-indent: .14em; text-transform: uppercase; }
 .ts-board em { font-family: var(--font-mono); font-style: normal; font-size: .62rem; letter-spacing: .3em; text-indent: .3em; opacity: .7; text-transform: uppercase; }
+/* On a computer, a sign rocks on its posts when clicked and the plate swings from its left screw
+   (script); under the pointer they lean a little, to say so */
+body.lake-live .ts-board, body.lake-live .plate { cursor: pointer; transition: rotate .35s ease; }
+body.lake-live .ts-board { transform-origin: 50% calc(100% + 22px); }
+body.lake-live .plate { transform-origin: 30% 9px; }
+body.lake-live .ts-board:hover { rotate: -1.2deg; }
+body.lake-live .plate:hover { rotate: 1.4deg; }
 
 /* The dock at the foot of the page, its lantern alight, holding the colophon */
 .pontoon { position: relative; margin-top: 96px; text-align: center; }
@@ -2250,7 +2298,19 @@ BOOKS.push({
   const BOAT = id => `<svg viewBox="0 0 40 36"><defs><filter id="${id}" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".08 .6" numOctaves="1" seed="2"/><feDisplacementMap in="SourceGraphic" scale="2.4" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation=".35"/></filter></defs><g opacity=".28" filter="url(#${id})"><g transform="matrix(1 0 0 -1 0 44)">${boatBody}</g></g><path d="M1 22.5Q20 25 39 22.5" fill="none" stroke="var(--glint)" stroke-opacity=".25" stroke-width=".5"/>${boatBody}</svg>`;
   // Sara Laughs: the big log house above the lake, its deck on posts, steps down to the water.
   const houseWindows = [[34, 28, 7, 7], [46, 28, 7, 7], [65, 26, 12, 10], [96, 31, 5, 5], [56, 13, 8, 6]];
-  const HOUSE = `<svg viewBox="0 0 120 62"><defs><filter id="csp-house-glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2"/></filter></defs><g fill="color-mix(in srgb, var(--tree-near) 72%, var(--hill))"><path d="M28 39V20H92V39Z"/><path d="M22 21.5L60 5L98 21.5Z"/><path d="M92 39V27H108V39Z"/><path d="M89 28.5L100 21L111 28.5Z"/><path d="M76 13V5H81V10.5Z"/><path d="M22 39H102V41H22Z"/><path d="M29 41h1.6v7H29zM50 41h1.6v8H50zM72 41h1.6v9H72zM96 41h1.6v10H96z"/><path d="M44 41h4l-12 21h-4Z"/></g><path d="M60 5L98 21.5M100 21L111 28.5" stroke="var(--glint)" stroke-opacity=".3" stroke-width=".7" fill="none"/><g fill="var(--lantern)" filter="url(#csp-house-glow)" opacity=".7">${houseWindows.map(([x, y, w, h]) => `<rect x="${x - 1}" y="${y - 1}" width="${w + 2}" height="${h + 2}"/>`).join("")}</g><g fill="color-mix(in srgb, var(--lantern) 75%, #fff6d8)">${houseWindows.map(([x, y, w, h]) => `<rect x="${x}" y="${y}" width="${w}" height="${h}"/>`).join("")}</g><path d="M71 26V36M65 31H77M37.5 28V35M49.5 28V35" stroke="color-mix(in srgb, var(--tree-near) 72%, var(--hill))" stroke-width=".8"/></svg>`;
+  const HOUSE = `<svg viewBox="0 0 120 62"><defs><filter id="csp-house-glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2"/></filter></defs><g fill="color-mix(in srgb, var(--tree-near) 72%, var(--hill))"><path d="M28 39V20H92V39Z"/><path d="M22 21.5L60 5L98 21.5Z"/><path d="M92 39V27H108V39Z"/><path d="M89 28.5L100 21L111 28.5Z"/><path d="M76 13V5H81V10.5Z"/><path d="M22 39H102V41H22Z"/><path d="M29 41h1.6v7H29zM50 41h1.6v8H50zM72 41h1.6v9H72zM96 41h1.6v10H96z"/><path d="M44 41h4l-12 21h-4Z"/></g><path d="M60 5L98 21.5M100 21L111 28.5" stroke="var(--glint)" stroke-opacity=".3" stroke-width=".7" fill="none"/><g fill="var(--lantern)" filter="url(#csp-house-glow)" opacity=".7">${houseWindows.map(([x, y, w, h]) => `<rect class="hw" x="${x - 1}" y="${y - 1}" width="${w + 2}" height="${h + 2}"/>`).join("")}</g><g fill="color-mix(in srgb, var(--lantern) 75%, #fff6d8)">${houseWindows.map(([x, y, w, h]) => `<rect class="hw" x="${x}" y="${y}" width="${w}" height="${h}"/>`).join("")}</g><path d="M71 26V36M65 31H77M37.5 28V35M49.5 28V35" stroke="color-mix(in srgb, var(--tree-near) 72%, var(--hill))" stroke-width=".8"/></svg>`;
+  // The sheen of oil on the black patch: rainbow bands following the swirls of a noise, as on a
+  // thin film.
+  const band = ph => Array.from({ length: 25 }, (_, i) => Math.max(0, .36 + .5 * Math.sin((i / 24 * 6 + ph) * 2 * Math.PI)).toFixed(2)).join(" ");
+  const IRIS = `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240"><filter id="i" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".011" numOctaves="3" seed="23"/><feColorMatrix type="matrix" values="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 1"/><feComponentTransfer><feFuncR type="table" tableValues="${band(0)}"/><feFuncG type="table" tableValues="${band(.33)}"/><feFuncB type="table" tableValues="${band(.66)}"/></feComponentTransfer></filter><rect width="100%" height="100%" filter="url(#i)"/></svg>`)}")`;
+  // A storm drain on the right bank: a concrete pipe in the rocks, its dark mouth at the water,
+  // the bank mirrored below; and deep inside, now and then, two eyes.
+  const drainBank = `<path d="M200 0V86H40C52 80 60 70 70 64C78 56 84 44 98 40C112 36 120 26 136 22C150 18 164 8 178 6C188 4 194 0 200 0Z" fill="color-mix(in srgb, var(--tree-near) 78%, var(--hill))"/><path d="M92 42H114A30 24 0 0 1 114 90H92Z" fill="#2c302d"/><ellipse cx="92" cy="66" rx="30" ry="24" fill="url(#csp-drain-pipe)"/><ellipse cx="94.5" cy="67" rx="23" ry="18" fill="url(#csp-drain-dark)"/><g fill="#0a1412"><ellipse cx="52" cy="83" rx="12" ry="5"/><ellipse cx="130" cy="81" rx="16" ry="7"/><ellipse cx="152" cy="85" rx="10" ry="4"/></g><path d="M70 43q4-6 9-2q3-5 8-1q4-4 9 0" fill="color-mix(in srgb, var(--tree-mid) 70%, #2f4a32)"/><g stroke="color-mix(in srgb, var(--tree-mid) 55%, #3c5236)" stroke-width="1.1" stroke-linecap="round" fill="none"><path d="M44 85Q42 71 37 63M48 85Q48 69 52 59M150 84Q152 70 158 64M156 84Q158 74 166 70"/></g>`;
+  const DRAIN = `<svg viewBox="0 0 200 120"><defs><linearGradient id="csp-drain-pipe" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a8e88"/><stop offset=".55" stop-color="#565a56"/><stop offset="1" stop-color="#2c302e"/></linearGradient><radialGradient id="csp-drain-dark" cx=".56" cy=".5" r=".6"><stop offset="0" stop-color="#000"/><stop offset=".7" stop-color="#030605"/><stop offset="1" stop-color="#151a18"/></radialGradient><filter id="csp-drain-glow" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="1.2"/></filter><clipPath id="csp-drain-above"><rect width="200" height="86"/></clipPath><linearGradient id="csp-drain-fade" x1="0" y1="86" x2="0" y2="118" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><mask id="csp-drain-mask"><rect y="86" width="200" height="34" fill="url(#csp-drain-fade)"/></mask></defs>
+    <g mask="url(#csp-drain-mask)"><g filter="url(#csp-raft-wave)"><g transform="matrix(1 0 0 -1 0 172)" clip-path="url(#csp-drain-above)">${drainBank}</g></g></g>
+    <g clip-path="url(#csp-drain-above)">${drainBank}</g>
+    <path d="M64 60A30 24 0 0 1 112 45" fill="none" stroke="var(--glint)" stroke-opacity=".45" stroke-width="1"/><path d="M42 80Q52 76 62 80M116 76Q130 71 144 76" fill="none" stroke="var(--glint)" stroke-opacity=".22" stroke-width=".8"/><path d="M78 85.5Q93 87 108 85.5M30 86.5Q115 88.5 200 86.5" fill="none" stroke="var(--glint)" stroke-opacity=".28" stroke-width=".7"/>
+    <g class="dr-eyes"><g fill="#f4b545" filter="url(#csp-drain-glow)"><ellipse cx="88.5" cy="63" rx="2.6" ry="1.7"/><ellipse cx="99.5" cy="63" rx="2.6" ry="1.7"/></g><g fill="#ffe7a8"><ellipse cx="88.5" cy="63" rx="1.2" ry=".8"/><ellipse cx="99.5" cy="63" rx="1.2" ry=".8"/></g></g></svg>`;
   // Its lit windows on the water: broken golden streaks, two sets that shimmer in turn.
   function houseGlow(seed) {
     const r = seeded(seed);
@@ -2282,15 +2342,19 @@ BOOKS.push({
       <i class="lk-ripple lk-r2" style='background-image:${RIPPLES}'></i>
       <i class="lk-ripple lk-r1" style='background-image:${RIPPLES}'></i>
       <div class="lk-house-glow">${houseGlow(3)}${houseGlow(9)}</div>
-      <div class="lk-slick"></div>
+      <div class="lk-slick" style='--iris:${IRIS}'><i class="sl-core"></i><i class="sl-lobe"></i><i class="sl-lobe"></i><span class="sl-iris"><i></i><i></i></span></div>
       <div class="lk-raft">${RAFT}</div>
       <div class="lk-boat">${BOAT("csp-boat-wave")}</div>
       <div class="lk-glint">${moonPath(5)}${moonPath(17)}</div>
+      <canvas class="lk-waves"></canvas>
+      <div class="lk-drain">${DRAIN}</div>
       <div class="lk-loon">${LOON}</div>
     </div>
     <div class="lk lk-near"><svg viewBox="0 0 1600 100" preserveAspectRatio="xMidYMax slice" fill="currentColor"><path d="${nearRow}"/></svg><div class="lk-house">${HOUSE}</div></div>
     <div class="lk lk-mist1"><i></i></div>
     <div class="lk lk-mist2"><i></i></div>
+    <div class="lk-balloon-up">${BALLOON("csp-balloon-up")}</div>
+    <div class="lk-trance"></div>
   </div>
   <div class="balloon-near" aria-hidden="true">${BALLOON("csp-balloon-near")}</div>`);
 
@@ -2310,10 +2374,11 @@ BOOKS.push({
     new MutationObserver(soon).observe(document.body, { attributes: true, attributeFilter: ["data-view"] });
   }
 
-  /* The loon: every 30 to 60 s, while the shelf is on screen, it crosses the lake. Its call is
-     made here by the browser (no sound file) and stays off until the reader turns it on. */
+  /* The loon: every 30 to 60 s, while the shelf is on screen, it crosses the lake. Its call, like
+     every sound of the lake, is made here by the browser (no sound file), and they all stay off
+     until the reader turns them on. */
   const loon = document.querySelector(".lk-loon");
-  let loonTimer = 0, loonVoice = null;
+  let loonTimer = 0, loonFlight = null, sounds = null; // sounds: the AudioContext, while they are on
   const loonLater = () => { clearTimeout(loonTimer); loonTimer = setTimeout(loonCross, 30000 + Math.random() * 30000); };
   function loonCross() {
     loonLater();
@@ -2321,13 +2386,13 @@ BOOKS.push({
     const east = Math.random() < .5;
     loon.classList.toggle("west", !east);
     loon.style.top = f1(5 + Math.random() * 20) + "vh";
-    loon.animate([
+    loonFlight = loon.animate([
       { transform: `translateX(${east ? -12 : 108}vw)`, opacity: 0 },
       { opacity: 1, offset: .07 },
       { opacity: 1, offset: .93 },
       { transform: `translateX(${east ? 108 : -12}vw)`, opacity: 0 }
     ], { duration: 28000, easing: "linear" });
-    if (loonVoice) setTimeout(() => { if (loonVoice) loonCall(loonVoice); }, 2500);
+    if (sounds) setTimeout(() => { if (sounds) loonCall(sounds); }, 2500);
   }
   loonLater();
   // A wail: a whistle that rises, wavers, leaps a little higher and falls away, echoing on the water.
@@ -2366,21 +2431,21 @@ BOOKS.push({
     });
   }
   const loonBtn = h("button", {
-    class: "loon-btn", type: "button", "aria-pressed": "false", "aria-label": "Cri du huard", title: "Cri du huard : coupé",
+    class: "loon-btn", type: "button", "aria-pressed": "false", "aria-label": "Sons du lac", title: "Sons du lac : coupés",
     html: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path class="off" d="M16 10l4 4M20 10l-4 4"/><path class="on" d="M15.5 9.5a3.5 3.5 0 0 1 0 5M18 7a7 7 0 0 1 0 10"/></svg>`,
     onclick: () => {
-      const on = !loonVoice;
+      const on = !sounds;
       if (on) {
         const Ctx = window.AudioContext || window.webkitAudioContext;
         if (!Ctx) return;
-        loonVoice = new Ctx();
-        loonCall(loonVoice);
+        sounds = new Ctx();
+        loonCall(sounds);
       } else {
-        loonVoice.close();
-        loonVoice = null;
+        sounds.close();
+        sounds = null;
       }
       loonBtn.setAttribute("aria-pressed", String(on));
-      loonBtn.title = on ? "Cri du huard : activé" : "Cri du huard : coupé";
+      loonBtn.title = on ? "Sons du lac : activés" : "Sons du lac : coupés";
     }
   });
   document.body.append(loonBtn);
@@ -2428,6 +2493,748 @@ BOOKS.push({
     ], { duration: 900, easing: "ease-out" });
   }
   setTimeout(shootingStar, 6000 + Math.random() * 8000);
+
+  /* ---------- The lake you can touch (computer) ----------
+     With a mouse, on a screen wide enough to leave some lake around the shelf, the scene answers.
+     The raft can be dragged across the water and the black patch follows it, as in The Raft, to
+     wait beside it; watched, its colours turn and the night closes in around it. Georgie's boat
+     is thrown with a flick, and the storm drain on the bank swallows it before a red balloon comes
+     back out. The water rings where it is touched, the loon dives when clicked, Sara Laughs'
+     windows waver and Bunter's bell rings, a click in the sky sends a shooting star, the welcome
+     signs and the plate swing. The lake lies under the page, so the page hands on what lands on
+     empty space. Nothing runs while nothing moves (the water is only drawn while it stirs), and
+     none of it plays with less motion. */
+  const desk = matchMedia("(min-width: 601px) and (hover: hover) and (pointer: fine)");
+  const still = matchMedia("(prefers-reduced-motion: reduce)");
+  const lakeEl = document.querySelector(".lake"), water = lakeEl.querySelector(".lk-water");
+  const skyEl = lakeEl.querySelector(".lk-sky"), farEl = lakeEl.querySelector(".lk-far"), houseEl = lakeEl.querySelector(".lk-house");
+  const houseShine = water.querySelector(".lk-house-glow"), drain = water.querySelector(".lk-drain"), eyes = drain.querySelector(".dr-eyes");
+  const wavesEl = water.querySelector(".lk-waves"), wctx = wavesEl.getContext("2d");
+  const trance = lakeEl.querySelector(".lk-trance"), rising = lakeEl.querySelector(".lk-balloon-up");
+  const lively = () => desk.matches && !still.matches;
+  const live = () => lively() && document.body.dataset.view === "home";
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const thing = (sel, oy) => ({ el: water.querySelector(sel), oy, X: 0, Z: 0, vX: 0, vZ: 0, tX: 0, tZ: 0, held: false, rot: 0, r: 0, home: null });
+  const raft = thing(".lk-raft", .5), boat = thing(".lk-boat", 22 / 36), slick = thing(".lk-slick", .5);
+  Object.assign(slick, { ang: 0, stretch: 1, hyp: 0, watched: false, rate: 1 });
+  Object.assign(boat, { gone: false, sink: -1 });
+  const iris = slick.el.querySelector(".sl-iris");
+
+  // The lake seen from the shore: a point (x, y) of the water layer lies on the lake at (X, Z), in
+  // pixels as they look at the raft's distance. Things grow with their depth D below a horizon a
+  // little above the far shore, and a circle on the water there looks SQ times as high as wide.
+  const SQ = .22;
+  let G = null;
+  function measure() {
+    const W = water.clientWidth, vh = innerHeight / 100;
+    if (!W) return false;
+    const was = G && [raft, boat, slick].map(o => { const p = G.at(o.X, o.Z); return [p.x / G.W, p.y / G.vh]; });
+    const y0 = 14 * vh, spot = (el, oy) => ({ x: el.offsetLeft + el.offsetWidth / 2, y: el.offsetTop + el.offsetHeight * oy });
+    const Dref = spot(raft.el, .5).y + y0;
+    const lake = (x, y) => { const D = Math.max(y + y0, vh); return { X: (x - W / 2) * Dref / D, Z: Dref * Dref / (SQ * D) }; };
+    const at = (X, Z) => { const D = Dref * Dref / (SQ * Z); return { x: W / 2 + X * D / Dref, y: D - y0, s: D / Dref }; };
+    G = { W, vh, y0, Dref, lake, at };
+    [raft, boat, slick].forEach((o, k) => {
+      o.home = spot(o.el, o.oy);
+      o.home.s = (o.home.y + y0) / Dref;
+      const p = was ? { x: was[k][0] * W, y: was[k][1] * vh } : o.home, q = lake(p.x, p.y);
+      o.X = o.tX = q.X; o.Z = o.tZ = q.Z; o.vX = o.vZ = 0;
+    });
+    raft.r = raft.el.offsetWidth * 60 / 140;
+    boat.r = boat.el.offsetWidth * 17 / 40 / boat.home.s;
+    slick.r = slick.el.offsetWidth * .4 / slick.home.s;
+    const m = spot(drain, 86 / 120);
+    m.x = drain.offsetLeft + drain.offsetWidth * .46;
+    G.mouth = lake(m.x, m.y);
+    G.mouthY = m.y;
+    setupWaves();
+    if (was) show();
+    return true;
+  }
+  const ready = () => (G && !G.stale) || measure();
+  const speed = o => Math.hypot(o.vX, o.vZ);
+  // Between two depths (in vh of the water layer), and fully on screen
+  function keepIn(o, yMin, yMax) {
+    const near = G.lake(0, yMax * G.vh).Z, far = G.lake(0, yMin * G.vh).Z;
+    if (o.Z < near) { o.Z = near; o.vZ = Math.abs(o.vZ) * .35; }
+    if (o.Z > far) { o.Z = far; o.vZ = -Math.abs(o.vZ) * .35; }
+    const lim = (G.W / 2 - 6) * SQ * o.Z / G.Dref - o.r;
+    if (o.X < -lim) { o.X = -lim; o.vX = Math.abs(o.vX) * .35; }
+    if (o.X > lim) { o.X = lim; o.vX = -Math.abs(o.vX) * .35; }
+  }
+
+  /* The water's surface: a small field of waves laid on the lake itself (so that rings far off
+     look small and flat), lit by the moon, golden under Sara Laughs' windows, its troughs breaking
+     the moon's path. It runs only while something stirs it, then clears. */
+  let sea = null;
+  let PX = 3; // one point of the drawing for PX × PX pixels of the screen (4 on a wide screen)
+  function setupWaves() {
+    const { W, vh, y0, Dref } = G, cell = Dref / 40, yTop = 4 * vh, yBot = 104 * vh;
+    PX = W > 1500 ? 4 : 3;
+    const zf = G.lake(0, yTop).Z, zn = G.lake(0, yBot).Z, xMax = W / 2 * Dref / (yTop + y0);
+    const cols = Math.ceil(2 * xMax / cell) + 4, rows = Math.ceil((zf - zn) / cell) + 4, n = cols * rows;
+    const lo = new Int32Array(rows), hi = new Int32Array(rows), damp = new Float32Array(n);
+    for (let j = 1; j < rows - 1; j++) {
+      const half = W / 2 * SQ * (zf - (j - 1) * cell) / Dref / cell;
+      lo[j] = Math.max(1, Math.floor(cols / 2 - half) - 1);
+      hi[j] = Math.min(cols - 2, Math.ceil(cols / 2 + half) + 1);
+      for (let i = lo[j]; i <= hi[j]; i++) {
+        const edge = Math.min(i - lo[j], hi[j] - i, j - 1, rows - 2 - j);
+        damp[j * cols + i] = edge < 8 ? .982 * (.84 + .02 * edge) : .982;
+      }
+    }
+    const cw = Math.ceil(W / PX), ch = Math.ceil(yBot / PX), m = cw * ch;
+    wavesEl.width = cw;
+    wavesEl.height = ch;
+    wavesEl.style.width = cw * PX + "px";
+    wavesEl.style.height = ch * PX + "px";
+    const rowJ = new Float32Array(ch), rowS = new Float32Array(ch);
+    const R = new Uint8ClampedArray(m), Gr = new Uint8ClampedArray(m), B = new Uint8ClampedArray(m), L = new Float32Array(m), K = new Float32Array(m);
+    const mx = .78 * W, hx = houseShine.offsetLeft + houseShine.offsetWidth / 2, hw = houseShine.offsetWidth * .3, hh = houseShine.offsetHeight;
+    for (let r = 0; r < ch; r++) {
+      const y = (r + .5) * PX, sig = W * (.01 + .07 * Math.min(1, y / (68 * vh)));
+      rowJ[r] = y < yTop ? -1 : (zf - G.lake(0, y).Z) / cell + 1;
+      rowS[r] = Dref / (y + y0) / cell;
+      for (let c = 0; c < cw; c++) {
+        const x = (c + .5) * PX, p = r * cw + c;
+        const moon = 1.2 * Math.exp(-(((x - mx) / sig) ** 2)), win = y < hh ? .9 * Math.exp(-(((x - hx) / hw) ** 2)) * (1 - y / hh) : 0, l = .3 + moon + win;
+        R[p] = (246 * (.3 + moon) + 242 * win) / l;
+        Gr[p] = (228 * (.3 + moon) + 166 * win) / l;
+        B[p] = (173 * (.3 + moon) + 75 * win) / l;
+        L[p] = l;
+        K[p] = .55 + .6 * moon;
+      }
+    }
+    sea = { cell, zf, cols, rows, lo, hi, damp, h0: new Float32Array(n), h1: new Float32Array(n), h2: new Float32Array(n), v: new Float32Array(n),
+      cw, ch, rowJ, rowS, R, Gr, B, L, K, img: wctx.createImageData(cw, ch), on: false, calm: 0, acc: 0 };
+    wctx.clearRect(0, 0, cw, ch);
+  }
+  // A dent (a < 0) or a bump of radius r at (X, Z): the rings spread from there
+  function ripple(X, Z, r, a) {
+    if (!sea) return;
+    const { cols, rows, lo, hi, cell, h1 } = sea, gi = cols / 2 + X / cell, gj = (sea.zf - Z) / cell + 1, R = Math.max(1.5, r / cell);
+    for (let j = Math.max(1, Math.floor(gj - R)); j <= Math.min(rows - 2, Math.ceil(gj + R)); j++)
+      for (let i = Math.max(lo[j], Math.floor(gi - R)); i <= Math.min(hi[j], Math.ceil(gi + R)); i++) {
+        const d2 = ((i - gi) ** 2 + (j - gj) ** 2) / (R * R);
+        if (d2 < 1) h1[j * cols + i] += a * (1 - d2) * (1 - d2);
+      }
+    sea.on = true;
+    sea.calm = 0;
+    wake();
+  }
+  function stepWaves() {
+    const s = sea, { cols, rows, lo, hi, damp, h0: prv, h1: cur, h2: nxt } = s;
+    for (let j = 1; j < rows - 1; j++)
+      for (let i = lo[j], k = j * cols + i; i <= hi[j]; i++, k++)
+        nxt[k] = (2 * cur[k] - prv[k] + .26 * (cur[k - 1] + cur[k + 1] + cur[k - cols] + cur[k + cols] - 4 * cur[k])) * damp[k];
+    // Oil lies flat: the waves die on the black patch
+    const gi = cols / 2 + slick.X / s.cell, gj = (s.zf - slick.Z) / s.cell + 1, R = slick.r * .9 * slick.stretch / s.cell;
+    for (let j = Math.max(1, Math.floor(gj - R)); j <= Math.min(rows - 2, Math.ceil(gj + R)); j++)
+      for (let i = Math.max(lo[j], Math.floor(gi - R)); i <= Math.min(hi[j], Math.ceil(gi + R)); i++) {
+        const d2 = ((i - gi) ** 2 + (j - gj) ** 2) / (R * R);
+        if (d2 < 1) nxt[j * cols + i] *= .8 + .2 * d2;
+      }
+    s.h0 = cur; s.h1 = nxt; s.h2 = prv;
+  }
+  function drawWaves() {
+    const s = sea, { cols, rows, lo, hi, h1: H, v: V } = s;
+    let peak = 0;
+    for (let j = 1; j < rows - 1; j++)
+      for (let i = lo[j], k = j * cols + i; i <= hi[j]; i++, k++) {
+        const g = H[k + cols] - H[k - cols] + .3 * (H[k + 1] - H[k - 1]);
+        V[k] = g;
+        if (g > peak) peak = g; else if (-g > peak) peak = -g;
+      }
+    if (peak < .003) {
+      if (++s.calm > 30) { s.on = false; wctx.clearRect(0, 0, s.cw, s.ch); }
+      return;
+    }
+    s.calm = 0;
+    const d = s.img.data, { cw, ch, rowJ, rowS, R, Gr, B, L, K } = s, half = G.W / 2, GAIN = 2000;
+    for (let r = 0, p = 0; r < ch; r++) {
+      const J = rowJ[r], j = J | 0, fj = J - j, S = rowS[r];
+      if (J < 1 || j >= rows - 2) { for (let c = 0; c < cw; c++, p++) d[p * 4 + 3] = 0; continue; }
+      const a = lo[j], b = hi[j] - 1;
+      for (let c = 0; c < cw; c++, p++) {
+        const gi = cols / 2 + ((c + .5) * PX - half) * S, i = Math.floor(gi), q = p * 4;
+        if (i < a || i > b) { d[q + 3] = 0; continue; }
+        const fi = gi - i, k = j * cols + i;
+        const v = (V[k] + (V[k + 1] - V[k]) * fi) * (1 - fj) + (V[k + cols] + (V[k + cols + 1] - V[k + cols]) * fi) * fj;
+        if (v > 0) { d[q] = R[p]; d[q + 1] = Gr[p]; d[q + 2] = B[p]; d[q + 3] = Math.min(225, v * GAIN * L[p]); }
+        else { d[q] = 1; d[q + 1] = 4; d[q + 2] = 7; d[q + 3] = Math.min(175, -v * GAIN * K[p]); }
+      }
+    }
+    wctx.putImageData(s.img, 0, 0);
+  }
+
+  // Moving things: held, a thing follows the hand on a spring; let go, it glides and slows.
+  function pull(o, dt, k, c) {
+    o.vX += ((o.tX - o.X) * k - o.vX * c) * dt;
+    o.vZ += ((o.tZ - o.Z) * k - o.vZ * c) * dt;
+  }
+  function glide(o, dt, drag) {
+    const f = Math.exp(-drag * dt);
+    o.vX *= f;
+    o.vZ *= f;
+  }
+  // The raft is heavy: it lags behind the hand, leans, leaves a wake, creaks.
+  function moveRaft(dt) {
+    const o = raft;
+    if (o.held) pull(o, dt, 18, 6.5); else glide(o, dt, 1.1);
+    o.X += o.vX * dt;
+    o.Z += o.vZ * dt;
+    keepIn(o, 6, 72);
+    const sp = speed(o);
+    if (sp > 10) {
+      const a = -Math.min(.3, sp * .001), c = sea.cell;
+      ripple(o.X - o.r, o.Z, c * 1.3, a);
+      ripple(o.X + o.r, o.Z, c * 1.3, a);
+      ripple(o.X, o.Z - o.r * .4, c * 1.5, a * .6);
+      if (o.held && sp > 60 && Math.random() < dt * .8) sfx.creak();
+    }
+    o.rot += (clamp(o.vX * .011, -5, 5) - o.rot) * Math.min(1, dt * 6);
+    return o.held || sp > 1.5 || Math.abs(o.rot) > .04;
+  }
+  // The paper boat is light: it flies off a flick, sticks in the oil, and the drain draws it in.
+  function moveBoat(dt) {
+    const o = boat;
+    if (o.gone) return false;
+    if (o.sink >= 0) {
+      o.sink = Math.min(1, o.sink + dt / 1.1);
+      o.X += (G.mouth.X - o.X) * Math.min(1, dt * 5);
+      o.Z += (G.mouth.Z + o.r * .8 - o.Z) * Math.min(1, dt * 5);
+      if (Math.random() < dt * 9) ripple(G.mouth.X + (Math.random() - .5) * o.r * 3, G.mouth.Z - Math.random() * o.r * 2, sea.cell, -.12);
+      if (o.sink === 1) swallowed();
+      return true;
+    }
+    if (o.held) pull(o, dt, 70, 14);
+    else {
+      glide(o, dt, Math.hypot(o.X - slick.X, o.Z - slick.Z) < slick.r ? 3.5 : .5);
+      const dx = G.mouth.X - o.X, dz = G.mouth.Z - o.Z, d = Math.hypot(dx, dz), zone = o.r * 5;
+      if (d < zone) {
+        const draw = 420 * (1 - d / zone) * dt;
+        o.vX += dx / d * draw;
+        o.vZ += dz / d * draw;
+      }
+      if (d < o.r * 1.2) { o.sink = 0; o.vX = o.vZ = 0; sfx.gurgle(); }
+    }
+    o.X += o.vX * dt;
+    o.Z += o.vZ * dt;
+    keepIn(o, 8, 100);
+    const sp = speed(o);
+    if (sp > 12) ripple(o.X, o.Z, sea.cell * 1.1, -Math.min(.16, sp * .0005));
+    o.rot += (clamp(o.vX * .03, -12, 12) - o.rot) * Math.min(1, dt * 6);
+    return o.held || sp > 1.5 || Math.abs(o.rot) > .04;
+  }
+  function collide() {
+    if (boat.gone || boat.sink >= 0) return;
+    const dx = boat.X - raft.X, dz = boat.Z - raft.Z, d = Math.hypot(dx, dz), min = raft.r + boat.r;
+    if (d >= min || d < .01) return;
+    const nx = dx / d, nz = dz / d, rel = (boat.vX - raft.vX) * nx + (boat.vZ - raft.vZ) * nz;
+    boat.X = raft.X + nx * min;
+    boat.Z = raft.Z + nz * min;
+    if (rel < 0) {
+      boat.vX -= nx * rel * 1.6;
+      boat.vZ -= nz * rel * 1.6;
+      ripple(boat.X, boat.Z, sea.cell * 1.2, -.3);
+      if (rel < -80) sfx.plop(.35);
+    }
+  }
+  /* The black patch comes alongside the raft and waits there, on the side it came from: slowly,
+     stretching toward it, faster when the raft is far. Watched, it holds still. */
+  function moveSlick(dt) {
+    const o = slick, dx = o.X - raft.X, dz = o.Z - raft.Z, dist = Math.hypot(dx, dz) || 1;
+    let tX = o.X, tZ = o.Z;
+    if (o.hyp < .25) {
+      const gap = raft.r + o.r * .5;
+      tX = raft.X + dx / dist * gap;
+      tZ = raft.Z + dz / dist * gap;
+    }
+    const ex = tX - o.X, ez = tZ - o.Z, e = Math.hypot(ex, ez);
+    const want = Math.min(e * .9, (dist > raft.r * 7 ? 1 : .35) * raft.r * 2);
+    const k = Math.min(1, dt * .9);
+    o.vX += ((e > .5 ? ex / e * want : 0) - o.vX) * k;
+    o.vZ += ((e > .5 ? ez / e * want : 0) - o.vZ) * k;
+    o.X += o.vX * dt;
+    o.Z += o.vZ * dt;
+    keepIn(o, 4, 100);
+    const sp = speed(o);
+    o.stretch += (1 + Math.min(.8, sp / (raft.r * 1.2)) - o.stretch) * Math.min(1, dt * 1.5);
+    if (sp > 2) {
+      let da = Math.atan2(-o.vZ, o.vX) - o.ang;
+      da = Math.atan2(Math.sin(da), Math.cos(da));
+      o.ang += da * Math.min(1, dt * 1.6);
+    }
+    const goal = o.watched ? 1 : 0;
+    o.hyp += (goal - o.hyp) * Math.min(1, dt * (goal ? .55 : 1.8));
+    if (Math.abs(goal - o.hyp) < .003) o.hyp = goal;
+    entrance(o.hyp);
+    return e > 1.5 || sp > 1 || Math.abs(o.stretch - 1) > .01 || o.hyp !== goal;
+  }
+  // Its colours, which hold whoever looks at them: brighter and turning faster, the night darkening
+  // around it, a low hum.
+  let tranceAt = "";
+  function entrance(h) {
+    iris.style.opacity = (.32 + .48 * h).toFixed(3);
+    const rate = 1 + 12 * h;
+    if (Math.abs(rate - slick.rate) > .05 || h === 0 || h === 1) {
+      slick.rate = rate;
+      for (const a of iris.getAnimations({ subtree: true })) a.playbackRate = rate;
+    }
+    trance.classList.toggle("on", h > .002);
+    if (h > .002) { trance.style.opacity = (h * .9).toFixed(3); aimTrance(); }
+    drone(h);
+  }
+  function aimTrance() {
+    const b = water.getBoundingClientRect(), q = G.at(slick.X, slick.Z), at = `${f1(b.left + q.x)}px ${f1(b.top + q.y)}px`;
+    if (at === tranceAt) return;
+    tranceAt = at;
+    trance.style.setProperty("--tx", f1(b.left + q.x) + "px");
+    trance.style.setProperty("--ty", f1(b.top + q.y) + "px");
+  }
+  function place(o, k, turn) {
+    const q = G.at(o.X, o.Z);
+    o.el.style.transform = `translate(${f1(q.x - o.home.x)}px, ${f1(q.y - o.home.y)}px) scale(${(q.s / o.home.s * k).toFixed(3)}) ${turn}`;
+    return q;
+  }
+  function show() {
+    // In front of the drain's bank when nearer than it, behind it when farther
+    raft.el.style.zIndex = place(raft, 1, `rotate(${raft.rot.toFixed(2)}deg)`).y > G.mouthY - 6 ? 3 : 1;
+    if (!boat.gone) {
+      const sink = Math.max(0, boat.sink), q = place(boat, 1 - .6 * sink, `rotate(${(boat.rot + sink * 25).toFixed(2)}deg)`);
+      boat.el.style.opacity = sink ? (1 - sink).toFixed(2) : "";
+      boat.el.style.zIndex = boat.sink >= 0 || q.y < G.mouthY - 6 ? 1 : 3;
+    }
+    const k = slick.stretch, q = G.at(slick.X, slick.Z);
+    slick.el.style.transform = `translate(${f1(q.x - slick.home.x)}px, ${f1(q.y - slick.home.y)}px) scale(${(q.s / slick.home.s * (1 + .06 * slick.hyp)).toFixed(3)}) scaleY(${(SQ * q.s).toFixed(3)}) rotate(${slick.ang.toFixed(3)}rad) scale(${k.toFixed(3)}, ${(1 / Math.sqrt(k)).toFixed(3)})`;
+  }
+
+  // One frame of the lake; it goes back to sleep as soon as everything is still.
+  let lakeFrame = 0, then = 0;
+  function wake() {
+    if (lakeFrame || !live() || !ready()) return;
+    then = performance.now();
+    lakeFrame = requestAnimationFrame(tick);
+  }
+  function tick(now) {
+    lakeFrame = -1; // a ripple made during this frame must not ask for another one
+    if (!live() || !ready()) { lakeFrame = 0; return rest(); }
+    const dt = Math.min(1 / 30, (now - then) / 1000);
+    then = now;
+    let busy = moveRaft(dt) | moveBoat(dt);
+    collide();
+    busy |= moveSlick(dt);
+    show();
+    if (sea.on) {
+      sea.acc = Math.min(sea.acc + dt, 3 / 60);
+      for (; sea.acc >= 1 / 60; sea.acc -= 1 / 60) stepWaves();
+      drawWaves();
+      busy |= sea.on;
+    }
+    lap(grab ? clamp(speed(grab.o) / 700, 0, 1) : swirl ? .45 : 0);
+    lakeFrame = busy || grab || swirl ? requestAnimationFrame(tick) : 0;
+    if (!lakeFrame) rest();
+  }
+  function rest() {
+    lap(0);
+    if (live()) return;
+    slick.watched = false;
+    slick.hyp = 0;
+    entrance(0);
+    point("");
+  }
+
+  /* The page lies over the lake: what lands beside the links and books goes to the lake. A thing
+     under the pointer is picked up (even under a line of text, so it is never lost there); on empty
+     space, the water rings, or a star falls. */
+  const LINKS = "a, button, input, select, textarea, label, summary, .vol-slot, .plate, .ts-board, .dock, .loon-btn";
+  const reachable = t => t instanceof Element && !t.closest(LINKS);
+  const free = t => reachable(t) && !t.closest("p, h1, h2, h3, .book-caption, .rec, .now, .sync");
+  const onWater = e => { const b = water.getBoundingClientRect(); return { x: e.clientX - b.left, y: e.clientY - b.top }; };
+  const inBox = (e, el, l, t, r, b, pad = 6) => {
+    const x = el.getBoundingClientRect();
+    return x.width > 0 && e.clientX > x.left + x.width * l - pad && e.clientX < x.left + x.width * r + pad && e.clientY > x.top + x.height * t - pad && e.clientY < x.top + x.height * b + pad;
+  };
+  function onThing(p) {
+    for (const o of [boat, raft]) {
+      if (o === boat && (boat.gone || boat.sink >= 0)) continue;
+      const q = G.at(o.X, o.Z), k = q.s / o.home.s, w = o.el.offsetWidth * k, h = o.el.offsetHeight * k;
+      const up = h * (o === raft ? .3 : .6), down = h * .14;
+      if (Math.abs(p.x - q.x) < w * .46 + 8 && p.y > q.y - up - 8 && p.y < q.y + down + 8) return o;
+    }
+    return null;
+  }
+  function onSlick(p) {
+    const q = G.at(slick.X, slick.Z), rx = slick.r * q.s * 1.15 + 6, ry = slick.r * q.s * SQ * q.s * 1.15 + 6;
+    return ((p.x - q.x) / rx) ** 2 + ((p.y - q.y) / ry) ** 2 < 1;
+  }
+  const onLoon = e => !!loonFlight && loonFlight.playState === "running" && inBox(e, loon, 0, 0, 1, 1, 12);
+  const onHouse = e => inBox(e, houseEl, .15, 0, .95, .7);
+  const onDrain = e => inBox(e, drain, .3, .35, .62, .78);
+  let grab = null, swirl = null, lastMove = null, hoverFrame = 0;
+  let cursorNow = "";
+  function point(c) {
+    if (c === cursorNow) return;
+    const root = document.documentElement;
+    if (cursorNow) root.classList.remove(cursorNow);
+    if (c) root.classList.add(c);
+    cursorNow = c;
+  }
+  addEventListener("pointerdown", e => {
+    if (e.button !== 0 || e.pointerType !== "mouse" || !live() || !reachable(e.target) || !ready()) return;
+    const p = onWater(e), o = onThing(p);
+    lastMove = e;
+    if (o) {
+      e.preventDefault();
+      const q = G.at(o.X, o.Z), k = q.s / o.home.s;
+      grab = { o, dx: (q.x - p.x) / k, dy: (q.y - p.y) / k, t: performance.now(), vX: 0, vZ: 0, at: G.lake(p.x, p.y) };
+      o.held = true;
+      o.tX = o.X;
+      o.tZ = o.Z;
+      ripple(o.X, o.Z, o.r * .5, .12);
+      point("lk-grabbing");
+      return wake();
+    }
+    if (!free(e.target)) return;
+    if (onLoon(e)) return loonDive();
+    if (onHouse(e)) return houseCall();
+    if (onDrain(e)) return drainPeek();
+    if (p.y > 2) { e.preventDefault(); swirl = { x: p.x, y: p.y, moved: 0 }; }
+    else if (e.clientY < farEl.getBoundingClientRect().top) starAt(e.clientX, e.clientY);
+  });
+  // Where the held thing should go: under the hand, wherever the page has scrolled to
+  function aim() {
+    const o = grab.o, p = onWater(lastMove), k = G.at(o.X, o.Z).s / o.home.s, t = G.lake(p.x + grab.dx * k, p.y + grab.dy * k);
+    o.tX = t.X;
+    o.tZ = t.Z;
+    wake();
+  }
+  addEventListener("pointermove", e => {
+    if (e.pointerType !== "mouse") return;
+    lastMove = e;
+    if (grab) {
+      aim();
+      const w = onWater(e), p = G.lake(w.x, w.y), now = performance.now(), dt = Math.max(8, now - grab.t) / 1000;
+      grab.vX = grab.vX * .5 + (p.X - grab.at.X) / dt * .5;
+      grab.vZ = grab.vZ * .5 + (p.Z - grab.at.Z) / dt * .5;
+      grab.at = p;
+      grab.t = now;
+    } else if (swirl) {
+      const p = onWater(e), dx = p.x - swirl.x, dy = p.y - swirl.y, len = Math.hypot(dx, dy);
+      if (len > 4 && p.y > 2) {
+        const steps = Math.ceil(len / 8);
+        for (let k = 1; k <= steps; k++) {
+          const q = G.lake(swirl.x + dx * k / steps, swirl.y + dy * k / steps);
+          ripple(q.X, q.Z, sea.cell * 1.2, -Math.min(.35, len * .015) / steps * 2);
+        }
+        swirl.moved += len;
+        swirl.x = p.x;
+        swirl.y = p.y;
+      }
+    } else if (!hoverFrame) hoverFrame = requestAnimationFrame(hover);
+  }, { passive: true });
+  function hover() {
+    hoverFrame = 0;
+    const e = lastMove;
+    let c = "", watching = false;
+    if (e && live() && reachable(e.target) && ready()) {
+      const p = onWater(e);
+      if (onThing(p)) c = "lk-grab";
+      else if (free(e.target) && (onLoon(e) || onHouse(e) || onDrain(e))) c = "lk-point";
+      else watching = onSlick(p);
+    }
+    point(c);
+    if (watching !== slick.watched) { slick.watched = watching; wake(); }
+  }
+  document.documentElement.addEventListener("mouseleave", () => { lastMove = null; if (!grab) hover(); });
+  function letGo() {
+    if (grab) {
+      const o = grab.o;
+      o.held = false;
+      if (o === boat && performance.now() - grab.t < 90) {
+        const v = Math.hypot(grab.vX, grab.vZ), f = v > 2200 ? 2200 / v : 1;
+        o.vX = grab.vX * .9 * f;
+        o.vZ = grab.vZ * .9 * f;
+      }
+      ripple(o.X, o.Z, o.r * .6, -.2);
+      sfx.splash(o === raft ? .6 : .3);
+      grab = null;
+      point("");
+      hover();
+      wake();
+    } else if (swirl) {
+      if (swirl.moved < 6) {
+        const q = G.lake(swirl.x, swirl.y);
+        ripple(q.X, q.Z, sea.cell * 2.2, -1.4);
+        sfx.plop(clamp(G.at(q.X, q.Z).s, .4, 1.2));
+      }
+      swirl = null;
+    }
+  }
+  addEventListener("pointerup", letGo);
+  addEventListener("pointercancel", letGo);
+  addEventListener("scroll", () => {
+    if (!G) return;
+    if (grab && lastMove) aim();
+    if (slick.hyp > 0) aimTrance();
+  }, { passive: true });
+  addEventListener("resize", () => { if (G) { G.stale = true; wake(); } });
+  function setLive() {
+    const on = lively();
+    lakeEl.classList.toggle("live", on);
+    document.body.classList.toggle("lake-live", on);
+    G = null;
+    if (on) return;
+    for (const o of [raft, boat, slick]) o.el.style.transform = o.el.style.zIndex = o.el.style.opacity = "";
+    rest();
+  }
+  desk.addEventListener("change", setLive);
+  still.addEventListener("change", setLive);
+  setLive();
+
+  // The loon, clicked, dives: rings where it went down, and it comes up again farther on.
+  function loonDive() {
+    if (loon.dataset.diving) return;
+    loon.dataset.diving = "1";
+    const bird = loon.firstElementChild, rings = () => {
+      const b = loon.getBoundingClientRect(), w = water.getBoundingClientRect(), q = G.lake(b.left + b.width / 2 - w.left, b.bottom - w.top - 6);
+      ripple(q.X, q.Z, sea.cell * 2, -1.8);
+    };
+    rings();
+    sfx.plop(.5);
+    loonFlight.pause();
+    bird.getAnimations().forEach(a => a.cancel());
+    bird.animate([{ translate: "0 0", opacity: 1 }, { translate: "0 7px", opacity: 0 }], { duration: 420, easing: "ease-in", fill: "forwards" });
+    setTimeout(() => {
+      const total = loonFlight.effect.getComputedTiming().duration;
+      loonFlight.currentTime = Math.min(total * .88, loonFlight.currentTime + 4500);
+      loonFlight.play();
+      bird.getAnimations().forEach(a => a.cancel());
+      bird.animate([{ translate: "0 7px", opacity: 0 }, { translate: "0 0", opacity: 1 }], { duration: 650, easing: "ease-out" });
+      requestAnimationFrame(rings);
+      if (sounds) setTimeout(() => sounds && loonCall(sounds), 600);
+      delete loon.dataset.diving;
+    }, 2600 + Math.random() * 1600);
+  }
+  // Sara Laughs, clicked: its windows waver, and across the water Bunter's bell rings, once for
+  // yes, twice for no (Bag of Bones).
+  const houseLights = [...houseEl.querySelectorAll(".hw")];
+  let houseUntil = 0;
+  function houseCall() {
+    if (performance.now() < houseUntil) return;
+    houseUntil = performance.now() + 3000;
+    const n = houseLights.length / 2, blink = () => Array.from({ length: 9 }, (_, k) => ({
+      opacity: k === 0 || k === 8 ? 1 : Math.random() < .5 ? Math.random() * .2 : .6 + Math.random() * .4, easing: "steps(1, end)" }));
+    for (let i = 0; i < n; i++) {
+      const keys = blink(), opt = { duration: 1300 + Math.random() * 700, delay: Math.random() * 250 };
+      houseLights[i].animate(keys, opt);
+      houseLights[i + n].animate(keys, opt);
+    }
+    houseShine.animate(blink(), { duration: 1700 });
+    sfx.bell(Math.random() < .5 ? 1 : 2);
+  }
+  // The drain, clicked: something stirs in the dark down there.
+  let peekUntil = 0;
+  function peek() { eyes.animate([{ opacity: 0 }, { opacity: .95, offset: .15 }, { opacity: .95, offset: .55 }, { opacity: 0, offset: .62 }, { opacity: .9, offset: .7 }, { opacity: 0 }], { duration: 1600 }); }
+  function drainPeek() {
+    if (performance.now() < peekUntil) return;
+    peekUntil = performance.now() + 2500;
+    peek();
+    sfx.gurgle(.5);
+  }
+  // Georgie's boat, swallowed: the eyes, then a red balloon floats out of the pipe and away; the
+  // boat comes back to its place a while later.
+  function swallowed() {
+    boat.gone = true;
+    boat.sink = -1;
+    boat.el.style.opacity = "0";
+    setTimeout(peek, 1000);
+    setTimeout(() => {
+      const b = drain.getBoundingClientRect();
+      rising.style.left = f1(b.left + b.width * .46 - rising.offsetWidth / 2) + "px";
+      rising.style.top = f1(b.top + b.height * .55 - rising.offsetHeight * .4) + "px";
+      rising.animate([
+        { transform: "translate(0, 10px) scale(.4)", opacity: 0 },
+        { transform: "translate(0, -12px) scale(1)", opacity: 1, offset: .05 },
+        { transform: "translate(-1.2vw, -35vh) rotate(-4deg)", offset: .35 },
+        { transform: "translate(.8vw, -70vh) rotate(3deg)", offset: .7 },
+        { transform: "translate(-.4vw, -104vh) rotate(-2deg)", opacity: 1, offset: .97 },
+        { transform: "translate(0, -110vh)", opacity: 0 }
+      ], { duration: 30000, easing: "linear" });
+    }, 2600);
+    setTimeout(() => {
+      Object.assign(boat, { gone: false, vX: 0, vZ: 0, rot: 0 });
+      boat.el.style.opacity = "";
+      boat.el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 1500 });
+      if (!G) return;
+      const q = G.lake(boat.home.x, boat.home.y);
+      boat.X = q.X;
+      boat.Z = q.Z;
+      ripple(q.X, q.Z, boat.r, -.3);
+      show();
+      wake();
+    }, 26000);
+  }
+  // A click in the sky: a shooting star crosses it there.
+  let falling = 0;
+  function starAt(x, y) {
+    if (falling > 3) return;
+    const r = skyEl.getBoundingClientRect(), star = shoot.cloneNode(), a = Math.random() < .4 ? 180 - (16 + Math.random() * 18) : 16 + Math.random() * 18;
+    star.style.left = f1(x - r.left - 150) + "px";
+    star.style.top = f1(y - r.top) + "px";
+    skyEl.append(star);
+    falling++;
+    star.animate([
+      { transform: `rotate(${a}deg) translateX(-40px) scaleX(.3)`, opacity: 0 },
+      { opacity: 1, offset: .2 },
+      { transform: `rotate(${a}deg) translateX(170px)`, opacity: 0 }
+    ], { duration: 950, easing: "ease-out" }).onfinish = () => { star.remove(); falling--; };
+    sfx.whoosh();
+  }
+  // The welcome signs rock on their posts, the plate swings from its screw.
+  app.addEventListener("click", e => {
+    if (!live()) return;
+    const board = e.target.closest(".ts-board"), plate = !board && e.target.closest(".plate");
+    const el = board || plate;
+    if (!el) return;
+    el.getAnimations().forEach(a => a.cancel());
+    el.animate((board ? [0, -3.4, 2.6, -1.6, .8, -.3, 0] : [0, 6, -4.4, 2.8, -1.6, .7, 0]).map(d => ({ transform: `rotate(${d}deg)` })),
+      { duration: board ? 1200 : 1800, easing: "ease-out" });
+    if (board) sfx.knock(); else sfx.rattle();
+  });
+
+  /* Sounds of the lake, made by the browser like the loon's call, and silent while they are off:
+     a plop, the lapping along a moving hull, the raft's creak, a splash, Bunter's bell, the drain's
+     gurgle, a star's whisper, the knock of a sign, the rattle of the plate, and the patch's hum. */
+  const ear = {};
+  function out() {
+    if (ear.ctx !== sounds) {
+      const c = sounds, len = c.sampleRate * 2, buf = c.createBuffer(1, len, c.sampleRate), d = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+      const il = Math.round(c.sampleRate * 2.4), ir = c.createBuffer(2, il, c.sampleRate);
+      for (let ch = 0; ch < 2; ch++) { const x = ir.getChannelData(ch); for (let i = 0; i < il; i++) x[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / il, 3.4); }
+      const dry = c.createGain(), echo = c.createConvolver(), wet = c.createGain();
+      dry.gain.value = .8;
+      wet.gain.value = .3;
+      echo.buffer = ir;
+      dry.connect(c.destination);
+      echo.connect(wet).connect(c.destination);
+      Object.assign(ear, { ctx: c, noise: buf, dry, echo, lapping: null, hum: null });
+    }
+    return ear;
+  }
+  function send(node, wet) {
+    const e = out();
+    node.connect(e.dry);
+    if (wet) { const g = sounds.createGain(); g.gain.value = wet; node.connect(g).connect(e.echo); }
+  }
+  function tone(type, f0, f1, dur, peak, wet = .4, at = 0) {
+    if (!sounds) return;
+    const t = sounds.currentTime + .02 + at, o = sounds.createOscillator(), g = sounds.createGain();
+    o.type = type;
+    o.frequency.setValueAtTime(f0, t);
+    if (f1 !== f0) o.frequency.exponentialRampToValueAtTime(f1, t + dur * .6);
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(peak, t + Math.min(.01, dur * .2));
+    g.gain.exponentialRampToValueAtTime(.0004, t + dur);
+    o.connect(g);
+    send(g, wet);
+    o.start(t);
+    o.stop(t + dur + .05);
+  }
+  function hiss(kind, f0, f1, q, dur, peak, wet = .3, at = 0) {
+    if (!sounds) return;
+    const t = sounds.currentTime + .02 + at, s = sounds.createBufferSource(), fl = sounds.createBiquadFilter(), g = sounds.createGain();
+    s.buffer = out().noise;
+    s.loop = true;
+    fl.type = kind;
+    fl.Q.value = q;
+    fl.frequency.setValueAtTime(f0, t);
+    if (f1 !== f0) fl.frequency.exponentialRampToValueAtTime(f1, t + dur);
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(peak, t + Math.min(.02, dur * .25));
+    g.gain.exponentialRampToValueAtTime(.0004, t + dur);
+    s.connect(fl).connect(g);
+    send(g, wet);
+    s.start(t, Math.random() * 1.5);
+    s.stop(t + dur + .05);
+  }
+  const sfx = {
+    plop(level = 1) { tone("sine", 600 + Math.random() * 350, 170, .14, .24 * level, .5); hiss("bandpass", 1800, 1800, 1.2, .07, .12 * level, .4); },
+    splash(level = 1) { hiss("lowpass", 1100, 280, .7, .5, .35 * level, .4); },
+    creak() {
+      if (!sounds) return;
+      const t = sounds.currentTime + .02, dur = .35 + Math.random() * .3, o = sounds.createOscillator(), g = sounds.createGain();
+      o.type = "sawtooth";
+      o.frequency.setValueAtTime(34 + Math.random() * 16, t);
+      o.frequency.linearRampToValueAtTime(52 + Math.random() * 30, t + dur);
+      for (const [f, q] of [[620 + Math.random() * 200, 9], [1350, 11]]) { const b = sounds.createBiquadFilter(); b.type = "bandpass"; b.frequency.value = f; b.Q.value = q; o.connect(b).connect(g); }
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(.5, t + .06);
+      g.gain.linearRampToValueAtTime(.32, t + dur * .7);
+      g.gain.linearRampToValueAtTime(0, t + dur);
+      send(g, .25);
+      o.start(t);
+      o.stop(t + dur + .05);
+    },
+    knock() { for (const at of [0, .12]) { hiss("bandpass", 420, 420, 5, .05, .8, .2, at); tone("sine", 160, 90, .09, .28, .2, at); } },
+    rattle() { [0, .07, .15, .26].forEach((at, i) => { hiss("bandpass", 3300, 3300, 7, .03, .9 / (i + 1), .2, at); tone("sine", 2350, 2300, .3, .05 / (i + 1), .3, at); tone("sine", 3480, 3400, .22, .03 / (i + 1), .3, at); }); },
+    bell(times) { for (let n = 0; n < times; n++) for (const [m, g, d] of [[1, .1, 2.2], [2.76, .05, 1.3], [5.4, .025, .8], [8.9, .012, .5]]) tone("sine", 1180 * m, 1180 * m, d, g, .9, .6 + n * 1.3); },
+    gurgle(level = 1) {
+      for (let i = 0; i < 13; i++) { const f = 210 + Math.random() * 330; tone("sine", f, f * 1.7, .06, .16 * level, .3, i * .1 + Math.random() * .05); }
+      hiss("lowpass", 320, 160, .8, 1.4, .3 * level, .3);
+    },
+    whoosh() { hiss("bandpass", 1500, 5200, 2.2, .75, .3, .5); tone("sine", 3300, 2300, .6, .015, .6); }
+  };
+  // Lapping along a hull on the move, as loud as it goes fast
+  function lap(level) {
+    if (!sounds) return;
+    const e = out();
+    if (!e.lapping && level > 0) {
+      const s = sounds.createBufferSource(), f = sounds.createBiquadFilter(), g = sounds.createGain(), lfo = sounds.createOscillator(), depth = sounds.createGain();
+      s.buffer = e.noise;
+      s.loop = true;
+      f.type = "bandpass";
+      f.frequency.value = 480;
+      f.Q.value = .9;
+      g.gain.value = 0;
+      lfo.frequency.value = .8;
+      depth.gain.value = 160;
+      lfo.connect(depth).connect(f.frequency);
+      s.connect(f).connect(g);
+      send(g, .25);
+      s.start();
+      lfo.start();
+      e.lapping = { s, g, lfo };
+    }
+    if (!e.lapping) return;
+    const t = sounds.currentTime;
+    e.lapping.g.gain.setTargetAtTime(level * .5, t, .08);
+    if (level === 0) { const l = e.lapping; e.lapping = null; l.s.stop(t + .6); l.lfo.stop(t + .6); }
+  }
+  // The patch's hum, while it holds someone's gaze
+  function drone(level) {
+    if (!sounds) return;
+    const e = out(), t = sounds.currentTime;
+    if (!e.hum && level > .01) {
+      const g = sounds.createGain();
+      g.gain.value = 0;
+      send(g, .5);
+      const parts = [[55, "sine", .5], [55.8, "sine", .5], [82.6, "triangle", .25], [220.4, "sine", .1], [221.1, "sine", .1], [1318, "sine", .025]].map(([f, type, v]) => {
+        const o = sounds.createOscillator(), og = sounds.createGain();
+        o.type = type;
+        o.frequency.value = f;
+        og.gain.value = v;
+        o.connect(og).connect(g);
+        o.start();
+        return o;
+      });
+      e.hum = { g, parts };
+    }
+    if (!e.hum) return;
+    e.hum.g.gain.setTargetAtTime(level * .2, t, .3);
+    if (level <= .01) { const h = e.hum; e.hum = null; h.g.gain.setTargetAtTime(0, t, .15); h.parts.forEach(o => o.stop(t + 1)); }
+  }
 
   // Home details: the welcome sign of each section's town, the plate's pine cone, the dock.
   const TOWNS = { "en-cours": "Castle Rock", "a-lire": "Derry", "lu": "Jerusalem's Lot", recs: "Chamberlain" };

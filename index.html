@@ -1029,6 +1029,7 @@ body[data-view="home"] {
     --lantern: #e39a3e;
     --wood: #8d6e50;
     --wood-dark: #5c4532;
+    --night: 0;
   }
 }
 :root[data-theme="light"] body[data-view="home"] {
@@ -1058,6 +1059,7 @@ body[data-view="home"] {
   --lantern: #e39a3e;
   --wood: #8d6e50;
   --wood-dark: #5c4532;
+  --night: 0;
 }
 /* The lamp's glow and the dust belong to the reading room of a book page, not to the lake */
 body[data-view="home"]::after, body[data-view="home"] .dust { display: none; }
@@ -1183,14 +1185,82 @@ body[data-view="home"] .lake {
 .lk-loon svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .lk-loon.west svg { transform: scaleX(-1); }
 
-/* Phones: fewer layers, one bank of mist, fewer twinkles */
+/* The Milky Way across the sky, fading toward the hills, and now and then a shooting star (script);
+   gone at dawn */
+.lk-milky {
+  position: absolute;
+  inset: 0;
+  opacity: var(--night, 1);
+  -webkit-mask-image: linear-gradient(#000 35%, transparent 88%);
+  mask-image: linear-gradient(#000 35%, transparent 88%);
+}
+.lk-milky svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.lk-shoot {
+  position: absolute;
+  left: 22%;
+  top: 16vh;
+  width: 150px;
+  height: 1.5px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--star) 70%, transparent) 80%, var(--star));
+  box-shadow: 0 0 6px 0 color-mix(in srgb, var(--star) 40%, transparent);
+  transform: rotate(24deg);
+  transform-origin: right;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* King's winks. A red balloon (It) rises from behind the trees now and then (script); with less
+   motion it just hangs there, beside the moon. */
+.lk-balloon { position: absolute; left: 86%; top: 40vh; width: clamp(14px, 1.5vw, 21px); aspect-ratio: 20 / 56; opacity: 0; will-change: transform, opacity; }
+.lk-balloon svg { display: block; width: 100%; height: 100%; overflow: visible; }
+/* Sara Laughs (Bag of Bones) on the far shore, its windows lit and shaking on the water */
+.lk-house, .lk-house-glow { position: absolute; left: 8%; width: clamp(88px, 10.5vw, 150px); }
+.lk-house { bottom: 0; aspect-ratio: 120 / 62; }
+.lk-house-glow { top: 0; aspect-ratio: 120 / 140; }
+.lk-house svg, .lk-house-glow svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.lk-house-glow svg + svg { animation: glint 3.4s ease-in-out infinite alternate; }
+/* The raft (The Raft): planks on drums, a ladder, and near it the black, rainbow-sheened patch,
+   drifting */
+.lk-raft { position: absolute; left: 2.5%; top: 31vh; width: clamp(90px, 11vw, 160px); aspect-ratio: 140 / 96; }
+.lk-raft svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.lk-slick {
+  position: absolute;
+  left: 11%;
+  top: 41vh;
+  width: clamp(70px, 8vw, 120px);
+  aspect-ratio: 5.2;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, .92), rgba(0, 0, 0, .78) 55%, rgba(0, 0, 0, .3) 82%, transparent);
+  animation: slick-drift 70s ease-in-out infinite alternate;
+}
+.lk-slick::before {
+  content: "";
+  position: absolute;
+  inset: 12% 10%;
+  border-radius: 50%;
+  background: conic-gradient(from 40deg, #5b3a8f, #1f6b63, #9b7a2a, #7a2c56, #2b4f8f, #5b3a8f);
+  -webkit-mask-image: radial-gradient(closest-side, transparent 35%, #000 60%, transparent 92%);
+  mask-image: radial-gradient(closest-side, transparent 35%, #000 60%, transparent 92%);
+  filter: blur(1.5px);
+  animation: slick-sheen 6s ease-in-out infinite alternate;
+}
+@keyframes slick-drift { to { transform: translateX(-2.5vw); } }
+@keyframes slick-sheen { from { opacity: .25; } to { opacity: .6; } }
+/* Georgie's paper boat (It), bobbing near the moon's path */
+.lk-boat { position: absolute; left: 89%; top: 86vh; width: clamp(34px, 3.6vw, 52px); aspect-ratio: 40 / 36; animation: boat-bob 5s ease-in-out infinite alternate; }
+.lk-boat svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+@keyframes boat-bob { from { transform: rotate(-3deg); } to { transform: rotate(3deg) translateY(1px); } }
+
+/* Phones: fewer layers, one bank of mist, fewer twinkles; the text spans the lake, so no boat under it */
 @media (max-width: 600px) {
-  .lk-far, .lk-mist1, .lk-tw:nth-of-type(n + 5) { display: none; }
+  .lk-far, .lk-mist1, .lk-tw:nth-of-type(n + 5), .lk-boat { display: none; }
   .lk-loon { width: 54px; height: 20px; }
 }
 /* Less motion: the scene stays, still, at the height where sky, trees and lake all show */
 @media (prefers-reduced-motion: reduce) {
   .lake { --p: .35; }
+  .lk-balloon { opacity: 1; }
 }
 
 /* ---------- Home: the details ---------- */
@@ -2170,6 +2240,55 @@ BOOKS.push({
   // dark troughs; laid at three sizes on the lake for depth.
   const RIPPLES = `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="800" height="120"><filter id="w" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".0045 .075" numOctaves="3" seed="8" stitchTiles="stitch" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.2 0 0 0 .78" result="trough"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 2.6 0 0 0 -1.62" result="crest"/><feMerge><feMergeNode in="trough"/><feMergeNode in="crest"/></feMerge></filter><rect width="100%" height="100%" filter="url(#w)"/></svg>`)}")`;
   const LOON = `<svg viewBox="0 0 80 30"><defs><linearGradient id="csp-wake" gradientUnits="userSpaceOnUse" x1="17" y1="0" x2="-70" y2="0"><stop offset="0" stop-color="var(--glint)" stop-opacity=".6"/><stop offset="1" stop-color="var(--glint)" stop-opacity="0"/></linearGradient></defs><g fill="none" stroke="url(#csp-wake)" stroke-linecap="round"><path d="M17 21L-70 8" stroke-width=".9"/><path d="M17 23L-70 34" stroke-width=".9"/><path d="M8 22L-24 18M8 23L-24 27" stroke-width=".6"/></g><g fill="currentColor"><path d="M14 21C17 15 40 13.5 52 16.5C57 17.8 59 19.5 59.5 21.5Z"/><path d="M50 17C52 11 55 8 60 7.6C64 7.3 66.5 9 67.5 10.8L76 12.3L67 13.4C63.5 14 61 15.5 59 19Z"/></g><path d="M23 16C33 13.8 43 14 50 15.6" fill="none" stroke="var(--glint)" stroke-width=".7" opacity=".45"/></svg>`;
+  // The Milky Way: a soft band of light with a dark lane of dust down it and a thousand fine stars,
+  // laid across the sky from the hills on the left toward the top.
+  const gauss = r => (r() + r() + r() + r() - 2) / 1.15;
+  function milkyWay() {
+    const r = seeded(41);
+    let glow = "", dust = "", stars = "";
+    for (let i = 0; i < 14; i++) {
+      const x = -760 + i * 115 + r() * 60, w = 120 + r() * 90, o = .05 + r() * .07;
+      glow += `<ellipse cx="${f1(x)}" cy="${f1(gauss(r) * 18)}" rx="${f1(w)}" ry="${f1(70 + r() * 50)}" fill="#cfd6dc" opacity="${(o * .85).toFixed(3)}"/>`;
+      glow += `<ellipse cx="${f1(x + 30)}" cy="${f1(gauss(r) * 10)}" rx="${f1(w * .7)}" ry="${f1(28 + r() * 18)}" fill="#efe3c8" opacity="${(o * .9).toFixed(3)}"/>`;
+    }
+    for (let i = 0; i < 16; i++) {
+      const x = -700 + i * 92 + r() * 50;
+      dust += `<ellipse cx="${f1(x)}" cy="${f1(8 + gauss(r) * 9)}" rx="${f1(40 + r() * 70)}" ry="${f1(5 + r() * 9)}" transform="rotate(${f1((r() - .5) * 14)} ${f1(x)} 0)" opacity="${(.35 + r() * .4).toFixed(2)}"/>`;
+    }
+    for (let i = 0; i < 1100; i++) {
+      const x = (r() - .5) * 1600, y = gauss(r) * 62, big = r() < .04;
+      stars += `<circle cx="${f1(x)}" cy="${f1(y)}" r="${big ? f1(.9 + r() * .6) : f1(.3 + r() * .5)}" opacity="${(big ? .7 + r() * .3 : .2 + r() * .55).toFixed(2)}"/>`;
+    }
+    return `<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice"><defs><filter id="csp-mw-glow" x="-20%" y="-60%" width="140%" height="220%"><feGaussianBlur stdDeviation="28 22"/></filter><filter id="csp-mw-dust" x="-20%" y="-80%" width="140%" height="260%"><feGaussianBlur stdDeviation="9 5"/></filter></defs><g transform="translate(390 470) rotate(-58)"><g filter="url(#csp-mw-glow)">${glow}</g><g filter="url(#csp-mw-dust)" fill="#03070d">${dust}</g><g fill="var(--star)">${stars}</g></g></svg>`;
+  }
+  // King's winks, drawn small: they are there for whoever looks.
+  const BALLOON = `<svg viewBox="0 0 20 56"><defs><radialGradient id="csp-balloon" cx=".36" cy=".3" r=".75"><stop offset="0" stop-color="#e2574c"/><stop offset=".55" stop-color="#a5212a"/><stop offset="1" stop-color="#4f0c13"/></radialGradient></defs><path d="M10 25.5c-1.6 5 1.9 9 .1 14.2s1.3 8.4-.2 15.8" fill="none" stroke="var(--star)" stroke-opacity=".5" stroke-width=".55"/><path d="M10 .8C4.6.8 1 5.3 1 10.8c0 6.2 4.6 11.4 9 12.6 4.4-1.2 9-6.4 9-12.6C19 5.3 15.4.8 10 .8Z" fill="url(#csp-balloon)"/><path d="M8.5 23.1h3l-1.5 2.6Z" fill="#7d1820"/><ellipse cx="6.4" cy="7.4" rx="1.6" ry="3.2" transform="rotate(-24 6.4 7.4)" fill="#fff" opacity=".35"/><path d="M15.2 5.2c2 2.4 2.6 6 1.4 9.4" fill="none" stroke="var(--glint)" stroke-opacity=".45" stroke-width=".7" stroke-linecap="round"/></svg>`;
+  // The raft: a square of planks on oil drums, a ladder, ripples around it; the water mirrors only
+  // what faces it (the edge, the drums, the ladder), stirred.
+  const raftEdge = `<path d="M10 41H130V46.5H10Z" fill="color-mix(in srgb, var(--wood-dark) 80%, #000)"/><g fill="#0b1113"><rect x="16" y="45" width="20" height="5" rx="2.4"/><rect x="50" y="45" width="20" height="5" rx="2.4"/><rect x="84" y="45" width="20" height="5" rx="2.4"/></g>`;
+  const raftLadder = rungs => `<g fill="none" stroke="color-mix(in srgb, var(--glint) 45%, #6f7472)" stroke-width="1.3" stroke-linecap="round"><path d="M106 52V37Q106 31.5 100.5 31"/><path d="M116 52V37Q116 31.5 110.5 31"/>${rungs ? `<path d="M106 44H116M106 50H116" stroke-width="1"/>` : ""}</g>`;
+  const RAFT = `<svg viewBox="0 0 140 96"><defs><linearGradient id="csp-raft-deck" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="color-mix(in srgb, var(--wood) 55%, #4a5254)"/><stop offset="1" stop-color="color-mix(in srgb, var(--wood) 35%, #7d8580)"/></linearGradient><filter id="csp-raft-wave" x="-5%" y="-10%" width="110%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".03 .35" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="5" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation=".6"/></filter><linearGradient id="csp-raft-fade" x1="0" y1="50" x2="0" y2="94" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><mask id="csp-raft-mask"><rect x="-10" y="50" width="160" height="50" fill="url(#csp-raft-fade)"/></mask></defs>
+    <g mask="url(#csp-raft-mask)" opacity=".5"><g filter="url(#csp-raft-wave)"><g transform="matrix(1 0 0 -1 0 100)">${raftEdge}${raftLadder(false)}</g></g></g>
+    <ellipse cx="70" cy="50" rx="68" ry="6.5" fill="none" stroke="var(--glint)" stroke-opacity=".16" stroke-width=".8"/><ellipse cx="70" cy="51" rx="78" ry="9" fill="none" stroke="var(--glint)" stroke-opacity=".07" stroke-width=".8"/>
+    ${raftEdge}<path d="M30 22H111L130 41H10Z" fill="url(#csp-raft-deck)"/><g stroke="#000" stroke-opacity=".5" stroke-width=".7">${[1, 2, 3, 4, 5, 6, 7, 8].map(i => `<path d="M${f1(30 + i * 9)} 22L${f1(10 + i * 120 / 9)} 41"/>`).join("")}</g><path d="M30 22H111" stroke="var(--glint)" stroke-opacity=".28" stroke-width=".8"/><path d="M111 22L130 41" stroke="var(--glint)" stroke-opacity=".42" stroke-width="1"/>${raftLadder(true)}</svg>`;
+  // Georgie's paper boat, folded from newspaper, and its wavering reflection.
+  const boatBody = `<path d="M3 14H37L31 22H9Z" fill="color-mix(in srgb, #e9e3d2 72%, var(--water-top))"/><path d="M11 14L20 2L20 14Z" fill="color-mix(in srgb, #f1ecdf 80%, var(--water-top))"/><path d="M20 2L29 14H20Z" fill="color-mix(in srgb, #e3dccb 58%, var(--water-top))"/><g stroke="#000" stroke-opacity=".22" stroke-width=".5"><path d="M10 17H30M12 19.5H28"/><path d="M14 9H18M13 11H18.5"/></g><path d="M20 2L29 14M37 14L31 22" stroke="var(--glint)" stroke-opacity=".5" stroke-width=".6" fill="none"/>`;
+  const BOAT = `<svg viewBox="0 0 40 36"><defs><filter id="csp-boat-wave" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".08 .6" numOctaves="1" seed="2"/><feDisplacementMap in="SourceGraphic" scale="2.4" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation=".35"/></filter></defs><g opacity=".28" filter="url(#csp-boat-wave)"><g transform="matrix(1 0 0 -1 0 44)">${boatBody}</g></g><path d="M1 22.5Q20 25 39 22.5" fill="none" stroke="var(--glint)" stroke-opacity=".25" stroke-width=".5"/>${boatBody}</svg>`;
+  // Sara Laughs: the big log house above the lake, its deck on posts, steps down to the water.
+  const houseWindows = [[34, 28, 7, 7], [46, 28, 7, 7], [65, 26, 12, 10], [96, 31, 5, 5], [56, 13, 8, 6]];
+  const HOUSE = `<svg viewBox="0 0 120 62"><defs><filter id="csp-house-glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2"/></filter></defs><g fill="color-mix(in srgb, var(--tree-near) 72%, var(--hill))"><path d="M28 39V20H92V39Z"/><path d="M22 21.5L60 5L98 21.5Z"/><path d="M92 39V27H108V39Z"/><path d="M89 28.5L100 21L111 28.5Z"/><path d="M76 13V5H81V10.5Z"/><path d="M22 39H102V41H22Z"/><path d="M29 41h1.6v7H29zM50 41h1.6v8H50zM72 41h1.6v9H72zM96 41h1.6v10H96z"/><path d="M44 41h4l-12 21h-4Z"/></g><path d="M60 5L98 21.5M100 21L111 28.5" stroke="var(--glint)" stroke-opacity=".3" stroke-width=".7" fill="none"/><g fill="var(--lantern)" filter="url(#csp-house-glow)" opacity=".7">${houseWindows.map(([x, y, w, h]) => `<rect x="${x - 1}" y="${y - 1}" width="${w + 2}" height="${h + 2}"/>`).join("")}</g><g fill="color-mix(in srgb, var(--lantern) 75%, #fff6d8)">${houseWindows.map(([x, y, w, h]) => `<rect x="${x}" y="${y}" width="${w}" height="${h}"/>`).join("")}</g><path d="M71 26V36M65 31H77M37.5 28V35M49.5 28V35" stroke="color-mix(in srgb, var(--tree-near) 72%, var(--hill))" stroke-width=".8"/></svg>`;
+  // Its lit windows on the water: broken golden streaks, two sets that shimmer in turn.
+  function houseGlow(seed) {
+    const r = seeded(seed);
+    let g = "";
+    for (const [x, , w] of houseWindows.slice(0, 4)) {
+      for (let i = 0; i < 26; i++) {
+        const d = Math.pow(r(), 1.3), s = 1 - d;
+        g += `<ellipse cx="${f1(x + w / 2 + (r() - .5) * (2 + d * 6))}" cy="${f1(3 + d * 110)}" rx="${f1((w * .3 + r() * w * .5) * (.5 + .5 * s))}" ry="${f1(.6 + r() * .7)}" opacity="${(s * (.35 + r() * .65)).toFixed(2)}"/>`;
+      }
+    }
+    return `<svg viewBox="0 0 120 140" preserveAspectRatio="none" fill="var(--lantern)"><g filter="url(#csp-soft)">${g}</g></svg>`;
+  }
   let lakeStars = "", twinkles = "";
   for (let i = 0, r = seeded(7); i < 100; i++) {
     if (i < 90) lakeStars += `<circle cx="${f1(r() * 1600)}" cy="${f1(r() * 620)}" r="${f1(.5 + r() * 1.1)}" opacity="${f1(.25 + r() * .6)}"/>`;
@@ -2177,7 +2296,7 @@ BOOKS.push({
   }
   const nearRow = spruceRow(31, 48, 46, 92, 100), midRow = spruceRow(21, 64, 40, 98, 110);
   document.body.insertAdjacentHTML("beforeend", `<div class="lake" aria-hidden="true">
-    <div class="lk lk-sky"><svg class="lk-stars" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" fill="currentColor">${lakeStars}</svg>${twinkles}<span class="lk-moon"></span></div>
+    <div class="lk lk-sky"><svg class="lk-stars" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" fill="currentColor">${lakeStars}</svg><div class="lk-milky">${milkyWay()}<span class="lk-shoot"></span></div>${twinkles}<span class="lk-moon"></span><div class="lk-balloon">${BALLOON}</div></div>
     <div class="lk lk-hills"><svg viewBox="0 0 1600 300" preserveAspectRatio="xMidYMax slice" fill="currentColor"><path opacity=".7" d="${ridge(3, 300, 150, 80)}"/><path d="${ridge(9, 300, 205, 55)}"/></svg></div>
     <div class="lk lk-far"><svg viewBox="0 0 1600 90" preserveAspectRatio="xMidYMax slice" fill="currentColor"><path d="${spruceRow(11, 90, 30, 70, 90)}"/></svg></div>
     <div class="lk lk-mid"><svg viewBox="0 0 1600 110" preserveAspectRatio="xMidYMax slice" fill="currentColor"><path d="${midRow}"/></svg></div>
@@ -2188,10 +2307,14 @@ BOOKS.push({
       <i class="lk-ripple lk-r3" style='background-image:${RIPPLES}'></i>
       <i class="lk-ripple lk-r2" style='background-image:${RIPPLES}'></i>
       <i class="lk-ripple lk-r1" style='background-image:${RIPPLES}'></i>
+      <div class="lk-house-glow">${houseGlow(3)}${houseGlow(9)}</div>
+      <div class="lk-slick"></div>
+      <div class="lk-raft">${RAFT}</div>
+      <div class="lk-boat">${BOAT}</div>
       <div class="lk-glint">${moonPath(5)}${moonPath(17)}</div>
       <div class="lk-loon">${LOON}</div>
     </div>
-    <div class="lk lk-near"><svg viewBox="0 0 1600 100" preserveAspectRatio="xMidYMax slice" fill="currentColor"><path d="${nearRow}"/></svg></div>
+    <div class="lk lk-near"><svg viewBox="0 0 1600 100" preserveAspectRatio="xMidYMax slice" fill="currentColor"><path d="${nearRow}"/></svg><div class="lk-house">${HOUSE}</div></div>
     <div class="lk lk-mist1"><i></i></div>
     <div class="lk lk-mist2"><i></i></div>
   </div>`);
@@ -2286,6 +2409,36 @@ BOOKS.push({
     }
   });
   document.body.append(loonBtn);
+
+  /* Now and then the red balloon rises from behind the trees, on one side of the shelf, sways and
+     drifts out of the sky; a shooting star crosses the Milky Way more often. */
+  const balloon = document.querySelector(".lk-balloon"), shoot = document.querySelector(".lk-shoot");
+  const skyFree = () => document.body.dataset.view === "home" && !document.hidden && !calm();
+  function balloonRise() {
+    setTimeout(balloonRise, 90000 + Math.random() * 60000);
+    if (!skyFree()) return;
+    balloon.style.left = f1(Math.random() < .5 ? 4 + Math.random() * 14 : 80 + Math.random() * 14) + "%";
+    balloon.style.top = "86vh";
+    balloon.animate([
+      { transform: "translate(0, 0) rotate(-4deg)", opacity: 0 },
+      { opacity: 1, offset: .08 },
+      { transform: "translate(1.5vw, -45vh) rotate(5deg)", offset: .5 },
+      { transform: "translate(-1vw, -100vh) rotate(-3deg)", opacity: 1 }
+    ], { duration: 50000, easing: "linear" });
+  }
+  setTimeout(balloonRise, 12000 + Math.random() * 12000);
+  function shootingStar() {
+    setTimeout(shootingStar, 20000 + Math.random() * 25000);
+    if (!skyFree()) return;
+    shoot.style.left = f1(8 + Math.random() * 50) + "%";
+    shoot.style.top = f1(4 + Math.random() * 26) + "vh";
+    shoot.animate([
+      { transform: "rotate(24deg) translateX(-60px) scaleX(.3)", opacity: 0 },
+      { opacity: 1, offset: .25 },
+      { transform: "rotate(24deg) translateX(140px)", opacity: 0 }
+    ], { duration: 900, easing: "ease-out" });
+  }
+  setTimeout(shootingStar, 6000 + Math.random() * 8000);
 
   // Home details: the welcome sign of each section's town, the plate's pine cone, the dock.
   const TOWNS = { "en-cours": "Castle Rock", "a-lire": "Derry", "lu": "Jerusalem's Lot", recs: "Chamberlain" };

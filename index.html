@@ -1225,7 +1225,10 @@ body[data-view="home"] .lake {
 /* The lake you can touch (computer, script): raft, boat and patch are moved by the script and bob
    on their own; the water's rings are drawn only while it stirs; the balloon the drain lets out;
    the night closing in around the patch while it is watched. */
-.lk-waves, .lk-balloon-up, .lk-trance { display: none; }
+.lk-waves, .lk-float, .lk-trance { display: none; }
+/* The balloon's own layer, in front of the whole scene but moving with the lake as the page
+   scrolls, so it rises through the scene rather than across the screen */
+.lake.live .lk-float { display: block; top: 104vh; height: 0; --dy: -135vh; }
 .lake.live .lk-waves { display: block; position: absolute; left: 0; top: 0; pointer-events: none; }
 .lake.live .lk-raft, .lake.live .lk-boat { z-index: 3; will-change: transform; }
 .lake.live .lk-raft > svg { animation: raft-bob 6.5s ease-in-out infinite alternate; }
@@ -1233,7 +1236,7 @@ body[data-view="home"] .lake {
 .lake.live .lk-boat > svg { animation: boat-bob 5s ease-in-out infinite alternate; }
 .lake.live .lk-slick { animation: none; will-change: transform; }
 @keyframes raft-bob { from { transform: rotate(-.5deg); } to { transform: rotate(.5deg) translateY(.6px); } }
-.lake.live .lk-balloon-up { display: block; position: absolute; left: 0; top: 0; width: clamp(20px, 2.2vw, 32px); aspect-ratio: 20 / 56; opacity: 0; will-change: transform, opacity; }
+.lk-balloon-up { position: absolute; left: 0; top: 0; width: clamp(20px, 2.2vw, 32px); aspect-ratio: 20 / 56; opacity: 0; will-change: transform, opacity; }
 .lk-balloon-up svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .lake.live .lk-trance.on {
   display: block;
@@ -2353,7 +2356,7 @@ BOOKS.push({
     <div class="lk lk-near"><svg viewBox="0 0 1600 100" preserveAspectRatio="xMidYMax slice" fill="currentColor"><path d="${nearRow}"/></svg><div class="lk-house">${HOUSE}</div></div>
     <div class="lk lk-mist1"><i></i></div>
     <div class="lk lk-mist2"><i></i></div>
-    <div class="lk-balloon-up">${BALLOON("csp-balloon-up")}</div>
+    <div class="lk lk-float"><div class="lk-balloon-up">${BALLOON("csp-balloon-up")}</div></div>
     <div class="lk-trance"></div>
   </div>
   <div class="balloon-near" aria-hidden="true">${BALLOON("csp-balloon-near")}</div>`);
@@ -3049,18 +3052,20 @@ BOOKS.push({
     boat.sink = -1;
     boat.el.style.opacity = "0";
     setTimeout(peek, 1000);
+    // Its layer lines up with the water's, so it starts at the pipe and climbs until it is gone
+    // even from the sky seen at the top of the page: scroll back up, and there it is.
     setTimeout(() => {
-      const b = drain.getBoundingClientRect();
-      rising.style.left = f1(b.left + b.width * .46 - rising.offsetWidth / 2) + "px";
-      rising.style.top = f1(b.top + b.height * .55 - rising.offsetHeight * .4) + "px";
+      const y = drain.offsetTop + drain.offsetHeight * .55 - rising.offsetHeight * .4, rise = y + innerHeight * 1.14 + rising.offsetHeight;
+      rising.style.left = f1(drain.offsetLeft + drain.offsetWidth * .46 - rising.offsetWidth / 2) + "px";
+      rising.style.top = f1(y) + "px";
       rising.animate([
         { transform: "translate(0, 10px) scale(.4)", opacity: 0 },
-        { transform: "translate(0, -12px) scale(1)", opacity: 1, offset: .05 },
-        { transform: "translate(-1.2vw, -35vh) rotate(-4deg)", offset: .35 },
-        { transform: "translate(.8vw, -70vh) rotate(3deg)", offset: .7 },
-        { transform: "translate(-.4vw, -104vh) rotate(-2deg)", opacity: 1, offset: .97 },
-        { transform: "translate(0, -110vh)", opacity: 0 }
-      ], { duration: 30000, easing: "linear" });
+        { transform: "translate(0, -12px) scale(1)", opacity: 1, offset: .03 },
+        { transform: `translate(-1.2vw, ${f1(-rise * .3)}px) rotate(-4deg)`, offset: .3 },
+        { transform: `translate(.8vw, ${f1(-rise * .62)}px) rotate(3deg)`, offset: .62 },
+        { transform: `translate(-.4vw, ${f1(-rise * .97)}px) rotate(-2deg)`, opacity: 1, offset: .97 },
+        { transform: `translate(0, ${f1(-rise)}px)`, opacity: 0 }
+      ], { duration: 46000, easing: "linear" });
     }, 2600);
     setTimeout(() => {
       Object.assign(boat, { gone: false, vX: 0, vZ: 0, rot: 0 });
@@ -3241,10 +3246,46 @@ BOOKS.push({
   const townSign = name => h("div", { class: "town-sign", "aria-hidden": "true" },
     h("span", { class: "ts-board" }, h("small", null, "Welcome to"), h("strong", null, name), h("em", null, "Maine")));
   const PINE = `<svg class="plate-pine" viewBox="0 0 30 40" aria-hidden="true"><path d="M15 4V14M15 6L7 1M15 6L23 1M15 8L5 6M15 8L25 6M15 10L8 11.5M15 10L22 11.5" fill="none" stroke="#2f5a3a" stroke-width="1.1" stroke-linecap="round"/><ellipse cx="15" cy="25" rx="6.5" ry="10" fill="#7a5233"/><path d="M12 17Q15 19 18 17M9.5 21Q15 24 20.5 21M9 26Q15 29 21 26M10.5 31Q15 33.5 19.5 31" fill="none" stroke="#4e321d" stroke-width="1"/></svg>`;
+  // The shore on both sides of the dock runs on past the drawing's box, out to the edges of any
+  // screen: a grassy bank, rising a little toward the sides, tufts of grass along its edge, which
+  // alone catches the moonlight; it slopes down into the water by the dock.
+  function shore() {
+    const r = seeded(57);
+    let banks = "", rims = "", grass = "", bushes = "";
+    for (const [far, near, step, ny, k, slope] of [
+      [-1600, 62, 20, 214, 83, "C84 204 104 226 128 230C150 236 168 262 196 300"],
+      [2580, 916, -20, 208, 79, "C892 204 874 228 852 236C830 244 812 268 790 300"]
+    ]) {
+      const pts = [];
+      for (let x = far; step > 0 ? x < near : x > near; x += step) {
+        pts.push([x, ny - 26 * Math.min(1, Math.abs(near - x) / 1400) + 6 * Math.sin(x / k) + 4 * Math.sin(x / 31 + 2)]);
+      }
+      pts.push([near, ny]);
+      const top = pts.map(([x, y]) => `${x} ${f1(y)}`).join("L") + slope;
+      banks += `<path d="M${far} 300L${top}Z"/>`;
+      rims += `<path d="M${top}"/>`;
+      const at = () => { const k = r() * (pts.length - 1), i = Math.floor(k), [x0, y0] = pts[i], [x1, y1] = pts[i + 1]; return [x0 + (x1 - x0) * (k - i), y0 + (y1 - y0) * (k - i)]; };
+      // A few low bushes, rounded clumps sitting on the edge
+      for (let i = 0; i < 8; i++) {
+        const [x, y] = at(), s = 8 + r() * 10;
+        bushes += `<circle cx="${f1(x)}" cy="${f1(y + s * .35)}" r="${f1(s)}"/><circle cx="${f1(x + s * .9)}" cy="${f1(y + s * .5)}" r="${f1(s * .7)}"/><circle cx="${f1(x - s * .8)}" cy="${f1(y + s * .55)}" r="${f1(s * .6)}"/>`;
+      }
+      // Tufts of grass all along it
+      for (let i = 0; i < 120; i++) {
+        const [x, y] = at(), n = 3 + Math.floor(r() * 4);
+        for (let b = 0; b < n; b++) {
+          const o = (r() - .5) * 9, h = 6 + r() * 16, lean = (r() - .5) * 11;
+          grass += `M${f1(x + o)} ${f1(y + 3)}Q${f1(x + o + lean * .3)} ${f1(y - h * .6)} ${f1(x + o + lean)} ${f1(y - h)}`;
+        }
+      }
+    }
+    return `<defs><linearGradient id="csp-bank" x1="0" y1="180" x2="0" y2="300" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="color-mix(in srgb, var(--hill) 60%, var(--tree-near))"/><stop offset="1" stop-color="var(--tree-near)"/></linearGradient></defs>
+    <g fill="color-mix(in srgb, var(--tree-mid) 80%, var(--hill))">${bushes}</g>
+    <path d="${grass}" fill="none" stroke="color-mix(in srgb, var(--tree-mid) 45%, #4a6644)" stroke-width="1.2" stroke-linecap="round"/>
+    <g fill="url(#csp-bank)">${banks}</g><g fill="none" stroke="var(--glint)" stroke-opacity=".2" stroke-width="1.2">${rims}</g>`;
+  }
   const DOCK = `<svg viewBox="0 0 980 300" aria-hidden="true">
-    <g style="fill:color-mix(in srgb, var(--hill) 60%, var(--tree-near));stroke:var(--glint)" stroke-opacity=".22" stroke-width="1.2">
-    <path d="M0 300V214C24 206 40 222 62 214C84 204 104 226 128 230C150 236 168 262 196 300Z"/>
-    <path d="M980 300V200C956 196 940 212 916 208C892 204 874 228 852 236C830 244 812 268 790 300Z"/></g>
+    ${shore()}
     <g style="fill:var(--wood-dark)"><rect x="404" y="96" width="9" height="56"/><rect x="627" y="96" width="9" height="56"/><rect x="498" y="104" width="7" height="40"/></g>
     <g style="fill:var(--wood-dark)" opacity=".3"><rect x="404" y="154" width="9" height="34"/><rect x="627" y="154" width="9" height="34"/></g>
     <path style="fill:var(--wood-dark)" d="M400 96H640V108H400Z"/>

@@ -233,22 +233,26 @@ h1, h2, h3 { text-wrap: balance; }
 .shelf-item { min-width: 0; }
 .book-link { display: grid; gap: 12px; text-decoration: none; }
 .book-year { display: flex; justify-content: center; color: var(--muted); }
-.book-caption { position: relative; display: grid; gap: 2px; padding-top: 18px; text-align: center; }
-/* The board the book stands on: with the 40px column gap, boards join up along a row */
+.book-caption { position: relative; display: grid; gap: 2px; padding-top: 26px; text-align: center; }
+/* The board the book stands on, seen a little from above: its top in shadow at the back, where
+   the book casts a dark patch, a moonlit edge, then the front with its grain. With the 40px column
+   gap, boards join up along a row. */
 .book-caption::before {
   content: "";
   position: absolute;
   top: -12px;
   left: -21px;
   right: -21px;
-  height: 10px;
-  background: linear-gradient(var(--plank), var(--plank-deep));
-  border-top: 1px solid var(--plank-edge);
-  box-shadow: 0 12px 18px -8px var(--shadow);
+  height: 19px;
+  background:
+    radial-gradient(42% 7px at 50% 0, rgba(0, 0, 0, .62), transparent) 0 0 / 100% 6px no-repeat,
+    repeating-linear-gradient(179.4deg, transparent 0 3px, rgba(0, 0, 0, .12) 3px 4px, transparent 4px 6px, rgba(255, 236, 200, .05) 6px 7px) 0 7px / 100% 12px no-repeat,
+    linear-gradient(color-mix(in srgb, var(--plank-deep) 80%, #000), var(--plank) 5px, var(--plank-edge) 6px, color-mix(in srgb, var(--plank-edge) 55%, #f3e2bd) 6px 7px, var(--plank) 7px, var(--plank-deep));
+  box-shadow: 0 18px 24px -12px rgba(0, 0, 0, .8);
 }
 .book-caption strong { font-family: var(--font-display); font-weight: 500; font-size: 1.3rem; line-height: 1.15; }
-.book-caption span { color: var(--muted); }
-.book-caption .done-tag { color: var(--ink-soft); }
+.book-caption span { color: var(--muted); text-wrap: balance; }
+.book-caption .done-tag { margin-top: 4px; color: var(--ink-soft); }
 .book-link:focus-visible { outline: none; }
 .book-link:focus-visible .cover { outline: 2px solid var(--focus); outline-offset: 4px; }
 
@@ -257,9 +261,12 @@ h1, h2, h3 { text-wrap: balance; }
 .progress > span { flex: 1; background: var(--line); }
 .progress > span.on { background: var(--accent); }
 
-/* The book in progress: a framed plate, a satin ribbon hanging out of the book */
+/* The book in progress: no frame, but the one warm light in the night, as if under a reading lamp
+   (a pool on what the book stands on, a glow behind it), and a satin ribbon hanging out of it */
 .now-list { list-style: none; margin: 0; padding: 0; display: grid; justify-items: center; gap: 40px; }
 .now {
+  position: relative;
+  isolation: isolate;
   display: grid;
   grid-template-columns: 92px minmax(0, 1fr);
   grid-template-areas: "cover head" "body body";
@@ -268,12 +275,38 @@ h1, h2, h3 { text-wrap: balance; }
   width: 100%;
   max-width: 820px;
   padding: 20px;
-  background: var(--bg-raise);
-  border: 1px solid var(--line);
-  outline: 1px solid var(--line);
-  outline-offset: 5px;
+}
+/* (kept within the column's width: wider, it would widen the page on a phone) */
+.now::before {
+  content: "";
+  position: absolute;
+  inset: -36px 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse 58% 62% at 50% 50%, rgba(3, 10, 13, .5), transparent 72%);
 }
 .now-cover { grid-area: cover; position: relative; isolation: isolate; }
+.now-cover::after {
+  content: "";
+  position: absolute;
+  inset: -40% -80%;
+  z-index: -2;
+  pointer-events: none;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--lantern) 30%, transparent), color-mix(in srgb, var(--lantern) 12%, transparent) 50%, transparent);
+}
+.now-cover::before {
+  content: "";
+  position: absolute;
+  left: -42%;
+  right: -42%;
+  bottom: -36px;
+  height: 72px;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(closest-side, rgba(0, 0, 0, .62), transparent) 50% 50% / 68% 22% no-repeat,
+    radial-gradient(closest-side, color-mix(in srgb, var(--lantern) 24%, transparent), color-mix(in srgb, var(--lantern) 8%, transparent) 60%, transparent);
+}
 /* The ribbon hangs from inside the book's block, so it follows the book when it is pulled out */
 .now-cover .volume::after {
   content: "";
@@ -1299,9 +1332,12 @@ body[data-view="home"] .wrap { padding-bottom: 0; }
 .plate-motto { font-family: var(--font-display); font-style: italic; font-weight: 600; font-size: 1rem; line-height: 1.2; color: #b0262d; }
 .plate-pine { position: absolute; left: 12px; top: 50%; width: 30px; height: 40px; margin-top: -20px; }
 
-/* A wooden welcome sign at the edge of each town, one per section */
-.town-sign { display: grid; justify-items: center; margin: 0 auto 30px; }
+/* A wooden welcome sign at the edge of each town, one per section, its posts in a tuft of grass */
+.town-sign { position: relative; display: grid; justify-items: center; width: fit-content; margin: 0 auto 30px; }
+.ts-grass { position: absolute; left: -18px; right: -18px; top: calc(100% + 8px); height: 20px; pointer-events: none; }
+.ts-grass svg { display: block; width: 100%; height: 100%; }
 .ts-board {
+  rotate: var(--lean, 0deg);
   position: relative;
   display: grid;
   justify-items: center;
@@ -1314,18 +1350,53 @@ body[data-view="home"] .wrap { padding-bottom: 0; }
   color: #f3e5c5;
   text-align: center;
 }
-.ts-board::before, .ts-board::after { content: ""; position: absolute; top: 100%; width: 7px; height: 22px; background: linear-gradient(90deg, #3a2515, #5d3e24 60%, #3a2515); }
+.ts-board::before, .ts-board::after { content: ""; position: absolute; top: 100%; width: 7px; height: 27px; background: linear-gradient(90deg, #3a2515, #5d3e24 60%, #3a2515); }
 .ts-board::before { left: 22%; }
 .ts-board::after { right: 22%; }
 .ts-board small { font-family: var(--font-body); font-style: italic; font-size: .82rem; opacity: .88; }
 .ts-board strong { font-family: var(--font-display); font-weight: 600; font-size: 1.3rem; line-height: 1.15; letter-spacing: .14em; text-indent: .14em; text-transform: uppercase; }
 .ts-board em { font-family: var(--font-mono); font-style: normal; font-size: .62rem; letter-spacing: .3em; text-indent: .3em; opacity: .7; text-transform: uppercase; }
+/* Derry: a red balloon tied to the end of the board, swaying on its string */
+.ts-balloon {
+  position: absolute;
+  right: calc(100% - 9px);
+  bottom: 34%;
+  width: 21px;
+  aspect-ratio: 20 / 56;
+  rotate: -17deg;
+  transform-origin: 50% 100%;
+  animation: ts-balloon 4.6s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+.ts-balloon svg { display: block; width: 100%; height: 100%; overflow: visible; }
+@keyframes ts-balloon { from { transform: rotate(-5deg); } to { transform: rotate(6deg) translateY(-2px); } }
+/* Jerusalem's Lot: an old sign, grey and cracked, its paint worn, leaning on a sunken post */
+.ts-jerusalem-s-lot .ts-board {
+  --lean: -2.6deg;
+  background:
+    linear-gradient(101deg, transparent 61.5%, rgba(0, 0, 0, .42) 61.5% 62%, transparent 62.3%) 0 0 / 100% 55% no-repeat,
+    linear-gradient(97deg, transparent 63.4%, rgba(0, 0, 0, .3) 63.4% 63.8%, transparent 64.1%) 0 100% / 100% 50% no-repeat,
+    radial-gradient(ellipse 9% 26% at 9% 72%, rgba(168, 150, 124, .35), transparent 70%),
+    radial-gradient(ellipse 12% 20% at 86% 24%, rgba(168, 150, 124, .28), transparent 70%),
+    repeating-linear-gradient(176deg, rgba(0, 0, 0, .1) 0 2px, transparent 2px 6px),
+    linear-gradient(#5f5446, #3a3129);
+  color: rgba(226, 214, 190, .8);
+}
+/* Chamberlain: scorched, soot along the bottom and the right-hand corner burnt black (script) */
+.ts-chamberlain .ts-board {
+  background:
+    linear-gradient(transparent 50%, rgba(22, 10, 4, .5)),
+    repeating-linear-gradient(176deg, rgba(0, 0, 0, .07) 0 2px, transparent 2px 7px),
+    linear-gradient(#73502f, #4a2f1b);
+}
+.ts-char { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; pointer-events: none; }
+.ts-char svg { display: block; width: 100%; height: 100%; }
 /* On a computer, a sign rocks on its posts when clicked and the plate swings from its left screw
    (script); under the pointer they lean a little, to say so */
 body.lake-live .ts-board, body.lake-live .plate { cursor: pointer; transition: rotate .35s ease; }
 body.lake-live .ts-board { transform-origin: 50% calc(100% + 22px); }
 body.lake-live .plate { transform-origin: 30% 9px; }
-body.lake-live .ts-board:hover { rotate: -1.2deg; }
+body.lake-live .ts-board:hover { rotate: calc(var(--lean, 0deg) - 1.2deg); }
 body.lake-live .plate:hover { rotate: 1.4deg; }
 
 /* The dock at the foot of the page, its lantern alight, holding the colophon */
@@ -3243,8 +3314,30 @@ BOOKS.push({
 
   // Home details: the welcome sign of each section's town, the plate's pine cone, the dock.
   const TOWNS = { "en-cours": "Castle Rock", "a-lire": "Derry", "lu": "Jerusalem's Lot", recs: "Chamberlain" };
-  const townSign = name => h("div", { class: "town-sign", "aria-hidden": "true" },
-    h("span", { class: "ts-board" }, h("small", null, "Welcome to"), h("strong", null, name), h("em", null, "Maine")));
+  // Each sign has its town's look (CSS): Derry's has a red balloon tied to it. Its posts stand in a
+  // tuft of grass.
+  const townSign = name => {
+    const town = name.toLowerCase().replace(/[^a-z]+/g, "-");
+    return h("div", { class: "town-sign ts-" + town, "aria-hidden": "true" },
+      h("span", { class: "ts-board" },
+        town === "derry" ? h("span", { class: "ts-balloon", html: BALLOON("csp-balloon-derry") }) : null,
+        h("small", null, "Welcome to"), h("strong", null, name), h("em", null, "Maine"),
+        town === "chamberlain" ? h("span", { class: "ts-char", html: CHAR }) : null),
+      h("span", { class: "ts-grass", html: TUFT }));
+  };
+  // Chamberlain's: the bottom right corner burnt black, a thin ember line at the edge of the char.
+  const charEdge = "M146 72C155 68 160 66 168 64C176 62 180 57 188 55C197 53 199 46 208 44C217 42 224 37 240 35";
+  const CHAR = `<svg viewBox="0 0 240 72" preserveAspectRatio="none"><filter id="csp-char-soot" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="5"/></filter><path d="M118 72C134 70 140 62 152 61C163 60 168 52 178 50C189 48 192 39 203 37C214 35 220 28 240 25V72Z" fill="#120804" opacity=".75" filter="url(#csp-char-soot)"/><path d="${charEdge}V72Z" fill="#0c0603"/><path d="${charEdge}" fill="none" stroke="#e0662a" stroke-opacity=".5" stroke-width="1" vector-effect="non-scaling-stroke"/><path d="M0 58C7 60 11 65 19 72H0Z" fill="#0c0603" opacity=".85"/><g fill="#ff9a4a"><ellipse cx="171" cy="61" rx=".9" ry="1.2" opacity=".7"/><ellipse cx="196" cy="51.5" rx=".7" ry="1" opacity=".55"/><ellipse cx="222" cy="39" rx=".8" ry="1.1" opacity=".6"/></g></svg>`;
+  // The tuft: a low mound, blades of grass from the shore's recipe, its rim catching the moon.
+  const TUFT = (() => {
+    const r = seeded(83), y = x => 15 + 11 * Math.pow((x - 100) / 100, 2);
+    let grass = "";
+    for (let i = 0; i < 60; i++) {
+      const x = 8 + r() * 184, h = 4 + r() * 9 * (1 - Math.abs(x - 100) / 140), lean = (r() - .5) * 3.2;
+      grass += `M${f1(x)} ${f1(y(x) + 2)}Q${f1(x + lean * .3)} ${f1(y(x) - h * .6)} ${f1(x + lean)} ${f1(y(x) - h)}`;
+    }
+    return `<svg viewBox="0 0 200 26" preserveAspectRatio="none"><path d="M0 26C24 19 54 15 100 15C146 15 176 19 200 26Z" fill="color-mix(in srgb, var(--tree-near) 70%, var(--hill))"/><path d="M0 26C24 19 54 15 100 15C146 15 176 19 200 26" fill="none" stroke="var(--glint)" stroke-opacity=".22" stroke-width="1" vector-effect="non-scaling-stroke"/><path d="${grass}" fill="none" stroke="color-mix(in srgb, var(--tree-mid) 45%, #4a6644)" stroke-width="1.1" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>`;
+  })();
   const PINE = `<svg class="plate-pine" viewBox="0 0 30 40" aria-hidden="true"><path d="M15 4V14M15 6L7 1M15 6L23 1M15 8L5 6M15 8L25 6M15 10L8 11.5M15 10L22 11.5" fill="none" stroke="#2f5a3a" stroke-width="1.1" stroke-linecap="round"/><ellipse cx="15" cy="25" rx="6.5" ry="10" fill="#7a5233"/><path d="M12 17Q15 19 18 17M9.5 21Q15 24 20.5 21M9 26Q15 29 21 26M10.5 31Q15 33.5 19.5 31" fill="none" stroke="#4e321d" stroke-width="1"/></svg>`;
   // The shore on both sides of the dock runs on past the drawing's box, out to the edges of any
   // screen: a grassy bank, rising a little toward the sides, tufts of grass along its edge, which
@@ -3593,7 +3686,8 @@ BOOKS.push({
         volume(b),
         h("span", { class: "book-caption" },
           h("strong", null, b.title),
-          h("span", null, b.meta),
+          // One line per fact ("58 chapitres", "5 parties"): never a "·" opening a line
+          b.meta.split(" · ").map(t => h("span", null, t)),
           line
         )
       )

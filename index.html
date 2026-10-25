@@ -664,28 +664,84 @@ h1, h2, h3 { text-wrap: balance; }
 .express-cast dd { margin: 2px 0 12px; color: var(--ink-soft); }
 .express-cast dd:last-child { margin-bottom: 0; }
 
-/* What to read next */
-.recs-intro { margin: -14px auto 28px; color: var(--ink-soft); font-style: italic; max-width: 40rem; text-align: center; }
-.rec-list { list-style: none; margin: 0 auto; padding: 0; max-width: 860px; }
-.rec {
-  display: grid;
-  grid-template-columns: 72px minmax(0, 1fr);
-  gap: 6px 20px;
-  padding: 22px 0;
-  border-top: 1px solid var(--line);
+/* What to read next: the covers face out on a bookshop ledge, each with why it is suggested; a
+   click opens one across the whole row, with its pitch and the button to add it */
+.recs-intro { margin: -14px auto 34px; color: var(--ink-soft); font-style: italic; max-width: 40rem; text-align: center; }
+.rec-list {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 860px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 46px 28px;
 }
-.rec > * { grid-column: 2; }
-.rec > .rec-cover { grid-column: 1; grid-row: 1 / span 5; align-self: start; }
-.recs-more { margin: 22px 0 0; text-align: center; }
-.rec:last-child { border-bottom: 1px solid var(--line); }
+.rec { flex: 0 1 186px; min-width: 0; }
+.rec-face {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+.rec-face:focus-visible { outline: none; }
+.rec-face:focus-visible .cover { outline: 2px solid var(--focus); outline-offset: 4px; }
+/* The ledge: a board like the shelf's, the covers leaning back a little against it */
+.rec-cover { position: relative; display: block; width: 100%; padding-bottom: 13px; margin-bottom: 10px; }
+.rec-cover .cover {
+  width: min(100%, 134px);
+  margin-inline: auto;
+  transform: perspective(700px) rotateX(7deg);
+  transform-origin: 50% 100%;
+  transition: transform .45s cubic-bezier(.2, .7, .2, 1);
+}
+.rec-cover::after {
+  content: "";
+  position: absolute;
+  left: -14px;
+  right: -14px;
+  bottom: 0;
+  height: 14px;
+  background:
+    radial-gradient(34% 6px at 50% 0, rgba(0, 0, 0, .6), transparent) 0 0 / 100% 5px no-repeat,
+    linear-gradient(color-mix(in srgb, var(--plank-deep) 80%, #000), var(--plank) 4px, var(--plank-edge) 5px, color-mix(in srgb, var(--plank-edge) 55%, #f3e2bd) 5px 6px, var(--plank) 6px, var(--plank-deep));
+  box-shadow: 0 14px 20px -10px rgba(0, 0, 0, .8);
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .rec-face:hover .cover { transform: perspective(700px) rotateX(0) translateY(-6px); }
+}
+.rec-name { font-family: var(--font-display); font-weight: 500; font-size: 1.3rem; line-height: 1.15; text-wrap: balance; }
+.rec-lead { color: var(--accent); font-family: var(--font-body); font-style: italic; font-size: .9rem; line-height: 1.4; text-wrap: balance; }
+.rec-detail { display: grid; gap: 6px; align-content: start; min-width: 0; }
+.rec.open {
+  flex-basis: 100%;
+  display: grid;
+  grid-template-columns: 186px minmax(0, 1fr);
+  gap: 0 36px;
+  align-items: start;
+}
+.rec.open .rec-name, .rec.open .rec-lead { display: none; }
+.recs-more { margin: 34px 0 0; text-align: center; }
 .rec h3 { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: 1.9rem; line-height: 1.1; }
 .rec-meta { margin: 0; color: var(--muted); }
 .rec-why { margin: 0; color: var(--accent); }
 .rec-pitch { margin: 4px 0 0; color: var(--ink-soft); max-width: 60ch; }
-.rec-action { align-self: start; }
-@media (min-width: 720px) {
-  .rec { grid-template-columns: 96px minmax(0, 1fr) auto; gap: 6px 28px; }
-  .rec > .rec-action { grid-column: 3; grid-row: 1 / span 4; }
+.rec-action { margin-top: 10px; }
+@media (max-width: 520px) {
+  .rec-list { gap: 34px 16px; }
+  .rec { flex-basis: calc((100% - 32px) / 3); }
+  .rec-cover::after { left: -8px; right: -8px; }
+  .rec-name { font-size: 1.05rem; }
+  .rec-lead { font-size: .8rem; }
+  .rec.open { grid-template-columns: 96px minmax(0, 1fr); gap: 0 16px; }
+  .rec h3 { font-size: 1.5rem; }
 }
 .pending-tools { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 4px; }
 .pending-tools select {
@@ -1099,7 +1155,7 @@ body[data-view="home"] .lake {
   position: absolute;
   left: 76%;
   top: 13vh;
-  width: clamp(38px, 4.6vw, 66px);
+  width: clamp(38px, 4.6vw, 88px);
   aspect-ratio: 1;
   border-radius: 50%;
   background:
@@ -1121,7 +1177,22 @@ body[data-view="home"] .lake {
 }
 .lk-r1 { top: 0; height: 24vh; --tile: 380px; --tile-h: 57px; -webkit-mask-image: linear-gradient(#000 65%, transparent); mask-image: linear-gradient(#000 65%, transparent); }
 .lk-r2 { top: 15vh; height: 52vh; --tile: 760px; --tile-h: 114px; -webkit-mask-image: linear-gradient(transparent, #000 25%, #000 75%, transparent); mask-image: linear-gradient(transparent, #000 25%, #000 75%, transparent); }
-.lk-r3 { top: 50vh; height: 125vh; --tile: 1500px; --tile-h: 225px; -webkit-mask-image: linear-gradient(transparent, #000 18%); mask-image: linear-gradient(transparent, #000 18%); }
+/* The big ripples near the shore are broken by calm patches, so the water does not read as stripes */
+.lk-r3 {
+  top: 50vh;
+  height: 125vh;
+  --tile: 1500px;
+  --tile-h: 225px;
+  --calm:
+    radial-gradient(26% 7% at 18% 26%, rgba(0, 0, 0, .15), #000), radial-gradient(30% 6% at 72% 34%, rgba(0, 0, 0, .2), #000),
+    radial-gradient(22% 8% at 44% 48%, rgba(0, 0, 0, .12), #000), radial-gradient(34% 7% at 88% 58%, rgba(0, 0, 0, .18), #000),
+    radial-gradient(28% 9% at 10% 70%, rgba(0, 0, 0, .14), #000), radial-gradient(30% 8% at 58% 82%, rgba(0, 0, 0, .16), #000);
+  opacity: .5;
+  -webkit-mask-image: linear-gradient(transparent, #000 18%), var(--calm);
+  mask-image: linear-gradient(transparent, #000 18%), var(--calm);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
 .lk-reflect {
   position: absolute;
   left: 0;
@@ -1196,12 +1267,12 @@ body[data-view="home"] .lake {
 
 /* King's winks. A red balloon (It) rises from behind the trees now and then (script); with less
    motion it just hangs there, beside the moon. */
-.lk-balloon { position: absolute; left: 86%; top: 40vh; width: clamp(14px, 1.5vw, 21px); aspect-ratio: 20 / 56; opacity: 0; will-change: transform, opacity; }
+.lk-balloon { position: absolute; left: 86%; top: 40vh; width: clamp(14px, 1.5vw, 29px); aspect-ratio: 20 / 56; opacity: 0; will-change: transform, opacity; }
 .lk-balloon svg, .balloon-near svg { display: block; width: 100%; height: 100%; overflow: visible; }
 /* Its phone twin, waiting just below the screen (see the phone rules) */
 .balloon-near { display: none; }
 /* Sara Laughs (Bag of Bones) on the far shore, its windows lit and shaking on the water */
-.lk-house, .lk-house-glow { position: absolute; left: 8%; width: clamp(88px, 10.5vw, 150px); }
+.lk-house, .lk-house-glow { position: absolute; left: 8%; width: clamp(88px, 10.5vw, 230px); }
 .lk-house { bottom: 0; aspect-ratio: 120 / 62; }
 .lk-house-glow { top: 0; aspect-ratio: 120 / 140; }
 .lk-house svg, .lk-house-glow svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
@@ -1209,10 +1280,10 @@ body[data-view="home"] .lake {
 /* The raft (The Raft): planks on drums, a ladder, and near it the black patch, a disc of oil seen
    from the shore (scaled flat), its edge shifting and its sheen marbled like a film of oil, drifting.
    On a computer both can be moved (see "The lake you can touch"); the patch then follows the raft. */
-.lk-raft { position: absolute; left: 2.5%; top: 31vh; width: clamp(90px, 11vw, 160px); aspect-ratio: 140 / 96; }
+.lk-raft { position: absolute; left: 2.5%; top: 31vh; width: clamp(90px, 11vw, 230px); aspect-ratio: 140 / 96; }
 .lk-raft svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .lk-slick {
-  --sd: clamp(84px, 9.5vw, 140px);
+  --sd: clamp(84px, 9.5vw, 200px);
   position: absolute;
   left: 15.5%;
   top: 42vh;
@@ -1246,14 +1317,80 @@ body[data-view="home"] .lake {
 @keyframes sl-lobe { to { transform: translate(14%, 16%) scale(.82); } }
 @keyframes sl-turn { to { transform: rotate(1turn); } }
 /* Georgie's paper boat (It), bobbing near the moon's path */
-.lk-boat { position: absolute; left: 89%; top: 86vh; width: clamp(34px, 3.6vw, 52px); aspect-ratio: 40 / 36; animation: boat-bob 5s ease-in-out infinite alternate; }
+.lk-boat { position: absolute; left: 89%; top: 86vh; width: clamp(34px, 3.6vw, 74px); aspect-ratio: 40 / 36; animation: boat-bob 5s ease-in-out infinite alternate; }
 .lk-boat svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 @keyframes boat-bob { from { transform: rotate(-3deg); } to { transform: rotate(3deg) translateY(1px); } }
 /* A storm drain on the right bank: Georgie's boat can be sent into it (computer only) */
-.lk-drain { display: none; position: absolute; right: 0; top: 63vh; z-index: 2; width: clamp(130px, 14vw, 220px); aspect-ratio: 200 / 120; }
+.lk-drain { display: none; position: absolute; right: 0; top: 63vh; z-index: 2; width: clamp(130px, 14vw, 300px); aspect-ratio: 200 / 120; }
 .lk-drain svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 @media (min-width: 601px) { .lk-drain { display: block; } }
 .dr-eyes { opacity: 0; }
+/* The Marsten House ('Salem's Lot) on its hill above the far shore, a dead tree beside it; now and
+   then a light comes on in the tower and goes out again (script) */
+.lk-marsten { position: absolute; left: max(70%, calc(50% + 470px)); bottom: 0; width: clamp(110px, 13vw, 270px); aspect-ratio: 200 / 120; }
+.lk-marsten svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.mh-light {
+  position: absolute;
+  left: 39%;
+  top: 39.5%;
+  width: 9%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, #ffe9a8, color-mix(in srgb, #f2b24b 60%, transparent) 30%, transparent);
+  opacity: 0;
+}
+/* A green glow pulsing between the spruces (The Tommyknockers), and its shimmer on the water */
+.lk-tk, .lk-tk-glow { position: absolute; left: 95%; translate: -50% 0; pointer-events: none; animation: tk-pulse 3.8s ease-in-out infinite alternate; }
+.lk-tk { bottom: 10%; width: clamp(130px, 13vw, 260px); height: 190%; background: radial-gradient(50% 58% at 50% 100%, rgba(118, 255, 150, .5), rgba(70, 210, 120, .18) 50%, transparent 78%); }
+.lk-tk::after { content: ""; position: absolute; inset: 40% 30% 0; background: radial-gradient(50% 60% at 50% 100%, rgba(190, 255, 200, .3), transparent 75%); animation: tk-pulse 2.3s ease-in-out -1s infinite alternate; }
+.lk-tk-glow { top: 0; width: clamp(40px, 4.5vw, 90px); height: 18vh; background: radial-gradient(50% 100% at 50% 0, rgba(118, 255, 160, .3), transparent 80%); }
+@keyframes tk-pulse { 0% { opacity: .25; } 40% { opacity: .9; } 55% { opacity: .55; } 100% { opacity: 1; } }
+/* A bank of fog (The Mist): it gathers on the far shore, comes slowly across the lake, swallowing
+   what it passes, then thins out; and a long while later, again. Layered in front of the lake. */
+.lk-fog { top: 90vh; height: 30vh; --dy: -135vh; pointer-events: none; }
+.lk-fog i {
+  position: absolute;
+  inset: 0 -6%;
+  transform-origin: 50% 0;
+  opacity: 0;
+  background:
+    radial-gradient(22% 30% at 12% 38%, rgba(222, 232, 234, .5), transparent 70%),
+    radial-gradient(26% 26% at 38% 34%, rgba(222, 232, 234, .55), transparent 70%),
+    radial-gradient(24% 30% at 63% 40%, rgba(222, 232, 234, .5), transparent 70%),
+    radial-gradient(20% 34% at 80% 34%, rgba(240, 238, 222, .62), transparent 70%),
+    radial-gradient(20% 28% at 96% 40%, rgba(222, 232, 234, .48), transparent 70%),
+    linear-gradient(transparent 20%, rgba(214, 226, 230, .5) 30%, rgba(214, 226, 230, .34) 62%, transparent);
+  animation: fog-advance 170s linear -38s infinite;
+}
+@keyframes fog-advance {
+  0% { opacity: 0; transform: translateY(-3vh) scale(1, .5); }
+  9% { opacity: .8; transform: translateY(0) scale(1, .7); }
+  48% { opacity: .82; transform: translateY(24vh) scale(1.12, 1.35); }
+  60% { opacity: 0; transform: translateY(30vh) scale(1.18, 1.5); }
+  100% { opacity: 0; transform: translateY(30vh) scale(1.18, 1.5); }
+}
+/* A paper lantern on the water for each book read, in that book's colour (script): a halo that
+   flickers, a reflection in broken streaks; each drifts and bobs on its own */
+.lk-lanterns { position: absolute; inset: 0; pointer-events: none; }
+.lk-lantern {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: calc(clamp(22px, 2vw, 40px) * var(--k));
+  aspect-ratio: 24 / 56;
+  translate: -50% -50%;
+  animation: lantern-drift var(--d) ease-in-out var(--w) infinite alternate;
+}
+.lk-lantern::before {
+  content: "";
+  position: absolute;
+  inset: -55% -330% 10%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--c) 42%, transparent), color-mix(in srgb, var(--c) 13%, transparent) 45%, transparent);
+  animation: glow 2.6s ease-in-out var(--w) infinite;
+}
+.lk-lantern svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; transform-origin: 50% 50%; animation: boat-bob 4.4s ease-in-out var(--w) infinite alternate; }
+@keyframes lantern-drift { from { transform: translateX(-1.4vw); } to { transform: translateX(1.4vw); } }
 
 /* The lake you can touch (computer, script): raft, boat and patch are moved by the script and bob
    on their own; the water's rings are drawn only while it stirs; the balloon the drain lets out;
@@ -1269,7 +1406,7 @@ body[data-view="home"] .lake {
 .lake.live .lk-boat > svg { animation: boat-bob 5s ease-in-out infinite alternate; }
 .lake.live .lk-slick { animation: none; will-change: transform; }
 @keyframes raft-bob { from { transform: rotate(-.5deg); } to { transform: rotate(.5deg) translateY(.6px); } }
-.lk-balloon-up { position: absolute; left: 0; top: 0; width: clamp(20px, 2.2vw, 32px); aspect-ratio: 20 / 56; opacity: 0; will-change: transform, opacity; }
+.lk-balloon-up { position: absolute; left: 0; top: 0; width: clamp(20px, 2.2vw, 42px); aspect-ratio: 20 / 56; opacity: 0; will-change: transform, opacity; }
 .lk-balloon-up svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .lake.live .lk-trance.on {
   display: block;
@@ -1289,6 +1426,7 @@ html.lk-grabbing, html.lk-grabbing * { cursor: grabbing !important; -webkit-user
   .lk-moon { left: 83%; top: 4.5vh; }
   .lk-glint { left: calc(87% - 9vw); }
   .lk-boat { display: none; }
+  .lk-marsten { left: 60%; }
   .lk-loon { width: 54px; height: 20px; }
   body[data-view="home"] .balloon-near {
     display: block;
@@ -1401,10 +1539,71 @@ body.lake-live .plate:hover { rotate: 1.4deg; }
 
 /* The dock at the foot of the page, its lantern alight, holding the colophon */
 .pontoon { position: relative; margin-top: 96px; text-align: center; }
-.pontoon .colophon { margin: 0 auto; border-top: 0; padding-top: 0; color: var(--ink-soft); }
+/* The colophon, painted on a board standing in the water on two piles, beyond the end of the dock;
+   the lantern warms its lower corner */
+.pontoon .colophon {
+  position: relative;
+  max-width: 34rem;
+  margin: 0 auto 50px;
+  padding: 16px 30px 18px;
+  border: 0;
+  border-radius: 5px;
+  background:
+    radial-gradient(60% 130% at 94% 135%, color-mix(in srgb, var(--lantern) 24%, transparent), transparent 70%),
+    repeating-linear-gradient(177deg, rgba(0, 0, 0, .08) 0 2px, transparent 2px 8px),
+    linear-gradient(#654629, #3c2717);
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, .3), inset 0 0 0 4px rgba(240, 220, 180, .12), 0 14px 24px -12px rgba(0, 0, 0, .8);
+  color: #f1e3c4;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, .45);
+  text-wrap: balance;
+}
+.pontoon .colophon::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 16%;
+  right: 16%;
+  height: 44px;
+  background:
+    linear-gradient(90deg, #3a2515, #5d3e24 60%, #3a2515) left top / 9px 100% no-repeat,
+    linear-gradient(90deg, #3a2515, #5d3e24 60%, #3a2515) right top / 9px 100% no-repeat;
+  -webkit-mask-image: linear-gradient(#000 50%, transparent);
+  mask-image: linear-gradient(#000 50%, transparent);
+}
+.pontoon .colophon::after {
+  content: "";
+  position: absolute;
+  top: calc(100% + 22px);
+  left: calc(16% - 14px);
+  right: calc(16% - 14px);
+  height: 10px;
+  background:
+    radial-gradient(closest-side, transparent 50%, rgba(246, 228, 173, .3) 64%, transparent 82%) left / 37px 10px no-repeat,
+    radial-gradient(closest-side, transparent 50%, rgba(246, 228, 173, .3) 64%, transparent 82%) right / 37px 10px no-repeat;
+}
 .pontoon .sync { margin-top: 22px; }
-.dock { position: relative; width: min(100%, 980px); aspect-ratio: 980 / 300; margin: 26px auto 0; }
+.dock { position: relative; width: min(100%, 980px); aspect-ratio: 980 / 300; margin: 26px auto 0; container-type: inline-size; }
 .dock svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+/* Carrie, the night of the prom, at the end of the dock: seen from behind, looking out over the
+   lake, her white dress soaked in blood, the bucket at her feet. Only once Carrie has been read. */
+.dock-carrie { position: absolute; left: 44.9%; top: 2%; width: 7.14%; aspect-ratio: 70 / 100; pointer-events: none; }
+/* Moths around the lantern */
+.moths { position: absolute; left: 67.96%; top: 8.2%; }
+.moths i {
+  position: absolute;
+  width: max(2px, .42cqi);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: #f7ecd2;
+  box-shadow: 0 0 max(2px, .5cqi) rgba(247, 236, 210, .55);
+  animation: var(--m) var(--t) ease-in-out var(--w) infinite, moth-flick .18s steps(2) infinite;
+}
+@keyframes moth-a { 0%, 100% { transform: translate(0, 0); } 18% { transform: translate(2.6cqi, -1.4cqi); } 37% { transform: translate(1.2cqi, 1.8cqi); } 55% { transform: translate(-1.8cqi, .8cqi); } 76% { transform: translate(-1.4cqi, -2.2cqi); } }
+@keyframes moth-b { 0%, 100% { transform: translate(-1cqi, 1cqi); } 25% { transform: translate(-3cqi, -.6cqi); } 50% { transform: translate(.4cqi, -2.6cqi); } 75% { transform: translate(2.2cqi, .4cqi); } }
+@keyframes moth-c { 0%, 100% { transform: translate(1cqi, -1cqi); } 30% { transform: translate(-.8cqi, 2.4cqi); } 60% { transform: translate(3.2cqi, 1cqi); } }
+@keyframes moth-flick { 50% { opacity: .4; } }
+@media (prefers-reduced-motion: reduce) { .moths { display: none; } }
 .lantern-glow {
   position: absolute;
   left: 67.96%;
@@ -2386,6 +2585,12 @@ BOOKS.push({
     <path d="M64 60A30 24 0 0 1 112 45" fill="none" stroke="var(--glint)" stroke-opacity=".45" stroke-width="1"/><path d="M42 80Q52 76 62 80M116 76Q130 71 144 76" fill="none" stroke="var(--glint)" stroke-opacity=".22" stroke-width=".8"/><path d="M78 85.5Q93 87 108 85.5M30 86.5Q115 88.5 200 86.5" fill="none" stroke="var(--glint)" stroke-opacity=".28" stroke-width=".7"/>
     <g class="dr-eyes"><g fill="#f4b545" filter="url(#csp-drain-glow)"><ellipse cx="88.5" cy="63" rx="2.6" ry="1.7"/><ellipse cx="99.5" cy="63" rx="2.6" ry="1.7"/></g><g fill="#ffe7a8"><ellipse cx="88.5" cy="63" rx="1.2" ry=".8"/><ellipse cx="99.5" cy="63" rx="1.2" ry=".8"/></g></g></svg>`;
   // Its lit windows on the water: broken golden streaks, two sets that shimmer in turn.
+  // The Marsten House: a dark Victorian house on a knoll, a spired tower on its left, a mansard
+  // roof, a lower wing; a dead tree beside it; its edges catching the moon.
+  const MARSTEN = `<svg viewBox="0 0 200 120"><path d="M0 120C30 110 52 92 78 80C92 74 108 72 122 74C148 80 172 100 200 120Z" fill="color-mix(in srgb, var(--tree-near) 88%, var(--hill))"/><path d="M40 98C56 88 66 84 78 80C92 74 108 72 122 74C138 77 150 84 162 92" fill="none" stroke="var(--glint)" stroke-opacity=".1" stroke-width=".8"/><g fill="color-mix(in srgb, var(--tree-near) 82%, var(--hill))"><path d="M84 77V50H124V77Z"/><path d="M82 50L87 38H121L126 50Z"/><path d="M72 77V36H85V77Z"/><path d="M70 36L78.5 13L87 36Z"/><path d="M124 77V58H141V77Z"/><path d="M122 58L132 49L143 58Z"/><path d="M96 38V29H100V38ZM111 38V30H115V38Z"/><path d="M82 65H126V67.5H82Z"/></g><path d="M78.5 13V8" stroke="color-mix(in srgb, var(--tree-near) 82%, var(--hill))" stroke-width=".8"/><g fill="#132a33" opacity=".75"><path d="M89 53h4v7h-4zM98 53h4v7h-4zM107 53h4v7h-4zM116 53h4v7h-4zM76.5 43h4v7h-4zM76.5 56h4v7h-4zM129 62h4v6h-4z"/></g><g fill="none" stroke="var(--glint)" stroke-linecap="round"><path d="M78.5 13L87 36M121 38L126 50M132 49L143 58" stroke-opacity=".3" stroke-width=".6"/><path d="M87 38H121" stroke-opacity=".16" stroke-width=".5"/></g><path d="M152 93C153 81 152 71 155 59M154.4 67L146 57L142 53M146 57L147 50M155.2 61L163 51L167 48M155 59L156 48" fill="none" stroke="color-mix(in srgb, var(--tree-near) 82%, var(--hill))" stroke-width="1.3" stroke-linecap="round"/></svg>`;
+  // A floating paper lantern in its book's colour (--c): a tray, glowing paper, a little roof, the
+  // ring it makes on the water and its reflection, broken streaks fading downward.
+  const LANTERN = `<svg viewBox="0 0 24 56"><g style="fill:var(--c)">${[[31, 6.5, .5], [34, 5.6, .4], [37.5, 4.8, .3], [41.5, 3.8, .2], [46, 2.8, .12]].map(([y, rx, o]) => `<ellipse cx="12" cy="${y}" rx="${rx}" ry=".9" opacity="${o}"/>`).join("")}</g><ellipse cx="12" cy="28.2" rx="11" ry="1.8" fill="none" style="stroke:var(--c)" stroke-opacity=".35" stroke-width=".6"/><path d="M5.5 11H18.5V25H5.5Z" style="fill:var(--c)"/><ellipse cx="12" cy="18.5" rx="4.6" ry="5.2" fill="#fffaf0" opacity=".6"/><g fill="#24180f"><path d="M3.5 25H20.5V28.2H3.5Z"/><path d="M3.5 11.4L12 6.6L20.5 11.4Z"/></g><path d="M5.5 11V25M18.5 11V25M12 11V25M5.5 18H18.5" stroke="#24180f" stroke-opacity=".55" stroke-width=".7"/></svg>`;
   function houseGlow(seed) {
     const r = seeded(seed);
     let g = "";
@@ -2416,6 +2621,8 @@ BOOKS.push({
       <i class="lk-ripple lk-r2" style='background-image:${RIPPLES}'></i>
       <i class="lk-ripple lk-r1" style='background-image:${RIPPLES}'></i>
       <div class="lk-house-glow">${houseGlow(3)}${houseGlow(9)}</div>
+      <i class="lk-tk-glow"></i>
+      <div class="lk-lanterns"></div>
       <div class="lk-slick" style='--iris:${IRIS}'><i class="sl-core"></i><i class="sl-lobe"></i><i class="sl-lobe"></i><span class="sl-iris"><i></i><i></i></span></div>
       <div class="lk-raft">${RAFT}</div>
       <div class="lk-boat">${BOAT("csp-boat-wave")}</div>
@@ -2424,7 +2631,8 @@ BOOKS.push({
       <div class="lk-drain">${DRAIN}</div>
       <div class="lk-loon">${LOON}</div>
     </div>
-    <div class="lk lk-near"><svg viewBox="0 0 1600 100" preserveAspectRatio="xMidYMax slice" fill="currentColor"><path d="${nearRow}"/></svg><div class="lk-house">${HOUSE}</div></div>
+    <div class="lk lk-near"><i class="lk-tk"></i><svg viewBox="0 0 1600 100" preserveAspectRatio="xMidYMax slice" fill="currentColor"><path d="${nearRow}"/></svg><div class="lk-house">${HOUSE}</div><div class="lk-marsten">${MARSTEN}<span class="mh-light"></span></div></div>
+    <div class="lk lk-fog"><i></i></div>
     <div class="lk lk-mist1"><i></i></div>
     <div class="lk lk-mist2"><i></i></div>
     <div class="lk lk-float"><div class="lk-balloon-up">${BALLOON("csp-balloon-up")}</div></div>
@@ -2567,6 +2775,38 @@ BOOKS.push({
     ], { duration: 900, easing: "ease-out" });
   }
   setTimeout(shootingStar, 6000 + Math.random() * 8000);
+
+  // Every 40 to 80 s, a light in the Marsten House's tower: it wavers a few seconds, then goes out.
+  const marstenLight = document.querySelector(".mh-light");
+  function marstenLater() {
+    setTimeout(() => {
+      marstenLater();
+      if (document.body.dataset.view !== "home" || document.hidden || calm()) return;
+      marstenLight.animate([{ opacity: 0 }, { opacity: .9, offset: .15 }, { opacity: .55, offset: .3 }, { opacity: .95, offset: .42 }, { opacity: .8, offset: .8 }, { opacity: 0 }],
+        { duration: 7000, easing: "ease-in-out" });
+    }, 40000 + Math.random() * 40000);
+  }
+  marstenLater();
+
+  /* A paper lantern on the lake for each book read, lit in the book's own colour. Spots kept to
+     the open water at the sides of the page, clear of the raft, the patch and the drain; further
+     off, a lantern is smaller (--k, as the raft's perspective). Redrawn only when the list changes. */
+  const LANTERN_SPOTS = [[19, 9], [84, 13], [7, 16], [93, 25], [28, 21], [71, 28], [12, 56], [86, 44], [33, 62], [64, 70], [4, 78], [95, 74]];
+  const lanternBox = document.querySelector(".lk-lanterns");
+  let lanternKey = "";
+  function lanterns(read) {
+    const key = read.map(b => b.id).join();
+    if (key === lanternKey) return;
+    lanternKey = key;
+    lanternBox.replaceChildren(...read.slice(0, LANTERN_SPOTS.length).map((b, i) => {
+      const [x, y] = LANTERN_SPOTS[i], c = (AMBIENCE[b.cover.motif] || ["", "#f2a64b"])[1], r = seeded(i * 7 + 3);
+      return h("div", {
+        class: "lk-lantern",
+        style: `--x:${x}%;--y:${y}vh;--k:${((y + 30) / 60).toFixed(2)};--c:${c};--d:${Math.round(38 + r() * 30)}s;--w:-${Math.round(r() * 30)}s`,
+        html: LANTERN
+      });
+    }));
+  }
 
   /* ---------- The lake you can touch (computer) ----------
      With a mouse, on a screen wide enough to leave some lake around the shelf, the scene answers.
@@ -3377,6 +3617,35 @@ BOOKS.push({
     <path d="${grass}" fill="none" stroke="color-mix(in srgb, var(--tree-mid) 45%, #4a6644)" stroke-width="1.2" stroke-linecap="round"/>
     <g fill="url(#csp-bank)">${banks}</g><g fill="none" stroke="var(--glint)" stroke-opacity=".2" stroke-width="1.2">${rims}</g>`;
   }
+  // Five moths: which loop each one flies, its time round, where it starts.
+  const MOTHS = [["moth-a", 2.6, .3], ["moth-b", 3.4, 1.1], ["moth-c", 2.2, .7], ["moth-a", 3.9, 2.4], ["moth-b", 2.9, 1.8]];
+  // Carrie at the end of the dock (drawn in the dock's own units: 70 × 100 from x 440, y 6), lit
+  // by the moon on her left and the lantern on her right; blood from her hair down her back, her
+  // arms, running down the dress; the bucket on the planks beside her, in its puddle.
+  const drip = (x, y, len, w) => `M${x - w} ${y}C${x - w} ${y + len * .5} ${f1(x - w * .6)} ${y + len * .8} ${f1(x - w * .8)} ${y + len}C${f1(x - w * .8)} ${f1(y + len + w * 1.6)} ${f1(x + w * .8)} ${f1(y + len + w * 1.6)} ${f1(x + w * .8)} ${y + len}C${f1(x + w * .6)} ${y + len * .8} ${x + w} ${y + len * .5} ${x + w} ${y}Z`;
+  const DRESS = "M38.4 28.6Q45 30.4 51.6 28.6L51 44C53.6 60 56.4 80 58.4 96.6Q45 99.6 31.6 96.6C33.6 80 36.4 60 39 44Z";
+  const CARRIE = `<svg viewBox="0 0 70 100"><defs><clipPath id="csp-carrie-dress"><path d="${DRESS}"/></clipPath></defs>
+    <ellipse cx="42" cy="97.6" rx="13" ry="1.8" fill="#000" opacity=".4"/><ellipse cx="30" cy="98.4" rx="16" ry="1.4" fill="#000" opacity=".22"/>
+    <g fill="#4e070b"><ellipse cx="17" cy="98" rx="9" ry="1.7"/><ellipse cx="27" cy="97.8" rx="3" ry=".7" opacity=".8"/><ellipse cx="33" cy="97.4" rx="1.6" ry=".5" opacity=".7"/></g>
+    <path d="M9.9 86C9.7 80.6 19.3 80.6 19.1 86" fill="none" stroke="#4b5150" stroke-width=".5"/><path d="M9.5 85.5H19.5L18.5 97.4H10.5Z" fill="#6f7675"/><path d="M16 85.5H19.5L18.5 97.4H15.6Z" fill="#a59783" opacity=".5"/><path d="M9.8 89H19.2M10.2 94H18.8" stroke="#4b5150" stroke-width=".5"/><ellipse cx="14.5" cy="85.5" rx="5.2" ry="1.3" fill="#8d9493" stroke="#4b5150" stroke-width=".4"/><ellipse cx="14.5" cy="85.6" rx="4.4" ry=".85" fill="#3a0407"/><path fill="#8b1016" d="${drip(12, 85.8, 5, .5)}${drip(17.4, 86, 7, .5)}${drip(14.6, 86.2, 2.5, .4)}"/>
+    <path d="M37.2 22C34.6 30 33.6 40 34 51.5C34.6 52.8 36.2 52.8 36.6 51.6C36.8 41 37.8 31.5 39.6 24Z" fill="#9c7c64"/><path d="M52.8 22C55.4 30 56.4 40 56 51.5C55.4 52.8 53.8 52.8 53.4 51.6C53.2 41 52.2 31.5 50.4 24Z" fill="#c39a78"/>
+    <g fill="#9c7c64"><ellipse cx="35.3" cy="52.6" rx="1.3" ry="1.8"/></g><ellipse cx="54.7" cy="52.6" rx="1.3" ry="1.8" fill="#c39a78"/>
+    <path d="M37 21.5Q45 18.6 53 21.5L52.2 29.5Q45 30.8 37.8 29.5Z" fill="#ad8a6f"/>
+    <path fill="#7d0e14" opacity=".9" d="${drip(36.6, 24, 18, .5)}${drip(35.4, 34, 15, .45)}${drip(53.4, 24, 13, .5)}${drip(55, 30, 19, .45)}M37.4 21.4Q45 18.8 52.6 21.4L52.4 25Q45 27 37.6 25Z"/>
+    <path d="${DRESS}" fill="#e9e3d7"/><path d="M39.5 28.8L40.6 21.4M50.5 28.8L49.4 21.4" stroke="#e9e3d7" stroke-width="1.1"/>
+    <g clip-path="url(#csp-carrie-dress)">
+      <path d="M38.4 28.6L39 44C36.4 60 33.6 80 31.6 96.6Q36 97.8 40 98.2C40.5 80 41 60 41.5 44L41 29.2Z" fill="#6f7480" opacity=".45"/><path d="M51.6 28.6L51 44C53.6 60 56.4 80 58.4 96.6L55.4 97.4C53.8 80 51.6 60 49.6 44L49.8 29Z" fill="#f3c98d" opacity=".3"/>
+      <path d="M42 50C41.2 66 39.8 82 38.6 97M46.5 50C46.8 66 47.2 82 47.6 98M50 52C51.2 68 52.6 82 53.8 97.5" fill="none" stroke="#b9b1a3" stroke-width=".45" opacity=".8"/>
+      <path d="M36 26H54V35C52 36.5 51 34 49.5 37C48.4 39.5 47 36 45.5 38.6C44 41 43 37 41.5 39C40.2 40.8 39 37.5 37.5 39C36.6 40 36 38 36 36Z" fill="#8b1016" opacity=".92"/>
+      <path fill="#8b1016" opacity=".85" d="${[[37.8, 37, 14, .9], [40.4, 38, 26, 1.1], [43.3, 37, 11, .8], [46, 38, 34, 1.2], [48.6, 36, 19, .9], [51, 35, 8, .7], [44.2, 50, 18, .7], [49.5, 55, 22, .8], [41.8, 62, 20, .6], [53.2, 48, 30, .7]].map(d => drip(...d)).join("")}"/>
+      <path d="M33 94Q45 97 57 94V99H33Z" fill="#6a0a0f" opacity=".5"/>
+    </g>
+    <path d="M39.6 9.5C39.8 3.6 50.2 3.6 50.4 9.5C51 17 52.6 25 52.2 33C49.4 34.8 40.6 34.8 37.8 33C37.4 25 39 17 39.6 9.5Z" fill="#4f3522"/>
+    <path d="M39.8 7C40 3.8 50 3.8 50.2 7C50.4 12 50.8 16 50.4 20C49 18 47.6 22 46 19.5C44.6 22.5 43 18.5 41.6 21C40.6 19 39.8 20 39.6 17Z" fill="#6e0c11" opacity=".8"/>
+    <path d="M42 8C41.5 18 41 26 40.6 33M45 6V34M48 8C48.6 18 49 26 49.4 33" fill="none" stroke="#2f1d11" stroke-width=".4"/>
+    <path fill="#7a0d13" d="${drip(42.5, 30, 6, .6)}${drip(47.5, 31, 8, .6)}${drip(45, 32, 4, .5)}"/>
+    <path d="M39.6 9.5C39 17 37.4 25 37.8 33" fill="none" stroke="#c8d3d8" stroke-opacity=".3" stroke-width=".45"/><path d="M50.4 9.5C51 17 52.6 25 52.2 33M56.4 30C56.8 40 56.4 46 56 51" fill="none" stroke="#ffcf8a" stroke-opacity=".4" stroke-width=".5"/>
+  </svg>`;
   const DOCK = `<svg viewBox="0 0 980 300" aria-hidden="true">
     ${shore()}
     <g style="fill:var(--wood-dark)"><rect x="404" y="96" width="9" height="56"/><rect x="627" y="96" width="9" height="56"/><rect x="498" y="104" width="7" height="40"/></g>
@@ -3753,6 +4022,7 @@ BOOKS.push({
   // The three best-placed suggestions show first; the rest wait behind a button.
   const RECS_FIRST = 3;
   let recsOpen = false;
+  let recShown = null; // the suggestion opened on the ledge, by id
   function recsSection() {
     const rank = { "lu": 0, "en-cours": 1, "a-lire": 2 };
     const recs = RECS
@@ -3772,15 +4042,26 @@ BOOKS.push({
       h("ol", { class: "rec-list" }, (recsOpen ? recs : recs.slice(0, RECS_FIRST)).map(r => {
         const src = byId[r.from];
         const lead = statusOf(r.from) === "lu" ? `Parce que vous avez lu ${src.title}` : `Dans la lignée de ${src.title}`;
-        return h("li", { class: "rec" },
-          r.cover ? h("div", { class: "rec-cover" }, cover(r)) : null,
-          h("h3", null, r.title),
-          h("p", { class: "rec-meta" }, `${r.original} · ${r.year}`),
-          h("p", { class: "rec-why" }, `${lead} · ${r.why}`),
-          h("p", { class: "rec-pitch" }, r.pitch),
-          mode !== "readonly"
-            ? h("div", { class: "rec-action" }, h("button", { class: "btn btn-accent", type: "button", onclick: () => setStatus(r.id, "a-lire") }, "Ajouter à « À lire »"))
-            : null
+        const open = recShown === r.id;
+        const toggle = () => {
+          recShown = open ? null : r.id;
+          refresh();
+          const face = app.querySelector(`.rec[data-id="${r.id}"] .rec-face`);
+          if (face) face.focus({ preventScroll: true });
+        };
+        return h("li", { class: open ? "rec open" : "rec", "data-id": r.id },
+          h("button", { class: "rec-face", type: "button", "aria-expanded": String(open), "aria-controls": "rec-" + r.id, onclick: toggle },
+            h("span", { class: "rec-cover" }, cover(r)),
+            h("span", { class: "rec-name" }, r.title),
+            h("span", { class: "rec-lead" }, lead)),
+          h("div", { class: "rec-detail", id: "rec-" + r.id, hidden: !open },
+            h("h3", null, r.title),
+            h("p", { class: "rec-meta" }, `${r.original} · ${r.year}`),
+            h("p", { class: "rec-why" }, `${lead} · ${r.why}`),
+            h("p", { class: "rec-pitch" }, r.pitch),
+            mode !== "readonly"
+              ? h("div", { class: "rec-action" }, h("button", { class: "btn btn-accent", type: "button", onclick: () => setStatus(r.id, "a-lire") }, "Ajouter à « À lire »"))
+              : null)
         );
       })),
       more
@@ -3817,6 +4098,7 @@ BOOKS.push({
       ...RECS.filter(r => entry(r.id).status).map(r => ({ kind: "rec", b: r, status: entry(r.id).status }))
     ].sort((a, z) => a.b.year - z.b.year);
     const piles = STATUSES.map(s => ({ ...s, list: all.filter(x => x.status === s.key) }));
+    lanterns(piles.find(p => p.key === "lu").list.map(x => x.b));
     const tally = h("p", { class: "tally", "aria-label": "Où j'en suis" },
       piles.map(p => h("span", { class: p.key === "en-cours" ? "is-reading" : null },
         h("b", null, String(p.list.length)), " " + (p.key === "lu" ? (p.list.length > 1 ? "lus" : "lu") : p.label.toLowerCase())
@@ -3852,7 +4134,11 @@ BOOKS.push({
       h("footer", { class: "pontoon" },
         h("p", { class: "colophon" }, "Les résumés suivent le découpage des éditions originales. Le statut de chaque livre se règle depuis sa page. Un nouveau livre à ajouter ? Il suffit de le demander à Claude."),
         syncSlip(),
-        h("div", { class: "dock", "aria-hidden": "true", html: DOCK }, h("div", { class: "dock-boat", html: BOAT("csp-dock-boat-wave") }), h("span", { class: "lantern-glow" }), h("span", { class: "lantern-flame" }))
+        h("div", { class: "dock", "aria-hidden": "true", html: DOCK },
+          h("div", { class: "dock-boat", html: BOAT("csp-dock-boat-wave") }),
+          statusOf("carrie") === "lu" ? h("div", { class: "dock-carrie", html: CARRIE }) : null,
+          h("span", { class: "lantern-glow" }), h("span", { class: "lantern-flame" }),
+          h("span", { class: "moths" }, MOTHS.map(([m, t, w]) => h("i", { style: `--m:${m};--t:${t}s;--w:-${w}s` }))))
       )
     ));
   }

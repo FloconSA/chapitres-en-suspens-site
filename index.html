@@ -972,15 +972,28 @@ body::after { animation: lamp 9s linear infinite; }
    shore, the lake with the moon's path on it, banks of mist. The scene sits fixed behind the page
    and the camera goes down toward the water as the page scrolls: each layer rises by its own
    --dy over the whole scroll, the nearest fastest. At the foot of the page a dock with a lantern
-   holds the colophon. In the light theme, the same lake at a misty dawn. Book pages keep their
-   own colours: everything here is scoped to the home view. */
+   holds the colophon. It stays night in the light theme too (the reader's choice), so the home
+   view sets every colour the light theme changes. Book pages keep their own colours: everything
+   here is scoped to the home view. */
+:root:has(> body[data-view="home"]) { color-scheme: dark; }
 body[data-view="home"] {
+  color-scheme: dark;
   --bg: #08141a;
   --bg-raise: rgba(8, 22, 27, .84);
+  --ink: #ede8de;
   --ink-soft: #d2d9d3;
   --muted: #a3b3af;
   --line: rgba(160, 196, 190, .2);
+  --gilt: #caa75e;
+  --accent: var(--gilt);
   --accent-wash: rgba(202, 167, 94, .12);
+  --ribbon: #a3262a;
+  --mark: #d6675e;
+  --plank: #5a4330;
+  --plank-deep: #2b1f15;
+  --plank-edge: #6e5339;
+  --focus: #e0c27e;
+  --shadow: rgba(0, 0, 0, .6);
   --veil: rgba(4, 12, 16, .62);
   --sky-top: #03070d;
   --sky-mid: #0a1824;
@@ -1000,66 +1013,6 @@ body[data-view="home"] {
   --wood: #3a2b1f;
   --wood-dark: #1c140d;
   background: var(--bg);
-}
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) body[data-view="home"] {
-    --bg: #ece6d8;
-    --bg-raise: rgba(250, 246, 236, .86);
-    --ink-soft: #3f3829;
-    --muted: #52473a;
-    --gilt: #6c4e0e;
-    --accent: var(--gilt);
-    --line: rgba(90, 80, 60, .22);
-    --veil: rgba(246, 241, 229, .74);
-    --sky-top: #c9d2d3;
-    --sky-mid: #e2e3dc;
-    --sky-low: #f3ede0;
-    --hill: #b6c0bc;
-    --tree-far: #9ba8a2;
-    --tree-mid: #7f8f87;
-    --tree-near: #5d6d65;
-    --water-top: #e4e6e0;
-    --water-deep: #b4c0be;
-    --moon: #fbf8ee;
-    --glint: #ffffff;
-    --mist: rgba(255, 255, 255, .5);
-    --star: transparent;
-    --loon: #37423f;
-    --ripple-o: .5;
-    --lantern: #e39a3e;
-    --wood: #8d6e50;
-    --wood-dark: #5c4532;
-    --night: 0;
-  }
-}
-:root[data-theme="light"] body[data-view="home"] {
-  --bg: #ece6d8;
-  --bg-raise: rgba(250, 246, 236, .86);
-  --ink-soft: #3f3829;
-  --muted: #52473a;
-  --gilt: #6c4e0e;
-  --accent: var(--gilt);
-  --line: rgba(90, 80, 60, .22);
-  --veil: rgba(246, 241, 229, .74);
-  --sky-top: #c9d2d3;
-  --sky-mid: #e2e3dc;
-  --sky-low: #f3ede0;
-  --hill: #b6c0bc;
-  --tree-far: #9ba8a2;
-  --tree-mid: #7f8f87;
-  --tree-near: #5d6d65;
-  --water-top: #e4e6e0;
-  --water-deep: #b4c0be;
-  --moon: #fbf8ee;
-  --glint: #ffffff;
-  --mist: rgba(255, 255, 255, .5);
-  --star: transparent;
-  --loon: #37423f;
-  --ripple-o: .5;
-  --lantern: #e39a3e;
-  --wood: #8d6e50;
-  --wood-dark: #5c4532;
-  --night: 0;
 }
 /* The lamp's glow and the dust belong to the reading room of a book page, not to the lake */
 body[data-view="home"]::after, body[data-view="home"] .dust { display: none; }
@@ -1131,7 +1084,7 @@ body[data-view="home"] .lake {
   right: 0;
   background-repeat: repeat;
   background-size: var(--tile) var(--tile-h);
-  opacity: var(--ripple-o, .55);
+  opacity: .55;
 }
 .lk-r1 { top: 0; height: 24vh; --tile: 380px; --tile-h: 57px; -webkit-mask-image: linear-gradient(#000 65%, transparent); mask-image: linear-gradient(#000 65%, transparent); }
 .lk-r2 { top: 15vh; height: 52vh; --tile: 760px; --tile-h: 114px; -webkit-mask-image: linear-gradient(transparent, #000 25%, #000 75%, transparent); mask-image: linear-gradient(transparent, #000 25%, #000 75%, transparent); }
@@ -1185,12 +1138,10 @@ body[data-view="home"] .lake {
 .lk-loon svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .lk-loon.west svg { transform: scaleX(-1); }
 
-/* The Milky Way across the sky, fading toward the hills, and now and then a shooting star (script);
-   gone at dawn */
+/* The Milky Way across the sky, fading toward the hills, and now and then a shooting star (script) */
 .lk-milky {
   position: absolute;
   inset: 0;
-  opacity: var(--night, 1);
   -webkit-mask-image: linear-gradient(#000 35%, transparent 88%);
   mask-image: linear-gradient(#000 35%, transparent 88%);
 }

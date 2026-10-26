@@ -1151,22 +1151,43 @@ body[data-view="home"] .lake {
   animation: twinkle var(--t) ease-in-out var(--w) infinite alternate;
 }
 @keyframes twinkle { from { opacity: .15; } to { opacity: 1; } }
+/* The moon as it is tonight (script): its seas, Tycho and its rays, the dark side faintly grey with
+   the earth's light; its glow, and the light it throws on the lake, as strong as its phase (--lit) */
 .lk-moon {
   position: absolute;
   left: 76%;
   top: 13vh;
-  width: clamp(38px, 4.6vw, 88px);
+  width: clamp(40px, 4.8vw, 92px);
   aspect-ratio: 1;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 62% 58%, color-mix(in srgb, var(--moon) 86%, #6f6650) 0 9%, transparent 10%),
-    radial-gradient(circle at 34% 40%, color-mix(in srgb, var(--moon) 90%, #6f6650) 0 7%, transparent 8%),
-    radial-gradient(circle at 40% 36%, #fffbf0, var(--moon) 58%, color-mix(in srgb, var(--moon) 82%, #6f6650));
-  box-shadow: 0 0 34px 8px color-mix(in srgb, var(--moon) 28%, transparent), 0 0 140px 60px color-mix(in srgb, var(--moon) 9%, transparent);
 }
+.lk-moon::before {
+  content: "";
+  position: absolute;
+  inset: -190%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--moon) 16%, transparent), color-mix(in srgb, var(--moon) 6%, transparent) 38%, transparent);
+  opacity: calc(.15 + .85 * var(--lit, 1));
+}
+.lk-moon svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 
 /* Lake: still ripples at three sizes, smaller toward the far shore (moving them cost too much); the shore mirrored and stirred by
-   the ripples; the moon's path, soft broken streaks shimmering on the water */
+   the ripples; the moon's path, soft broken streaks shimmering on the water. At night the water is
+   black but where a light falls on it: the ripples only catch the sky's last glow along the far
+   shore, the moon's path (as bright as the moon is full), Sara Laughs' windows and the dock's
+   lantern; elsewhere they barely show. */
+.lk-lit {
+  --mx: 78%;
+  --lit-mask:
+    radial-gradient(8vw 55vh at var(--mx) 0, rgb(0 0 0 / var(--lit, 1)), transparent),
+    radial-gradient(17vw 62vh at var(--mx) 55vh, rgb(0 0 0 / calc(.85 * var(--lit, 1))), transparent),
+    radial-gradient(6vw 26vh at calc(8% + 5.25vw) 0, rgb(0 0 0 / .75), transparent),
+    radial-gradient(34vw 34vh at calc(50% + min(18vw, 176px)) calc(131vh - 230px), #000 20%, transparent),
+    linear-gradient(rgb(0 0 0 / .85), rgb(0 0 0 / .4) 18vh, rgb(0 0 0 / .26) 55vh, rgb(0 0 0 / .22));
+  position: absolute;
+  inset: 0;
+  -webkit-mask-image: var(--lit-mask);
+  mask-image: var(--lit-mask);
+}
 .lk-ripple {
   position: absolute;
   left: 0;
@@ -1209,7 +1230,7 @@ body[data-view="home"] .lake {
 }
 .lk-reflect-mid { height: 21vh; color: var(--tree-mid); opacity: .42; }
 .lk-reflect svg { display: block; width: 100%; height: 100%; overflow: visible; }
-.lk-glint { position: absolute; top: .4vh; left: calc(78% - 9vw); width: 18vw; height: 80vh; color: var(--glint); }
+.lk-glint { position: absolute; top: .4vh; left: calc(78% - 9vw); width: 18vw; height: 80vh; color: var(--glint); opacity: calc(.3 + .7 * var(--lit, 1)); }
 .lk-glint::before {
   content: "";
   position: absolute;
@@ -1370,6 +1391,38 @@ body[data-view="home"] .lake {
   60% { opacity: 0; transform: translateY(30vh) scale(1.18, 1.5); }
   100% { opacity: 0; transform: translateY(30vh) scale(1.18, 1.5); }
 }
+/* Rare scenes (script). The freight train over the trestle, drawn in the same box as the shore's
+   spruces; the Long Walk crossing the far shore in its halftrack's lights (if read); a flock of
+   sparrows drawn while it flies; the Turtle surfacing; in the fog, the thing that walks (if The Mist
+   has been read, timed with the fog). */
+.lk-train { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.lk-walk { display: none; position: absolute; left: 0; bottom: 3%; pointer-events: none; }
+.lk-walk.walking { display: block; }
+.wk-group { position: absolute; left: 0; bottom: 0; width: 17vw; opacity: 0; will-change: transform, opacity; }
+.wk-beam { position: absolute; left: 1.4vw; bottom: -1.4vh; width: 15vw; height: 5.4vh; background: radial-gradient(closest-side at 30% 58%, rgba(255, 238, 196, .6), rgba(255, 238, 196, .2) 55%, transparent); }
+.wk-shine { bottom: -4.6vh; height: 2.6vh; opacity: .55; }
+.wk-track { position: absolute; left: 0; bottom: -.15vh; width: max(18px, 2.1vw); aspect-ratio: 30 / 14; }
+.wk-track svg, .wk-man svg, .lk-turtle svg, .fog-beast svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.wk-man { position: absolute; bottom: 0; height: calc(max(8px, 1.1vh) * var(--h)); aspect-ratio: 6 / 14; color: #030706; }
+.wk-man svg { fill: currentColor; }
+.lk-walk.walking .wk-man { animation: wk-step .5s ease-in-out var(--w) infinite alternate; }
+@keyframes wk-step { to { transform: translateY(-9%); } }
+.lk-birds { display: none; position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.lk-birds.on { display: block; }
+.lk-turtle { display: none; position: absolute; width: calc(clamp(90px, 9vw, 190px) * var(--k, 1)); aspect-ratio: 124 / 50; translate: -50% -68%; pointer-events: none; }
+.lk-turtle.up { display: block; }
+.tt-ring { position: absolute; left: 0; right: 0; top: 60%; height: 16%; border: 1px solid color-mix(in srgb, var(--glint) 34%, transparent); border-radius: 50%; opacity: 0; animation: tt-ring 4.2s ease-out infinite; }
+.tt-ring + .tt-ring { animation-delay: -2.1s; }
+@keyframes tt-ring { from { transform: scale(.85); opacity: .7; } to { transform: scale(1.6, 1.9); opacity: 0; } }
+.fog-beast { display: none; position: absolute; left: 70%; bottom: 52%; width: clamp(150px, 15vw, 320px); aspect-ratio: 200 / 240; opacity: 0; pointer-events: none; animation: beast-walk 170s linear -38s infinite; }
+.lake.brume-lu .fog-beast { display: block; }
+@keyframes beast-walk {
+  0%, 11% { opacity: 0; transform: translateX(0); }
+  18% { opacity: .55; }
+  34% { opacity: .45; }
+  42% { opacity: 0; transform: translateX(-7vw); }
+  100% { opacity: 0; transform: translateX(-7vw); }
+}
 /* A paper lantern on the water for each book read, in that book's colour (script): a halo that
    flickers, a reflection in broken streaks; each drifts and bobs on its own */
 .lk-lanterns { position: absolute; inset: 0; pointer-events: none; }
@@ -1377,7 +1430,7 @@ body[data-view="home"] .lake {
   position: absolute;
   left: var(--x);
   top: var(--y);
-  width: calc(clamp(22px, 2vw, 40px) * var(--k));
+  width: calc(clamp(34px, 3.3vw, 64px) * var(--k));
   aspect-ratio: 24 / 56;
   translate: -50% -50%;
   animation: lantern-drift var(--d) ease-in-out var(--w) infinite alternate;
@@ -1385,10 +1438,35 @@ body[data-view="home"] .lake {
 .lk-lantern::before {
   content: "";
   position: absolute;
-  inset: -55% -330% 10%;
-  background: radial-gradient(closest-side, color-mix(in srgb, var(--c) 42%, transparent), color-mix(in srgb, var(--c) 13%, transparent) 45%, transparent);
+  inset: -60% -340% 6%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--c) 48%, transparent), color-mix(in srgb, var(--c) 15%, transparent) 45%, transparent);
   animation: glow 2.6s ease-in-out var(--w) infinite;
 }
+/* Its card, as in a museum, when the pointer is on it (or a finger, on a phone): the book's title
+   and the day it was finished */
+.lk-tag {
+  position: fixed;
+  z-index: 6;
+  left: 0;
+  top: 0;
+  padding: 8px 14px 9px;
+  border: 1px solid color-mix(in srgb, var(--gilt) 45%, transparent);
+  border-radius: 3px;
+  background: rgba(5, 13, 17, .9);
+  box-shadow: 0 10px 24px -10px rgba(0, 0, 0, .8);
+  color: var(--muted);
+  font: italic .86rem/1.35 var(--font-body);
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  translate: -50% calc(-100% - 10px);
+  transition: opacity .25s ease;
+}
+.lk-tag.on { opacity: 1; }
+body:not([data-view="home"]) .lk-tag { display: none; }
+.lk-tag strong { display: block; color: var(--ink); font: 500 1.1rem/1.2 var(--font-display); font-style: normal; }
+.lk-tag i { display: block; margin-top: 3px; color: var(--accent); font-size: .78rem; }
 .lk-lantern svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; transform-origin: 50% 50%; animation: boat-bob 4.4s ease-in-out var(--w) infinite alternate; }
 @keyframes lantern-drift { from { transform: translateX(-1.4vw); } to { transform: translateX(1.4vw); } }
 
@@ -1425,6 +1503,7 @@ html.lk-grabbing, html.lk-grabbing * { cursor: grabbing !important; -webkit-user
 @media (max-width: 600px) {
   .lk-moon { left: 83%; top: 4.5vh; }
   .lk-glint { left: calc(87% - 9vw); }
+  .lk-lit { --mx: 87%; }
   .lk-boat { display: none; }
   .lk-marsten { left: 60%; }
   .lk-loon { width: 54px; height: 20px; }
@@ -1587,6 +1666,66 @@ body.lake-live .plate:hover { rotate: 1.4deg; }
 /* Carrie, the night of the prom, at the end of the dock: seen from behind, looking out over the
    lake, her white dress soaked in blood, the bucket at her feet. Only once Carrie has been read. */
 .dock-carrie { position: absolute; left: 44.9%; top: 2%; width: 7.14%; aspect-ratio: 70 / 100; pointer-events: none; }
+/* The nearest things: lily pads and a stump (one drawing over the dock's), the canoe tied up
+   under the lantern, rocking a little, and the reeds swaying, each clump on its own */
+.dock { --reed: color-mix(in srgb, var(--tree-near) 78%, #34452b); --reed-head: #2f1e13; }
+.dock-front, .dock-front svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.lily-bloom { display: none; }
+.dock-canoe { position: absolute; left: 70.2%; top: 62.67%; width: 18.37%; aspect-ratio: 200 / 60; transform-origin: 50% 60%; animation: canoe-rock 7s ease-in-out infinite alternate; }
+.dock-canoe svg, .dock-reeds svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+@keyframes canoe-rock { from { transform: rotate(-.5deg); } to { transform: rotate(.6deg) translateY(.15cqi); } }
+.dock-reeds { position: absolute; transform-origin: 50% 100%; pointer-events: none; animation: reed-sway var(--d) ease-in-out var(--w) infinite alternate; }
+/* The swaying clumps stand in a box that clips them: leaning past the foot of the page, they would
+   change its size at every frame, and the whole page would be repainted. */
+.dock-reedbed { position: absolute; inset: 0; overflow: clip; pointer-events: none; }
+@keyframes reed-sway { from { transform: rotate(-1.4deg); } to { transform: rotate(1.6deg); } }
+/* The seasons (script: body[data-season]). Autumn: reeds turning, leaves falling over the lake.
+   Winter: dry reeds, snow falling, no lily pads, no moths. Summer: lilies in bloom, fireflies. */
+body[data-season="autumn"] .dock { --reed: color-mix(in srgb, var(--tree-near) 72%, #5a4524); }
+body[data-season="winter"] .dock { --reed: #4a4636; --reed-head: #2a2016; }
+body[data-season="winter"] .lily, body[data-season="winter"] .moths { display: none; }
+body[data-season="summer"] .lily-bloom { display: inline; }
+.lk-leaves, .lk-snow { position: absolute; inset: 0; pointer-events: none; }
+.lk-leaves i { position: absolute; left: var(--x); top: -6vh; width: var(--s); aspect-ratio: 1; opacity: 0; animation: leaf-fall var(--t) linear var(--w) infinite; }
+.lk-leaves svg { display: block; width: 100%; height: 100%; animation: leaf-spin var(--sp) ease-in-out var(--w) infinite alternate; }
+@keyframes leaf-fall {
+  0% { transform: translate(0, 0); opacity: 0; }
+  6% { opacity: .8; }
+  25% { transform: translate(4vw, 28vh); }
+  50% { transform: translate(-1vw, 56vh); }
+  75% { transform: translate(5vw, 84vh); }
+  94% { opacity: .8; }
+  100% { transform: translate(2vw, 112vh); opacity: 0; }
+}
+@keyframes leaf-spin { from { transform: rotate(-40deg); } to { transform: rotate(55deg) scaleX(-.45); } }
+.lk-snow i { position: absolute; left: 0; right: 0; top: -360px; bottom: 0; background-size: 360px 360px; animation: snow-fall 18s linear infinite; }
+.lk-snow i + i { background-size: 420px 420px; top: -420px; animation-duration: 11s; animation-name: snow-fall-near; }
+@keyframes snow-fall { to { transform: translateY(360px); } }
+@keyframes snow-fall-near { to { transform: translateY(420px); } }
+.lk-flies { position: absolute; inset: 0; pointer-events: none; }
+.lk-flies i, .dock-flies i {
+  position: absolute;
+  left: var(--x);
+  bottom: var(--y);
+  width: 2.5px;
+  height: 2.5px;
+  border-radius: 50%;
+  background: #eef7a6;
+  box-shadow: 0 0 6px 2px rgba(205, 240, 120, .45);
+  opacity: 0;
+  animation: fly-blink var(--t) ease-in-out var(--w) infinite, fly-drift calc(var(--t) * 3) ease-in-out var(--w) infinite alternate;
+}
+.dock-flies { position: absolute; inset: 0; pointer-events: none; }
+.dock-flies i { bottom: auto; width: max(3px, .38cqi); height: max(3px, .38cqi); }
+@keyframes fly-blink { 0%, 60%, 100% { opacity: 0; } 68% { opacity: 1; } 76% { opacity: .25; } 84% { opacity: .9; } }
+@keyframes fly-drift { from { transform: translate(0, 0); } to { transform: translate(14px, -9px); } }
+.dock-pumpkins, .dock-pumpkins svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.dock-pumpkins { animation: pumpkin-flicker 1.9s ease-in-out infinite; }
+@keyframes pumpkin-flicker { 0%, 100% { opacity: .95; } 21% { opacity: .78; } 37% { opacity: 1; } 58% { opacity: .84; } 80% { opacity: .97; } }
+/* The lantern's light shimmering on the water beside the dock */
+.dock-shine { position: absolute; inset: 0; pointer-events: none; opacity: .75; }
+.dock-shine svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.dock-shine svg + svg { animation: glint 2.9s ease-in-out infinite alternate; }
 /* Moths around the lantern */
 .moths { position: absolute; left: 67.96%; top: 8.2%; }
 .moths i {
@@ -2490,8 +2629,9 @@ BOOKS.push({
      and the moon's glitter come from a fixed recipe, so the night is the same at every visit. */
   const seeded = seed => () => (seed = seed * 16807 % 2147483647) / 2147483647;
   const f1 = v => Math.round(v * 10) / 10;
-  // A row of spruces on a strip of ground, as one path in a box 1600 wide and H high.
-  function spruceRow(seed, count, low, high, H) {
+  // A row of spruces on a strip of ground, as one path in a box 1600 wide and H high, with no tree
+  // standing in the gap, if one is asked for.
+  function spruceRow(seed, count, low, high, H, gap) {
     const r = seeded(seed);
     let d = `M0 ${H}V${f1(H - low * .16)}H1600V${H}Z`;
     for (let i = 0; i < count; i++) {
@@ -2505,6 +2645,7 @@ BOOKS.push({
         left.push([x - outL, y]);
       }
       const pts = [[x, H - h], ...right, [x + 1.6, H], [x - 1.6, H], ...left.reverse()];
+      if (gap && x > gap[0] && x < gap[1]) continue;
       d += "M" + pts.map(([a, b]) => `${f1(a)} ${f1(b)}`).join("L") + "Z";
     }
     return d;
@@ -2590,7 +2731,7 @@ BOOKS.push({
   const MARSTEN = `<svg viewBox="0 0 200 120"><path d="M0 120C30 110 52 92 78 80C92 74 108 72 122 74C148 80 172 100 200 120Z" fill="color-mix(in srgb, var(--tree-near) 88%, var(--hill))"/><path d="M40 98C56 88 66 84 78 80C92 74 108 72 122 74C138 77 150 84 162 92" fill="none" stroke="var(--glint)" stroke-opacity=".1" stroke-width=".8"/><g fill="color-mix(in srgb, var(--tree-near) 82%, var(--hill))"><path d="M84 77V50H124V77Z"/><path d="M82 50L87 38H121L126 50Z"/><path d="M72 77V36H85V77Z"/><path d="M70 36L78.5 13L87 36Z"/><path d="M124 77V58H141V77Z"/><path d="M122 58L132 49L143 58Z"/><path d="M96 38V29H100V38ZM111 38V30H115V38Z"/><path d="M82 65H126V67.5H82Z"/></g><path d="M78.5 13V8" stroke="color-mix(in srgb, var(--tree-near) 82%, var(--hill))" stroke-width=".8"/><g fill="#132a33" opacity=".75"><path d="M89 53h4v7h-4zM98 53h4v7h-4zM107 53h4v7h-4zM116 53h4v7h-4zM76.5 43h4v7h-4zM76.5 56h4v7h-4zM129 62h4v6h-4z"/></g><g fill="none" stroke="var(--glint)" stroke-linecap="round"><path d="M78.5 13L87 36M121 38L126 50M132 49L143 58" stroke-opacity=".3" stroke-width=".6"/><path d="M87 38H121" stroke-opacity=".16" stroke-width=".5"/></g><path d="M152 93C153 81 152 71 155 59M154.4 67L146 57L142 53M146 57L147 50M155.2 61L163 51L167 48M155 59L156 48" fill="none" stroke="color-mix(in srgb, var(--tree-near) 82%, var(--hill))" stroke-width="1.3" stroke-linecap="round"/></svg>`;
   // A floating paper lantern in its book's colour (--c): a tray, glowing paper, a little roof, the
   // ring it makes on the water and its reflection, broken streaks fading downward.
-  const LANTERN = `<svg viewBox="0 0 24 56"><g style="fill:var(--c)">${[[31, 6.5, .5], [34, 5.6, .4], [37.5, 4.8, .3], [41.5, 3.8, .2], [46, 2.8, .12]].map(([y, rx, o]) => `<ellipse cx="12" cy="${y}" rx="${rx}" ry=".9" opacity="${o}"/>`).join("")}</g><ellipse cx="12" cy="28.2" rx="11" ry="1.8" fill="none" style="stroke:var(--c)" stroke-opacity=".35" stroke-width=".6"/><path d="M5.5 11H18.5V25H5.5Z" style="fill:var(--c)"/><ellipse cx="12" cy="18.5" rx="4.6" ry="5.2" fill="#fffaf0" opacity=".6"/><g fill="#24180f"><path d="M3.5 25H20.5V28.2H3.5Z"/><path d="M3.5 11.4L12 6.6L20.5 11.4Z"/></g><path d="M5.5 11V25M18.5 11V25M12 11V25M5.5 18H18.5" stroke="#24180f" stroke-opacity=".55" stroke-width=".7"/></svg>`;
+  const LANTERN = i => `<svg viewBox="0 0 24 56"><defs><radialGradient id="csp-lantern-paper-${i}" cx=".5" cy=".62" r=".7"><stop offset="0" stop-color="#fffbef"/><stop offset=".35" stop-color="color-mix(in srgb, var(--c) 45%, #fff3d6)"/><stop offset="1" style="stop-color:var(--c)"/></radialGradient></defs><g style="fill:var(--c)">${[[30.5, 7, .55], [33.4, 6.2, .45], [36.8, 5.2, .34], [40.8, 4.2, .24], [45.4, 3.2, .15], [50.4, 2.2, .08]].map(([y, rx, o]) => `<ellipse cx="12" cy="${y}" rx="${rx}" ry="1" opacity="${o}"/>`).join("")}</g><ellipse cx="12" cy="28.2" rx="11" ry="1.8" fill="none" style="stroke:var(--c)" stroke-opacity=".4" stroke-width=".6"/><path d="M5.5 11.2H18.5V25H5.5Z" fill="url(#csp-lantern-paper-${i})"/><ellipse cx="12" cy="21.4" rx="1.1" ry="2" fill="#fffef6"/><g fill="#24180f"><path d="M4.2 25H19.8L19 28H5Z"/><path d="M4 11.6L12 7.2L20 11.6Z"/></g><path d="M5.5 11.2V25M18.5 11.2V25M12 11.2V25M5.5 18H18.5" stroke="#24180f" stroke-opacity=".3" stroke-width=".55"/></svg>`;
   function houseGlow(seed) {
     const r = seeded(seed);
     let g = "";
@@ -2602,24 +2743,151 @@ BOOKS.push({
     }
     return `<svg viewBox="0 0 120 140" preserveAspectRatio="none" fill="var(--lantern)"><g filter="url(#csp-soft)">${g}</g></svg>`;
   }
+  /* The moon as it is tonight: its phases come round every 29.53 days from the new moon of
+     6 January 2000. Lit on the right while it waxes, on the left as it wanes (as seen from Maine),
+     the rest faintly grey with the earth's light; its seas, bright craters, Tycho and its rays, a
+     fine grain, the edge a little darker. k: how much of it is lit, from 0 to 1. */
+  const moonAge = (d = new Date()) => (((d - Date.UTC(2000, 0, 6, 18, 14)) / 864e5 / 29.530588853) % 1 + 1) % 1;
+  function moonDisc(age) {
+    const k = (1 - Math.cos(2 * Math.PI * age)) / 2;
+    const lit = `<path${age < .5 ? "" : ` transform="matrix(-1 0 0 1 100 0)"`} d="M50 0A50 50 0 0 1 50 100A${f1(50 * Math.abs(1 - 2 * k))} 50 0 0 ${k > .5 ? 1 : 0} 50 0Z"/>`;
+    const seas = [[48, 17, 22, 3.6, -6], [37, 31, 15, 12, 0], [20, 50, 12, 22, 10], [59, 31, 8.5, 8, 0], [66, 45, 10, 8.5, 20], [83, 36, 6, 5, 0], [78, 57, 5.5, 8.5, -10],
+      [67, 62, 4, 4.5, 0], [50, 41, 5, 3.5, 0], [37, 49, 7, 5, 0], [41, 66, 9, 6.5, 0], [26, 68, 5, 5, 0], [33, 58, 5, 4, 0]]
+      .map(([x, y, rx, ry, a]) => `<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" transform="rotate(${a} ${x} ${y})"/>`).join("");
+    const r = seeded(13);
+    let rays = "";
+    for (let i = 0; i < 16; i++) { const a = r() * Math.PI * 2, l = 8 + r() * 30; rays += `M43 82L${f1(43 + Math.cos(a) * l)} ${f1(82 + Math.sin(a) * l)}`; }
+    return { k, svg: `<svg viewBox="0 0 100 100"><defs>
+      <radialGradient id="csp-moon-face" cx=".44" cy=".4" r=".68"><stop offset="0" stop-color="#fffdf7"/><stop offset=".55" stop-color="color-mix(in srgb, var(--moon) 55%, #fffcf2)"/><stop offset="1" stop-color="var(--moon)"/></radialGradient>
+      <radialGradient id="csp-moon-limb"><stop offset=".8" stop-color="#5a4f3a" stop-opacity="0"/><stop offset="1" stop-color="#5a4f3a" stop-opacity=".28"/></radialGradient>
+      <filter id="csp-moon-seas" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".11" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="5" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation=".8"/></filter>
+      <filter id="csp-moon-grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".07" numOctaves="3" seed="6"/><feColorMatrix values="0 0 0 0 .45 0 0 0 0 .43 0 0 0 0 .38 0 0 0 -2.2 1.25"/></filter>
+      <filter id="csp-moon-blur" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation=".9"/></filter>
+      <filter id="csp-moon-glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="7"/></filter>
+      <clipPath id="csp-moon-disc"><circle cx="50" cy="50" r="50"/></clipPath>
+      <mask id="csp-moon-lit"><g fill="#fff" filter="url(#csp-moon-blur)">${lit}</g></mask></defs>
+      <circle cx="50" cy="50" r="50" fill="color-mix(in srgb, var(--sky-mid) 91%, #7d8a95)"/>
+      <g fill="var(--moon)" opacity=".75" filter="url(#csp-moon-glow)">${lit}</g>
+      <g mask="url(#csp-moon-lit)">
+        <circle cx="50" cy="50" r="50" fill="url(#csp-moon-face)"/>
+        <g clip-path="url(#csp-moon-disc)">
+          <rect width="100" height="100" opacity=".3" filter="url(#csp-moon-grain)"/>
+          <g fill="#9a9a94" opacity=".55" filter="url(#csp-moon-seas)">${seas}</g>
+          <path d="${rays}" stroke="#fffdf6" stroke-width=".8" opacity=".28" filter="url(#csp-moon-blur)"/>
+          <g fill="#fffdf6" filter="url(#csp-moon-blur)"><circle cx="43" cy="82" r="2"/><circle cx="37" cy="42" r="1.3" opacity=".6"/><circle cx="17" cy="36" r="1.1" opacity=".7"/></g>
+        </g>
+        <circle cx="50" cy="50" r="50" fill="url(#csp-moon-limb)"/>
+      </g></svg>` };
+  }
+  const tonight = moonDisc(moonAge());
   let lakeStars = "", twinkles = "";
   for (let i = 0, r = seeded(7); i < 100; i++) {
     if (i < 90) lakeStars += `<circle cx="${f1(r() * 1600)}" cy="${f1(r() * 620)}" r="${f1(.5 + r() * 1.1)}" opacity="${f1(.25 + r() * .6)}"/>`;
     else twinkles += `<i class="lk-tw" style="left:${f1(4 + r() * 92)}%;top:${f1(4 + r() * 50)}vh;--t:${f1(2 + r() * 3)}s;--w:-${f1(r() * 5)}s"></i>`;
   }
-  const nearRow = spruceRow(31, 48, 46, 92, 100), midRow = spruceRow(21, 64, 40, 98, 110);
-  document.body.insertAdjacentHTML("beforeend", `<div class="lake" aria-hidden="true">
-    <div class="lk lk-sky"><svg class="lk-stars" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" fill="currentColor">${lakeStars}</svg><div class="lk-milky">${milkyWay()}<span class="lk-shoot"></span></div>${twinkles}<span class="lk-moon"></span><div class="lk-balloon">${BALLOON("csp-balloon")}</div></div>
+  /* The season outside, from today's date. Autumn (22 September to 30 November): maples turning
+     among the spruces, leaves coming down and floating by the dock. Halloween (18 October to
+     1 November): carved pumpkins on the dock. Winter (1 December to 15 March): snow falling and
+     lying on the banks and the dock. Summer (1 June to 21 September): fireflies along the shores
+     and the lilies in bloom. */
+  const md = (new Date().getMonth() + 1) * 100 + new Date().getDate();
+  const SEASON = md >= 1201 || md <= 315 ? "winter" : md >= 922 ? "autumn" : md >= 601 ? "summer" : "spring";
+  document.body.dataset.season = SEASON;
+  const halloween = () => md >= 1018 && md <= 1101;
+  // Maples among the spruces of a row: ragged crowns of many small lobes, in three autumn colours
+  // dimmed by the night, catching the moon at the top and sinking into the dark of the trees below.
+  function mapleRow(id, seed, count, low, high, H, gap, colours, dark) {
+    const r = seeded(seed), d = colours.map(() => "");
+    const disc = (x, y, rr) => `M${f1(x - rr)} ${f1(y)}a${f1(rr)} ${f1(rr)} 0 1 0 ${f1(2 * rr)} 0a${f1(rr)} ${f1(rr)} 0 1 0 ${f1(-2 * rr)} 0Z`;
+    for (let i = 0; i < count; i++) {
+      const x = (i + .2 + r() * .6) * 1600 / count, h = low + r() * (high - low), rr = h * (.17 + r() * .05), cy = H - h + rr * 1.3, k = Math.floor(r() * colours.length);
+      if (gap && x > gap[0] - rr && x < gap[1] + rr) continue;
+      let c = `M${f1(x - 1)} ${H}V${f1(cy)}H${f1(x + 1)}V${H}Z` + disc(x, cy, rr * .7);
+      for (let j = 0; j < 11; j++) { const a = r() * 6.28, q = Math.sqrt(r()); c += disc(x + Math.cos(a) * rr * q, cy + Math.sin(a) * rr * 1.3 * q, rr * (.3 + r() * .22)); }
+      d[k] += c;
+    }
+    return `<defs>${colours.map((c, k) => `<linearGradient id="${id}-${k}" gradientUnits="userSpaceOnUse" x1="0" y1="${H - high}" x2="0" y2="${H}"><stop offset="0" stop-color="${c}"/><stop offset=".85" stop-color="${dark}"/></linearGradient>`).join("")}</defs>`
+      + d.map((dd, k) => `<path d="${dd}" fill="url(#${id}-${k})"/>`).join("");
+  }
+  const NEAR_GAP = [420, 570], MID_GAP = [552, 650];
+  /* The freight train that crosses the trestle (The Body is set in 1960): a diesel engine, its
+     headlight and the lit window of its cab, six boxcars and a caboose with its red lamp. Drawn
+     with the front of the engine at 0, the cars behind it; it shows only over the inlet, its
+     headlight sweeping the trees before it and lighting the water below. */
+  const TRAIN = (() => {
+    let cars = "";
+    for (let i = 0; i < 6; i++) { const x = -27.6 - i * 21.6 - 20; cars += `<rect x="${f1(x)}" y="68.4" width="20" height="6.6"/><path d="M${f1(x + 9)} 69.2V74.4M${f1(x + 11)} 69.2V74.4" stroke="#030606" stroke-width=".5"/>`; }
+    const cab = -27.6 - 6 * 21.6 - 16;
+    return `<defs><clipPath id="csp-inlet"><rect x="404" y="0" width="182" height="100"/></clipPath><radialGradient id="csp-headlight"><stop offset="0" stop-color="#fff6dc" stop-opacity=".75"/><stop offset=".4" stop-color="#ffe9b0" stop-opacity=".25"/><stop offset="1" stop-color="#ffe9b0" stop-opacity="0"/></radialGradient></defs>
+      <g clip-path="url(#csp-inlet)"><g class="tr-body" transform="translate(-400 0)"><g fill="#16211f">
+        <path d="M-26 75V69.2Q-26 67.6-24.4 67.6H-4Q-.6 67.8 0 70.6V75Z"/>${cars}<rect x="${f1(cab)}" y="69" width="16" height="6"/><rect x="${f1(cab + 5)}" y="66.6" width="5" height="2.6"/><rect x="-176" y="74.8" width="176" height=".9" fill="#040807"/></g>
+        <path d="M-25 67.6H-4M-${f1(27.6 + 6 * 21.6)} 68.4H-27.6M${f1(cab)} 69H${f1(cab + 16)}" fill="none" stroke="var(--glint)" stroke-opacity=".45" stroke-width=".5"/>
+        <rect x="-6" y="68.6" width="3" height="1.4" fill="#f0c068" opacity=".85"/><g fill="#f0c068" opacity=".7"><rect x="${f1(cab + 2)}" y="70.4" width="1.6" height="1.2"/><rect x="${f1(cab + 11)}" y="70.4" width="1.6" height="1.2"/></g>
+        <circle cx="${f1(cab)}" cy="70.2" r=".6" fill="#ff5a40"/><circle cx="-.3" cy="69.7" r=".85" fill="#fffaf0"/></g></g>
+      <g class="tr-light" transform="translate(-400 0)"><ellipse cx="30" cy="69.7" rx="36" ry="7.5" fill="url(#csp-headlight)"/><ellipse cx="26" cy="130.5" rx="30" ry="2.8" fill="url(#csp-headlight)" opacity=".45"/></g>`;
+  })();
+  /* The Long Walk (if it has been read): along the far shore road, walking south, a hundred boys
+     who must not stop, the soldiers' halftrack rolling behind them, its lights on their backs. */
+  const WALKER = `<svg viewBox="0 0 6 14"><circle cx="3" cy="1.6" r="1.3"/><path d="M1.9 3.4H4.1L4.5 8.2L5.6 13.6H4.5L3 9.2L1.6 13.6H.5L1.5 8.2Z"/></svg>`;
+  const HALFTRACK = `<svg viewBox="0 0 30 14"><path d="M2 12V7.4L4 5H14L15.5 2.4H22L24 6.2H28.6V12Z" fill="#081110"/><g fill="#040807"><rect x="1.5" y="10.6" width="15" height="3" rx="1.5"/><circle cx="24.5" cy="12.2" r="1.6"/></g><path d="M4 5H14L15.5 2.4H22" fill="none" stroke="var(--glint)" stroke-opacity=".3" stroke-width=".4"/><circle cx="28.4" cy="7.8" r=".9" fill="#fff6dc"/></svg>`;
+  const walkers = () => Array.from({ length: 15 }, (_, i) => { const r = seeded(140 + i); return `<i class="wk-man" style="left:${f1(3.2 + i * .82 + r() * .6)}vw;--h:${f1(.92 + r() * .16)};--w:-${f1(r() * .6)}s">${WALKER}</i>`; }).join("");
+  /* The Turtle (It, and the Dark Tower books): now and then, rarely, the great shell comes up out of
+     the lake where the reader is looking, stays a while with its head out, and sinks again. */
+  const TURTLE = `<svg viewBox="0 0 124 50"><defs><linearGradient id="csp-shell" x1="0" y1="9" x2="0" y2="34" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#3e4130"/><stop offset="1" stop-color="#121710"/></linearGradient></defs>
+    <g opacity=".32" filter="url(#csp-raft-wave)"><path transform="matrix(1 0 0 -1 0 68)" d="M10 34C14 18 34 9 60 9C86 9 106 18 110 34Z" fill="#0d120b"/></g>
+    <path d="M108 33C111 27.5 119 27 122.5 30.6C122 33.6 115 35 108 34.4Z" fill="#1a2014"/><circle cx="118.6" cy="30.4" r=".7" fill="#c9b778" opacity=".8"/>
+    <path d="M10 34C14 18 34 9 60 9C86 9 106 18 110 34Z" fill="url(#csp-shell)"/>
+    <path d="M40 12.5L36 22L44 33.5M60 9V20M80 12.5L84 22L76 33.5M36 22H84M44 33.5L52 22M76 33.5L68 22M52 22L60 20L68 22M22 22L36 22M84 22H98M24 30L36 22M96 30L84 22" fill="none" stroke="#0b1009" stroke-opacity=".7" stroke-width="1"/>
+    <path d="M18 24C28 13 44 9.5 60 9.5C76 9.5 92 13 102 24" fill="none" stroke="var(--glint)" stroke-opacity=".42" stroke-width=".9"/>
+    <path d="M4 34.6Q62 38 120 34.6" fill="none" stroke="var(--glint)" stroke-opacity=".3" stroke-width=".8"/></svg>`;
+  /* The Mist (if it has been read): when the bank of fog lies along the far shore, something
+     enormous walks in it, so tall that only its legs show, grey shadows in the grey. */
+  const BEAST = `<svg viewBox="0 0 200 240"><defs><linearGradient id="csp-beast" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0d1518" stop-opacity="0"/><stop offset=".3" stop-color="#0d1518" stop-opacity=".9"/><stop offset="1" stop-color="#0d1518"/></linearGradient><filter id="csp-beast-blur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.6"/></filter></defs>
+    <g fill="url(#csp-beast)" filter="url(#csp-beast-blur)"><path d="M58 40C80 22 128 20 150 42C140 54 76 56 58 40Z"/>
+    <path d="M66 46C52 90 34 140 22 240H28C42 150 62 100 78 52Z"/><path d="M86 52C84 110 70 170 62 240H68C78 170 94 110 96 54Z"/><path d="M110 54C116 112 118 172 122 240H128C126 170 124 110 120 52Z"/>
+    <path d="M130 50C150 96 162 150 176 240H182C170 150 158 94 140 46Z"/><path d="M76 48C60 70 50 100 44 130L48 131C56 102 66 74 84 52Z" opacity=".6"/><path d="M142 46C162 64 176 92 186 124L190 122C180 90 166 60 150 42Z" opacity=".6"/></g></svg>`;
+  /* The railroad trestle of The Body (Different Seasons), the line out of Castle Rock: it crosses an
+     inlet where the spruces open, on timber bents braced crosswise, its deck catching the moon.
+     Now and then a freight train goes over (script). */
+  const TRESTLE = (() => {
+    let posts = "", braces = "";
+    for (let x = 408; x <= 582; x += 14.5) {
+      posts += `M${f1(x - 1.6)} 79.5L${f1(x - 4.2)} 100H${f1(x - 3)}L${f1(x - .5)} 79.5ZM${f1(x + .5)} 79.5L${f1(x + 3)} 100H${f1(x + 4.2)}L${f1(x + 1.6)} 79.5Z`;
+      if (x + 14.5 <= 583) braces += `M${f1(x)} 81.5L${f1(x + 14.5)} 97M${f1(x + 14.5)} 81.5L${f1(x)} 97`;
+    }
+    return `<g fill="color-mix(in srgb, var(--tree-near) 70%, var(--hill))"><path d="M392 75.8H598V79.8H392Z"/><path d="${posts}"/></g><path d="${braces}M402 89H588" fill="none" stroke="color-mix(in srgb, var(--tree-near) 70%, var(--hill))" stroke-width=".7"/><path d="M392 75.8H598" fill="none" stroke="var(--glint)" stroke-opacity=".32" stroke-width=".6"/>`;
+  })();
+  const nearRow = spruceRow(31, 48, 46, 92, 100, NEAR_GAP), midRow = spruceRow(21, 64, 40, 98, 110, MID_GAP);
+  const autumn = SEASON === "autumn";
+  const LEAF = `<svg viewBox="-10 -10 20 20"><path d="M0 -9.5L2 -4.2L6.4 -6.6L5.2 -1.2L9.6 0L4.6 3L5.6 7.6L1 5.6V9.6H-1V5.6L-5.6 7.6L-4.6 3L-9.6 0L-5.2 -1.2L-6.4 -6.6L-2 -4.2Z" style="fill:var(--lf)"/></svg>`;
+  const LEAF_COLOURS = ["#8e3322", "#a55a24", "#8a6a2a", "#7a2a20", "#9c4a1e"];
+  // Leaves coming down in front of the far shore and the lake, each on its own slow, swaying way
+  const fallingLeaves = () => Array.from({ length: 10 }, (_, i) => {
+    const r = seeded(70 + i * 3);
+    return `<i style="--x:${f1(3 + r() * 94)}%;--s:${f1(9 + r() * 8)}px;--t:${f1(19 + r() * 12)}s;--sp:${f1(2.4 + r() * 2)}s;--w:-${f1(r() * 30)}s;--lf:${LEAF_COLOURS[i % 5]}">${LEAF}</i>`;
+  }).join("");
+  // Snow: two veils of flakes, each a tile of dots that falls on and on, the nearer faster
+  function snowTile(seed, n, rMin, rMax) {
+    const r = seeded(seed);
+    return Array.from({ length: n }, () => { const rr = rMin + r() * (rMax - rMin); return `radial-gradient(circle at ${Math.round(r() * 360)}px ${Math.round(r() * 360)}px, rgba(238, 244, 248, ${(.5 + r() * .45).toFixed(2)}) ${f1(rr)}px, transparent ${f1(rr + .8)}px)`; }).join(",");
+  }
+  // Fireflies along the far shore, lighting up one after another
+  const farFlies = () => Array.from({ length: 18 }, (_, i) => {
+    const r = seeded(90 + i);
+    return `<i style="--x:${f1(2 + r() * 96)}%;--y:${f1(4 + r() * 30)}%;--t:${f1(3 + r() * 4)}s;--w:-${f1(r() * 7)}s"></i>`;
+  }).join("");
+  const nearMaples = autumn ? mapleRow("csp-maple-near", 47, 18, 34, 62, 100, NEAR_GAP, ["#6e2619", "#6e3e19", "#5e501f"], "#050f0d") : "";
+  const midMaples = autumn ? mapleRow("csp-maple-mid", 53, 24, 30, 70, 110, MID_GAP, ["#62271d", "#694221", "#5b5329"], "#0a1c22") : "";
+  document.body.insertAdjacentHTML("beforeend", `<div class="lake" aria-hidden="true" style="--lit:${tonight.k.toFixed(3)}">
+    <div class="lk lk-sky"><svg class="lk-stars" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" fill="currentColor">${lakeStars}</svg><div class="lk-milky">${milkyWay()}<span class="lk-shoot"></span></div>${twinkles}<span class="lk-moon">${tonight.svg}</span><canvas class="lk-birds"></canvas><div class="lk-balloon">${BALLOON("csp-balloon")}</div></div>
     <div class="lk lk-hills"><svg viewBox="0 0 1600 300" preserveAspectRatio="xMidYMax slice" fill="currentColor"><path opacity=".7" d="${ridge(3, 300, 150, 80)}"/><path d="${ridge(9, 300, 205, 55)}"/></svg></div>
     <div class="lk lk-far"><svg viewBox="0 0 1600 90" preserveAspectRatio="xMidYMax slice" fill="currentColor"><path d="${spruceRow(11, 90, 30, 70, 90)}"/></svg></div>
-    <div class="lk lk-mid"><svg viewBox="0 0 1600 110" preserveAspectRatio="xMidYMax slice" fill="currentColor"><path d="${midRow}"/></svg></div>
+    <div class="lk lk-mid"><svg viewBox="0 0 1600 110" preserveAspectRatio="xMidYMax slice" fill="currentColor"><path d="${midRow}"/>${midMaples}</svg></div>
     <svg width="0" height="0" style="position:absolute"><filter id="csp-soft" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation=".7 .45"/></filter><filter id="csp-ripple" x="-2%" y="-5%" width="104%" height="115%"><feTurbulence type="fractalNoise" baseFrequency=".003 .09" numOctaves="2" seed="5"/><feDisplacementMap in="SourceGraphic" scale="10" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
     <div class="lk lk-water">
-      <div class="lk-reflect lk-reflect-mid"><svg viewBox="0 0 1600 110" preserveAspectRatio="xMidYMin slice" fill="currentColor"><g filter="url(#csp-ripple)"><path transform="matrix(1 0 0 -1 0 110)" d="${midRow}"/></g></svg></div>
-      <div class="lk-reflect"><svg viewBox="0 0 1600 100" preserveAspectRatio="xMidYMin slice" fill="currentColor"><g filter="url(#csp-ripple)"><path transform="matrix(1 0 0 -1 0 100)" d="${nearRow}"/></g></svg></div>
-      <i class="lk-ripple lk-r3" style='background-image:${RIPPLES}'></i>
-      <i class="lk-ripple lk-r2" style='background-image:${RIPPLES}'></i>
-      <i class="lk-ripple lk-r1" style='background-image:${RIPPLES}'></i>
+      <div class="lk-reflect lk-reflect-mid"><svg viewBox="0 0 1600 110" preserveAspectRatio="xMidYMin slice" fill="currentColor"><g filter="url(#csp-ripple)"><g transform="matrix(1 0 0 -1 0 110)"><path d="${midRow}"/>${midMaples}</g></g></svg></div>
+      <div class="lk-reflect"><svg viewBox="0 0 1600 100" preserveAspectRatio="xMidYMin slice" fill="currentColor"><g filter="url(#csp-ripple)"><g transform="matrix(1 0 0 -1 0 100)"><path d="${nearRow}"/>${nearMaples}${TRESTLE}</g></g></svg></div>
+      <div class="lk-lit"><i class="lk-ripple lk-r3" style='background-image:${RIPPLES}'></i><i class="lk-ripple lk-r2" style='background-image:${RIPPLES}'></i><i class="lk-ripple lk-r1" style='background-image:${RIPPLES}'></i></div>
       <div class="lk-house-glow">${houseGlow(3)}${houseGlow(9)}</div>
       <i class="lk-tk-glow"></i>
       <div class="lk-lanterns"></div>
@@ -2630,12 +2898,15 @@ BOOKS.push({
       <canvas class="lk-waves"></canvas>
       <div class="lk-drain">${DRAIN}</div>
       <div class="lk-loon">${LOON}</div>
+      <div class="lk-turtle"><i class="tt-ring"></i><i class="tt-ring"></i>${TURTLE}</div>
     </div>
-    <div class="lk lk-near"><i class="lk-tk"></i><svg viewBox="0 0 1600 100" preserveAspectRatio="xMidYMax slice" fill="currentColor"><path d="${nearRow}"/></svg><div class="lk-house">${HOUSE}</div><div class="lk-marsten">${MARSTEN}<span class="mh-light"></span></div></div>
-    <div class="lk lk-fog"><i></i></div>
+    <div class="lk lk-near"><i class="lk-tk"></i><svg viewBox="0 0 1600 100" preserveAspectRatio="xMidYMax slice" fill="currentColor"><path d="${nearRow}"/>${nearMaples}${TRESTLE}</svg><svg class="lk-train" viewBox="0 0 1600 100" preserveAspectRatio="xMidYMax slice">${TRAIN}</svg>${SEASON === "summer" ? `<div class="lk-flies">${farFlies()}</div>` : ""}<div class="lk-walk"><div class="wk-group"><i class="wk-beam"></i><i class="wk-beam wk-shine"></i><span class="wk-track">${HALFTRACK}</span>${walkers()}</div></div><div class="lk-house">${HOUSE}</div><div class="lk-marsten">${MARSTEN}<span class="mh-light"></span></div></div>
+    <div class="lk lk-fog"><b class="fog-beast">${BEAST}</b><i></i></div>
     <div class="lk lk-mist1"><i></i></div>
     <div class="lk lk-mist2"><i></i></div>
     <div class="lk lk-float"><div class="lk-balloon-up">${BALLOON("csp-balloon-up")}</div></div>
+    ${autumn ? `<div class="lk-leaves">${fallingLeaves()}</div>` : ""}
+    ${SEASON === "winter" ? `<div class="lk-snow"><i style="background-image:${snowTile(5, 34, .7, 1.4)}"></i><i style="background-image:${snowTile(9, 16, 1.4, 2.4)}"></i></div>` : ""}
     <div class="lk-trance"></div>
   </div>
   <div class="balloon-near" aria-hidden="true">${BALLOON("csp-balloon-near")}</div>`);
@@ -2788,6 +3059,134 @@ BOOKS.push({
   }
   marstenLater();
 
+
+  /* Rare scenes, while the shelf is on screen and the reader has not asked for less motion; each
+     has its sound when the lake's sounds are on. */
+  const sceneFree = () => document.body.dataset.view === "home" && !document.hidden && !calm();
+  const later = (fn, a, b) => setTimeout(fn, a + Math.random() * (b - a));
+  // The freight train over the trestle: every 3 to 5 minutes, the first soon after arriving; its
+  // horn as it comes out of the trees, its rumble and the clack of its wheels. Clicked, the trestle
+  // calls one (or the train sounds its horn). Not on a phone, where the inlet is off the screen.
+  const trainSvg = document.querySelector(".lk-train"), trainParts = [...trainSvg.querySelectorAll(".tr-body, .tr-light")];
+  let trainOn = false;
+  function trainPass() {
+    if (trainOn) return sfx.horn();
+    trainOn = true;
+    const run = trainParts.map(el => el.animate([{ transform: "translate(395px, 0)" }, { transform: "translate(764px, 0)" }], { duration: 15000, easing: "linear" }));
+    run[0].onfinish = () => { trainOn = false; };
+    if (sounds) { sfx.horn(); sfx.rumble(15); }
+  }
+  function trainLater(first) {
+    later(() => { trainLater(); if (sceneFree() && !phone.matches) trainPass(); }, first ? 25000 : 180000, first ? 45000 : 300000);
+  }
+  trainLater(true);
+  function onTrestle(e) {
+    const b = trainSvg.getBoundingClientRect(), k = Math.max(b.width / 1600, b.height / 100), x0 = b.left + (b.width - 1600 * k) / 2, y0 = b.bottom - 100 * k;
+    return e.clientX > x0 + 404 * k && e.clientX < x0 + 586 * k && e.clientY > y0 + 64 * k && e.clientY < y0 + 101 * k;
+  }
+
+  // The sparrows (The Dark Half): every 4 to 7 minutes a flock sweeps across the sky, a cloud of
+  // birds folding and stretching as it goes, drawn only while it flies; and their chirping.
+  const birdsEl = document.querySelector(".lk-birds"), bctx = birdsEl.getContext("2d");
+  let flock = 0;
+  function sparrows() {
+    if (flock) return;
+    birdsEl.classList.add("on");
+    const k = Math.min(2, devicePixelRatio || 1), W = birdsEl.clientWidth, H = birdsEl.clientHeight;
+    birdsEl.width = Math.round(W * k);
+    birdsEl.height = Math.round(H * k);
+    const r = seeded(Math.floor(Math.random() * 1e6) + 1), n = 90, D = 17, east = Math.random() < .5, y0 = H * (.3 + Math.random() * .16);
+    const birds = Array.from({ length: n }, () => [gauss(r), gauss(r), r() * 6.28, .8 + r() * .4]);
+    const spread = Math.max(50, W * .065), wing = Math.max(3.4, W * .003), start = performance.now();
+    if (sounds) for (let i = 0; i < 44; i++) { const f = 3000 + Math.random() * 1900; tone("sine", f, f * 1.28, .045, .016, .35, 1 + Math.random() * (D - 3)); }
+    const frame = now => {
+      const t = (now - start) / 1000;
+      bctx.setTransform(k, 0, 0, k, 0, 0);
+      bctx.clearRect(0, 0, W, H);
+      if (t > D || document.body.dataset.view !== "home") { flock = 0; birdsEl.classList.remove("on"); return; }
+      const f = t / D, cx = east ? -.15 * W + f * 1.3 * W : 1.15 * W - f * 1.3 * W, cy = y0 + H * .05 * Math.sin(f * 7.5);
+      const th = .55 * Math.sin(t * .45), sx = 1 + .6 * Math.sin(t * .33 + 1), c = Math.cos(th), s = Math.sin(th);
+      bctx.strokeStyle = "rgba(1, 3, 5, .95)";
+      bctx.lineWidth = 1.6;
+      bctx.lineCap = "round";
+      bctx.beginPath();
+      for (const [u, v, p, z] of birds) {
+        const x = cx + spread * (c * u * sx - s * v / sx) + 4 * Math.sin(t * 2.1 + p), y = cy + spread * .55 * (s * u * sx + c * v / sx) + 3 * Math.cos(t * 1.7 + p);
+        const w = wing * z, lift = Math.sin(t * 15 * z + p * 7) * w * .7;
+        bctx.moveTo(x - w, y - lift);
+        bctx.quadraticCurveTo(x - w * .4, y - lift * .3 - w * .2, x, y);
+        bctx.quadraticCurveTo(x + w * .4, y - lift * .3 - w * .2, x + w, y - lift);
+      }
+      bctx.stroke();
+      flock = requestAnimationFrame(frame);
+    };
+    flock = requestAnimationFrame(frame);
+  }
+  function sparrowsLater(first) {
+    later(() => { sparrowsLater(); if (sceneFree()) sparrows(); }, first ? 70000 : 240000, first ? 120000 : 420000);
+  }
+  sparrowsLater(true);
+
+  // The Turtle: rarely (a chance every 8 to 12 minutes, the first after 3 to 5), it comes up on the
+  // open water at the side of the page the reader is looking at, stays twenty seconds, sinks.
+  // Clicked, it goes down at once.
+  const turtle = document.querySelector(".lk-turtle"), waterLayer = document.querySelector(".lk-water");
+  let turtleUp = null;
+  function turtleRise() {
+    if (turtleUp) return true;
+    const b = waterLayer.getBoundingClientRect(), top = Math.max(0, -b.top), bottom = Math.min(b.height, innerHeight - b.top);
+    if (bottom - top < innerHeight * .3) return false;
+    const y = top + (bottom - top) * (.3 + Math.random() * .45), x = (Math.random() < .5 ? .06 + Math.random() * .13 : .8 + Math.random() * .1) * b.width;
+    turtle.style.left = f1(x) + "px";
+    turtle.style.top = f1(y) + "px";
+    turtle.style.setProperty("--k", clamp((y / innerHeight * 100 + 30) / 60, .7, 2).toFixed(2));
+    turtle.classList.add("up");
+    turtleUp = turtle.animate([
+      { opacity: 0, transform: "translateY(16%)" }, { opacity: 1, transform: "translateY(0)", offset: .12 },
+      { opacity: 1, transform: "translateY(-2%)", offset: .5 }, { opacity: 1, transform: "translateY(0)", offset: .88 }, { opacity: 0, transform: "translateY(18%)" }
+    ], { duration: 24000, easing: "ease-in-out" });
+    turtleUp.onfinish = () => { turtle.classList.remove("up"); turtleUp = null; };
+    turtleRings(x, y);
+    sfx.splash(.22);
+    return true;
+  }
+  function turtleRings(x, y) {
+    if (!live() || !ready()) return;
+    const q = G.lake(x, y);
+    ripple(q.X, q.Z, sea.cell * 3.2, -1.2);
+  }
+  function turtleDive() {
+    if (!turtleUp || turtleUp.currentTime > 24000 * .88) return;
+    turtleUp.currentTime = 24000 * .88;
+    turtleRings(parseFloat(turtle.style.left), parseFloat(turtle.style.top));
+    sfx.splash(.45);
+  }
+  // Missed because the lake was off the screen, the first chance comes back a little later.
+  function turtleLater(first) {
+    later(() => {
+      const up = sceneFree() && Math.random() < .65 && turtleRise();
+      if (first && !up) return turtleLater(true);
+      turtleLater();
+    }, first ? 180000 : 480000, first ? 300000 : 720000);
+  }
+  turtleLater(true);
+
+  // The Long Walk, once it has been read: every 4 to 7 minutes, ninety-five seconds across.
+  const walk = document.querySelector(".lk-walk"), walkGroup = walk.querySelector(".wk-group");
+  function longWalk() {
+    walk.classList.add("walking");
+    walkGroup.animate([{ transform: "translateX(-20vw)", opacity: 0 }, { opacity: 1, offset: .05 }, { opacity: 1, offset: .95 }, { transform: "translateX(106vw)", opacity: 0 }],
+      { duration: 95000, easing: "linear" }).onfinish = () => walk.classList.remove("walking");
+  }
+  function walkLater(first) {
+    later(() => { walkLater(); if (sceneFree() && statusOf("marche-ou-creve") === "lu" && !walk.classList.contains("walking")) longWalk(); }, first ? 50000 : 240000, first ? 90000 : 420000);
+  }
+  walkLater(true);
+  // What shows only once a book has been read: the thing in the fog (The Mist).
+  function readScenes() {
+    document.querySelector(".lake").classList.toggle("brume-lu", statusOf("brume") === "lu");
+  }
+
   /* A paper lantern on the lake for each book read, lit in the book's own colour. Spots kept to
      the open water at the sides of the page, clear of the raft, the patch and the drain; further
      off, a lantern is smaller (--k, as the raft's perspective). Redrawn only when the list changes. */
@@ -2795,18 +3194,54 @@ BOOKS.push({
   const lanternBox = document.querySelector(".lk-lanterns");
   let lanternKey = "";
   function lanterns(read) {
-    const key = read.map(b => b.id).join();
+    showTag(null);
+    const key = read.map(b => b.id + entry(b.id).finishedAt).join();
     if (key === lanternKey) return;
     lanternKey = key;
     lanternBox.replaceChildren(...read.slice(0, LANTERN_SPOTS.length).map((b, i) => {
-      const [x, y] = LANTERN_SPOTS[i], c = (AMBIENCE[b.cover.motif] || ["", "#f2a64b"])[1], r = seeded(i * 7 + 3);
+      const [x, y] = LANTERN_SPOTS[i], c = (AMBIENCE[b.cover.motif] || ["", "#f2a64b"])[1], r = seeded(i * 7 + 3), done = entry(b.id).finishedAt;
       return h("div", {
         class: "lk-lantern",
+        "data-id": byId[b.id] ? b.id : null,
+        "data-title": b.title,
+        "data-done": done ? "Terminé le " + fmtDate(done) : "Lu",
         style: `--x:${x}%;--y:${y}vh;--k:${((y + 30) / 60).toFixed(2)};--c:${c};--d:${Math.round(38 + r() * 30)}s;--w:-${Math.round(r() * 30)}s`,
-        html: LANTERN
+        html: LANTERN(i)
       });
     }));
   }
+  // A lantern under the pointer: its paper and roof, not its reflection
+  function onLantern(e) {
+    for (const l of lanternBox.children) {
+      const b = l.getBoundingClientRect();
+      if (e.clientX > b.left - 8 && e.clientX < b.right + 8 && e.clientY > b.top + b.height * .08 - 8 && e.clientY < b.top + b.height * .54 + 8) return l;
+    }
+    return null;
+  }
+  // Its card, above it, kept on the screen; gone as soon as the page moves.
+  const tag = h("div", { class: "lk-tag", "aria-hidden": "true" });
+  document.body.append(tag);
+  let tagFor = null, tagTimer = 0;
+  function showTag(l, hint) {
+    clearTimeout(tagTimer);
+    if (l === tagFor) return;
+    tagFor = l;
+    if (!l) return tag.classList.remove("on");
+    tag.replaceChildren(h("strong", null, l.dataset.title), l.dataset.done, hint && l.dataset.id ? h("i", null, hint) : null);
+    const b = l.getBoundingClientRect(), half = tag.offsetWidth / 2;
+    tag.style.left = f1(clamp(b.left + b.width / 2, half + 8, innerWidth - half - 8)) + "px";
+    tag.style.top = f1(b.top + b.height * .06) + "px";
+    tag.classList.add("on");
+  }
+  addEventListener("scroll", () => { if (tagFor) showTag(null); }, { passive: true });
+  // With a finger: a first touch shows the card, a second one opens the book.
+  addEventListener("click", e => {
+    if (e.pointerType === "mouse" || document.body.dataset.view !== "home" || !free(e.target)) return;
+    const l = onLantern(e);
+    if (l && l === tagFor && l.dataset.id) return void (location.hash = l.dataset.id);
+    showTag(l, "Touchez encore pour l'ouvrir");
+    if (l) tagTimer = setTimeout(() => showTag(null), 4000);
+  });
 
   /* ---------- The lake you can touch (computer) ----------
      With a mouse, on a screen wide enough to leave some lake around the shelf, the scene answers.
@@ -2911,7 +3346,7 @@ BOOKS.push({
       rowS[r] = Dref / (y + y0) / cell;
       for (let c = 0; c < cw; c++) {
         const x = (c + .5) * PX, p = r * cw + c;
-        const moon = 1.2 * Math.exp(-(((x - mx) / sig) ** 2)), win = y < hh ? .9 * Math.exp(-(((x - hx) / hw) ** 2)) * (1 - y / hh) : 0, l = .3 + moon + win;
+        const moon = 1.2 * (.3 + .7 * tonight.k) * Math.exp(-(((x - mx) / sig) ** 2)), win = y < hh ? .9 * Math.exp(-(((x - hx) / hw) ** 2)) * (1 - y / hh) : 0, l = .3 + moon + win;
         R[p] = (246 * (.3 + moon) + 242 * win) / l;
         Gr[p] = (228 * (.3 + moon) + 166 * win) / l;
         B[p] = (173 * (.3 + moon) + 75 * win) / l;
@@ -3185,6 +3620,7 @@ BOOKS.push({
   const onLoon = e => !!loonFlight && loonFlight.playState === "running" && inBox(e, loon, 0, 0, 1, 1, 12);
   const onHouse = e => inBox(e, houseEl, .15, 0, .95, .7);
   const onDrain = e => inBox(e, drain, .3, .35, .62, .78);
+  const onTurtle = e => !!turtleUp && inBox(e, turtle, .05, .1, 1, .7);
   let grab = null, swirl = null, lastMove = null, hoverFrame = 0;
   let cursorNow = "";
   function point(c) {
@@ -3210,6 +3646,10 @@ BOOKS.push({
       return wake();
     }
     if (!free(e.target)) return;
+    const l = onLantern(e);
+    if (l) { if (l.dataset.id) location.hash = l.dataset.id; return; }
+    if (onTurtle(e)) return turtleDive();
+    if (onTrestle(e)) return trainPass();
     if (onLoon(e)) return loonDive();
     if (onHouse(e)) return houseCall();
     if (onDrain(e)) return drainPeek();
@@ -3250,13 +3690,15 @@ BOOKS.push({
   function hover() {
     hoverFrame = 0;
     const e = lastMove;
-    let c = "", watching = false;
+    let c = "", watching = false, lit = null;
     if (e && live() && reachable(e.target) && ready()) {
       const p = onWater(e);
       if (onThing(p)) c = "lk-grab";
-      else if (free(e.target) && (onLoon(e) || onHouse(e) || onDrain(e))) c = "lk-point";
+      else if (free(e.target) && (lit = onLantern(e))) c = lit.dataset.id ? "lk-point" : "";
+      else if (free(e.target) && (onLoon(e) || onHouse(e) || onDrain(e) || onTurtle(e) || onTrestle(e))) c = "lk-point";
       else watching = onSlick(p);
     }
+    showTag(lit, "Ouvrir le livre");
     point(c);
     if (watching !== slick.watched) { slick.watched = watching; wake(); }
   }
@@ -3500,7 +3942,49 @@ BOOKS.push({
       for (let i = 0; i < 13; i++) { const f = 210 + Math.random() * 330; tone("sine", f, f * 1.7, .06, .16 * level, .3, i * .1 + Math.random() * .05); }
       hiss("lowpass", 320, 160, .8, 1.4, .3 * level, .3);
     },
-    whoosh() { hiss("bandpass", 1500, 5200, 2.2, .75, .3, .5); tone("sine", 3300, 2300, .6, .015, .6); }
+    whoosh() { hiss("bandpass", 1500, 5200, 2.2, .75, .3, .5); tone("sine", 3300, 2300, .6, .015, .6); },
+    // A diesel horn across the lake: two long blasts of a three-note chord
+    horn() {
+      if (!sounds) return;
+      for (const [at, len] of [[.3, 1.1], [1.65, 1.7]]) for (const f of [277, 349, 415]) {
+        const t = sounds.currentTime + at, o = sounds.createOscillator(), fl = sounds.createBiquadFilter(), g = sounds.createGain();
+        o.type = "sawtooth";
+        o.frequency.setValueAtTime(f * .97, t);
+        o.frequency.linearRampToValueAtTime(f, t + .15);
+        fl.type = "lowpass";
+        fl.frequency.value = 1300;
+        g.gain.setValueAtTime(0, t);
+        g.gain.linearRampToValueAtTime(.04, t + .12);
+        g.gain.setValueAtTime(.04, t + len - .25);
+        g.gain.linearRampToValueAtTime(0, t + len);
+        o.connect(fl).connect(g);
+        send(g, .8);
+        o.start(t);
+        o.stop(t + len + .05);
+      }
+    },
+    // The train going by: a low rumble swelling and fading, and the wheels clacking on the rails
+    rumble(dur) {
+      if (!sounds) return;
+      const t = sounds.currentTime + .02, s = sounds.createBufferSource(), fl = sounds.createBiquadFilter(), g = sounds.createGain();
+      s.buffer = out().noise;
+      s.loop = true;
+      fl.type = "lowpass";
+      fl.frequency.value = 170;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(.5, t + dur * .35);
+      g.gain.linearRampToValueAtTime(.5, t + dur * .6);
+      g.gain.linearRampToValueAtTime(0, t + dur);
+      s.connect(fl).connect(g);
+      send(g, .3);
+      s.start(t);
+      s.stop(t + dur + .05);
+      for (let at = 1; at < dur - 1; at += .42) {
+        const near = Math.sin(Math.PI * at / dur);
+        hiss("bandpass", 1100, 1100, 4, .035, .07 * near, .3, at);
+        hiss("bandpass", 1100, 1100, 4, .035, .06 * near, .3, at + .09);
+      }
+    }
   };
   // Lapping along a hull on the move, as loud as it goes fast
   function lap(level) {
@@ -3612,11 +4096,85 @@ BOOKS.push({
         }
       }
     }
-    return `<defs><linearGradient id="csp-bank" x1="0" y1="180" x2="0" y2="300" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="color-mix(in srgb, var(--hill) 60%, var(--tree-near))"/><stop offset="1" stop-color="var(--tree-near)"/></linearGradient></defs>
-    <g fill="color-mix(in srgb, var(--tree-mid) 80%, var(--hill))">${bushes}</g>
-    <path d="${grass}" fill="none" stroke="color-mix(in srgb, var(--tree-mid) 45%, #4a6644)" stroke-width="1.2" stroke-linecap="round"/>
-    <g fill="url(#csp-bank)">${banks}</g><g fill="none" stroke="var(--glint)" stroke-opacity=".2" stroke-width="1.2">${rims}</g>`;
+    // In winter the banks lie under snow, blue in the moonlight, the grass poking through.
+    const snow = SEASON === "winter";
+    return `<defs><linearGradient id="csp-bank" x1="0" y1="180" x2="0" y2="300" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="${snow ? "#7f939c" : "color-mix(in srgb, var(--hill) 60%, var(--tree-near))"}"/><stop offset="1" stop-color="${snow ? "#26343b" : "var(--tree-near)"}"/></linearGradient></defs>
+    <g fill="${snow ? "#5d6f77" : "color-mix(in srgb, var(--tree-mid) 80%, var(--hill))"}">${bushes}</g>
+    <path d="${grass}" fill="none" stroke="${snow ? "#3e4a40" : "color-mix(in srgb, var(--tree-mid) 45%, #4a6644)"}" stroke-width="1.2" stroke-linecap="round"/>
+    <g fill="url(#csp-bank)">${banks}</g><g fill="none" stroke="${snow ? "#dbe6ea" : "var(--glint)"}" stroke-opacity="${snow ? .45 : .2}" stroke-width="${snow ? 2.2 : 1.2}">${rims}</g>`;
   }
+  // The lantern's light on the water beside the dock: broken golden streaks under it, wider and
+  // fewer toward the shore, kept off the planks; two sets shimmer in turn.
+  function dockShine(seed) {
+    const r = seeded(seed);
+    let g = "";
+    for (let i = 0; i < 46; i++) {
+      const d = Math.pow(r(), 1.1), y = 156 + d * 132, edge = 640 + (y - 96) * 102 / 204;
+      const x = Math.max(edge + 6, 690 + (r() - .3) * (18 + d * 150)), w = (3 + r() * 9) * (1 + d * .8);
+      g += `<ellipse cx="${f1(x + w)}" cy="${f1(y)}" rx="${f1(w)}" ry="${f1(.7 + r() * .9 + d * .6)}" opacity="${((1 - d * .75) * (.3 + r() * .6)).toFixed(2)}"/>`;
+    }
+    return `<svg viewBox="0 0 980 300" fill="var(--lantern)"><g filter="url(#csp-soft)">${g}</g></svg>`;
+  }
+  /* What lies nearest, at the foot of the page: lily pads on the water on either side of the dock
+     (in bloom in summer), an old stump, a red canoe tied up under the lantern (Maine canoes, from
+     Old Town), and clumps of reeds and cattails swaying on the banks and in front of the dock. */
+  function lilyPads() {
+    const r = seeded(29);
+    let pads = "", flowers = "";
+    for (const [x, y, s] of [[24, 126, 14], [70, 140, 11], [128, 118, 9], [190, 150, 15], [236, 176, 12], [292, 132, 9], [224, 262, 13], [268, 286, 16], [176, 196, 10],
+      [722, 118, 10], [776, 136, 14], [842, 122, 9], [904, 150, 13], [960, 132, 10], [1030, 160, 15], [-60, 150, 13]]) {
+      const ry = s * .3, a = r() * 6.28, cut = .5, p = t => `${f1(x + Math.cos(t) * s)} ${f1(y + Math.sin(t) * ry)}`;
+      pads += `<path d="M${x} ${y}L${p(a + cut / 2)}A${s} ${f1(ry)} 0 1 1 ${p(a - cut / 2)}Z" opacity="${(.75 + r() * .25).toFixed(2)}"/>`;
+      if (r() < .4) flowers += `<g transform="translate(${f1(x + (r() - .5) * s * .6)} ${f1(y - ry * .2)})"><ellipse rx="${f1(s * .28)}" ry="${f1(s * .12)}" fill="#e9e6da"/><path d="M${f1(-s * .22)} 0L0 ${f1(-s * .3)}L${f1(s * .22)} 0Z" fill="#f6f3e8"/><circle cy="${f1(-s * .06)}" r="${f1(s * .06)}" fill="#e8c35a"/></g>`;
+    }
+    let leaves = "";
+    if (SEASON === "autumn") for (const [x, y, a] of [[150, 134, 20], [214, 238, -40], [306, 160, 75], [760, 150, 10], [868, 130, -60], [990, 142, 35], [60, 160, -15]]) {
+      leaves += `<g transform="translate(${x} ${y}) scale(.9 .32) rotate(${a})" style="--lf:${LEAF_COLOURS[Math.abs(a) % 5]}" opacity=".7"><path d="M0 -9.5L2 -4.2L6.4 -6.6L5.2 -1.2L9.6 0L4.6 3L5.6 7.6L1 5.6V9.6H-1V5.6L-5.6 7.6L-4.6 3L-9.6 0L-5.2 -1.2L-6.4 -6.6L-2 -4.2Z" style="fill:var(--lf)"/></g>`;
+    }
+    return `<g class="lily" fill="color-mix(in srgb, var(--tree-near) 55%, #2c4a2e)" stroke="var(--glint)" stroke-opacity=".16" stroke-width=".8">${pads}</g><g class="lily-bloom">${flowers}</g>${leaves}`;
+  }
+  const STUMP = `<g transform="translate(220 196)"><g opacity=".35" filter="url(#csp-raft-wave)"><path d="M-11 14L-9 26H11L13 14Z" fill="var(--tree-near)" transform="matrix(1 0 0 -1 0 28)"/></g><path d="M-19 15C-14 13 -11 12 -9.5 6L-8.5 -10L-6 -6L-3.5 -22L-1 -10L2.5 -15L4.5 -7C6.5 -2 7.5 7 10 11C12 13.5 15 14.5 20 15Z" fill="color-mix(in srgb, var(--tree-near) 72%, #2a2318)"/><path d="M4.5 -7C6.5 -2 7.5 7 10 11C12 13.5 15 14.5 20 15M-3.5 -22L-1 -10L2.5 -15L4.5 -7" fill="none" stroke="var(--glint)" stroke-opacity=".3" stroke-width=".8"/><path d="M-6 0L-5 10M0 -6L1 12" fill="none" stroke="#000" stroke-opacity=".35" stroke-width=".7"/><ellipse cx="0" cy="15.5" rx="22" ry="2.6" fill="none" stroke="var(--glint)" stroke-opacity=".14" stroke-width=".8"/></g>`;
+  const CANOE = `<svg viewBox="0 0 200 60"><defs><linearGradient id="csp-canoe" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8e3a29"/><stop offset=".4" stop-color="#5c1f17"/><stop offset="1" stop-color="#2f0e0b"/></linearGradient></defs>
+    <g opacity=".38" filter="url(#csp-raft-wave)"><path transform="matrix(1 0 0 -1 0 72)" d="M6 16C14 24 30 27 52 28L148 28C170 27 186 24 194 16C192 24 186 32 176 35C150 40 50 40 24 35C14 32 8 24 6 16Z" fill="#5a1a14"/></g>
+    <path d="M9 14C30 20 60 21.5 100 21.5C140 21.5 170 20 191 14L194 16C170 25 140 27 100 27C60 27 30 25 6 16Z" fill="#2a1a10"/><path d="M38 23.5L41 18M100 26V21.5M160 23.5L157 18" stroke="#6b4a2c" stroke-width="1.6"/>
+    <path d="M6 16C14 24 30 27 52 28L148 28C170 27 186 24 194 16C192 24 186 32 176 35C150 40 50 40 24 35C14 32 8 24 6 16Z" fill="url(#csp-canoe)"/>
+    <path d="M6 16C14 24 30 27 52 28L148 28C170 27 186 24 194 16" fill="none" stroke="#5e4429" stroke-width="1.8"/><path d="M6 16C14 24 30 27 52 28L96 28.4" fill="none" stroke="var(--lantern)" stroke-opacity=".5" stroke-width=".9"/>
+    <path d="M14 33C40 38 80 38.5 100 38.5" fill="none" stroke="#000" stroke-opacity=".3" stroke-width="1.4"/><path d="M2 37Q100 44 198 37" fill="none" stroke="var(--glint)" stroke-opacity=".18" stroke-width=".7"/></svg>`;
+  // A clump of reeds: long blades and a few cattails, the moon catching their right edges.
+  function reeds(seed, n, w, h, cattails, at) {
+    const r = seeded(seed);
+    let blades = "", rims = "", heads = "";
+    for (let i = 0; i < n; i++) {
+      const x = w * (.12 + r() * .76), tall = h * (.4 + r() * .6), lean = (r() - .5) * w * .55, b = 1.4 + r() * 1.8;
+      const tx = x + lean, ty = h - tall, mx = x + lean * .35, my = h - tall * .55;
+      blades += `M${f1(x - b)} ${h}Q${f1(mx - b * .6)} ${f1(my)} ${f1(tx)} ${f1(ty)}Q${f1(mx + b * .6)} ${f1(my)} ${f1(x + b)} ${h}Z`;
+      rims += `M${f1(x + b)} ${h}Q${f1(mx + b * .6)} ${f1(my)} ${f1(tx)} ${f1(ty)}`;
+    }
+    for (let i = 0; i < cattails; i++) {
+      const x = w * (.25 + r() * .5), tall = h * (.7 + r() * .3), lean = (r() - .5) * w * .18, tx = x + lean, ty = h - tall, len = h * .11;
+      blades += `M${f1(x - .7)} ${h}L${f1(tx - .5)} ${f1(ty)}L${f1(tx + .5)} ${f1(ty)}L${f1(x + .7)} ${h}Z`;
+      heads += `<rect x="${f1(tx + lean * .02 - 2.1)}" y="${f1(ty + len * .35)}" width="4.2" height="${f1(len)}" rx="2.1" transform="rotate(${f1(lean / tall * 57)} ${f1(tx)} ${f1(ty + len)})"/>`;
+    }
+    return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"${at ? ` x="${at[0]}" y="${at[1]}" width="${w}" height="${h}" overflow="visible"` : ""}><path d="${blades}" style="fill:var(--reed)"/><g style="fill:var(--reed-head)">${heads}</g><path d="${rims}" fill="none" stroke="var(--glint)" stroke-opacity=".28" stroke-width=".8"/></svg>`;
+  }
+  // The clumps, in the dock's units: where each stands, its size, its blades and cattails. Those
+  // within the dock's box sway; the two farther out, on the banks past it, are part of the drawing
+  // and stand still (as boxes of their own they widened the page).
+  const REEDS = [[262, 300, 60, 118, 18, 2], [92, 292, 96, 136, 26, 3], [728, 300, 62, 104, 18, 2], [872, 216, 86, 96, 22, 2]];
+  const FAR_REEDS = [[-260, 222, 90, 92, 20, 1], [1180, 214, 96, 98, 22, 2]].map(([x, y, w, ht, n, c], i) => reeds(113 + i * 13, n, w, ht, c, [x, y - ht])).join("");
+  const reedClumps = () => REEDS.map(([x, y, w, ht, n, c], i) => h("div", {
+    class: "dock-reeds",
+    style: `left:${f1(x / 9.8)}%;top:${f1((y - ht) / 3)}%;width:${f1(w / 9.8)}%;aspect-ratio:${w} / ${ht};--d:${f1(5.5 + i * .9)}s;--w:-${f1(i * 1.7)}s`,
+    html: reeds(61 + i * 13, n, w, ht, c)
+  }));
+  // Halloween: three carved pumpkins at the end of the dock, their faces lit from inside (the glow
+  // flickers on its own layer), a warm light on the planks around them.
+  const PUMPKINS = [[604, 104, 1.1], [626, 124, 1.45], [416, 118, 1]];
+  const pumpkinFace = "M-6 -2.6L-3 -5.2L-1.6 -1.6ZM6 -2.6L3 -5.2L1.6 -1.6ZM-1 .2L0 -1.6L1 .2ZM-6.6 1.4Q0 4.4 6.6 1.4L5.6 4.6L3.6 3.6L2 5.6L0 4.2L-2 5.6L-3.6 3.6L-5.6 4.6Z";
+  const PUMPKIN_BODIES = PUMPKINS.map(([x, y, k]) => `<g transform="translate(${x} ${y}) scale(${k})"><ellipse cy="7.4" rx="13" ry="2.4" fill="#000" opacity=".35"/><ellipse rx="11" ry="8" fill="#4d230c"/><ellipse cx="-5.2" rx="5.6" ry="7.7" fill="#5e2b0e"/><ellipse cx="5.2" rx="5.6" ry="7.7" fill="#57280d"/><ellipse rx="5" ry="8" fill="#6a3211"/><path d="M8.4 -4.6Q11 0 8.4 4.6" fill="none" stroke="var(--lantern)" stroke-opacity=".55" stroke-width=".8"/><path d="M-.8 -7.6Q-.6 -11 2.2 -12.2L2.8 -11.2Q1.2 -10.2 1.2 -7.6Z" fill="#33341a"/><path d="${pumpkinFace}" fill="#1a0a03"/></g>`).join("");
+  const PUMPKIN_GLOW = `<svg viewBox="0 0 980 300"><defs><radialGradient id="csp-pumpkin-light"><stop offset="0" stop-color="#ff9a3a" stop-opacity=".38"/><stop offset="1" stop-color="#ff9a3a" stop-opacity="0"/></radialGradient><filter id="csp-pumpkin-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.4"/></filter></defs>${PUMPKINS.map(([x, y, k]) => `<ellipse cx="${x}" cy="${f1(y + 6 * k)}" rx="${f1(30 * k)}" ry="${f1(9 * k)}" fill="url(#csp-pumpkin-light)"/><g transform="translate(${x} ${y}) scale(${k})"><path d="${pumpkinFace}" fill="#ff9d3c" filter="url(#csp-pumpkin-blur)"/><path d="${pumpkinFace}" fill="#ffd37a"/></g>`).join("")}</svg>`;
+  // Fireflies in summer, around the reeds and over the water by the dock
+  const DOCK_FLIES = Array.from({ length: 12 }, (_, i) => { const r = seeded(120 + i); return [f1(4 + r() * 92), f1(40 + r() * 52), f1(3 + r() * 3.5), f1(r() * 6)]; });
   // Five moths: which loop each one flies, its time round, where it starts.
   const MOTHS = [["moth-a", 2.6, .3], ["moth-b", 3.4, 1.1], ["moth-c", 2.2, .7], ["moth-a", 3.9, 2.4], ["moth-b", 2.9, 1.8]];
   // Carrie at the end of the dock (drawn in the dock's own units: 70 × 100 from x 440, y 6), lit
@@ -3651,7 +4209,7 @@ BOOKS.push({
     <g style="fill:var(--wood-dark)"><rect x="404" y="96" width="9" height="56"/><rect x="627" y="96" width="9" height="56"/><rect x="498" y="104" width="7" height="40"/></g>
     <g style="fill:var(--wood-dark)" opacity=".3"><rect x="404" y="154" width="9" height="34"/><rect x="627" y="154" width="9" height="34"/></g>
     <path style="fill:var(--wood-dark)" d="M400 96H640V108H400Z"/>
-    <path style="fill:var(--wood)" d="M400 96H640L742 300H298Z"/>
+    <path style="fill:var(--wood)" d="M400 96H640L742 300H298Z"/>${SEASON === "winter" ? `<path d="M400 96H640L742 300H298Z" fill="#c8d5dc" opacity=".3"/>` : ""}
     <g style="stroke:var(--wood-dark)" stroke-width="1.6" fill="none">
       <path d="M396 104H644M390 116H650M383 130H657M374 147H666M363 167H677M350 192H690M334 222H706M314 258H726"/>
       <path d="M520 96V300" opacity=".35"/>
@@ -4099,6 +4657,7 @@ BOOKS.push({
     ].sort((a, z) => a.b.year - z.b.year);
     const piles = STATUSES.map(s => ({ ...s, list: all.filter(x => x.status === s.key) }));
     lanterns(piles.find(p => p.key === "lu").list.map(x => x.b));
+    readScenes();
     const tally = h("p", { class: "tally", "aria-label": "Où j'en suis" },
       piles.map(p => h("span", { class: p.key === "en-cours" ? "is-reading" : null },
         h("b", null, String(p.list.length)), " " + (p.key === "lu" ? (p.list.length > 1 ? "lus" : "lu") : p.label.toLowerCase())
@@ -4135,10 +4694,16 @@ BOOKS.push({
         h("p", { class: "colophon" }, "Les résumés suivent le découpage des éditions originales. Le statut de chaque livre se règle depuis sa page. Un nouveau livre à ajouter ? Il suffit de le demander à Claude."),
         syncSlip(),
         h("div", { class: "dock", "aria-hidden": "true", html: DOCK },
+          h("div", { class: "dock-shine", html: dockShine(4) + dockShine(11) }),
+          h("div", { class: "dock-front", html: `<svg viewBox="0 0 980 300">${lilyPads()}${STUMP}<path d="M695 201Q676 197 668 146" fill="none" stroke="#a8916a" stroke-opacity=".7" stroke-width="1.1"/>${FAR_REEDS}${halloween() ? PUMPKIN_BODIES : ""}</svg>` }),
+          halloween() ? h("div", { class: "dock-pumpkins", html: PUMPKIN_GLOW }) : null,
           h("div", { class: "dock-boat", html: BOAT("csp-dock-boat-wave") }),
+          h("div", { class: "dock-canoe", html: CANOE }),
           statusOf("carrie") === "lu" ? h("div", { class: "dock-carrie", html: CARRIE }) : null,
           h("span", { class: "lantern-glow" }), h("span", { class: "lantern-flame" }),
-          h("span", { class: "moths" }, MOTHS.map(([m, t, w]) => h("i", { style: `--m:${m};--t:${t}s;--w:-${w}s` }))))
+          h("span", { class: "moths" }, MOTHS.map(([m, t, w]) => h("i", { style: `--m:${m};--t:${t}s;--w:-${w}s` }))),
+          SEASON === "summer" ? h("span", { class: "dock-flies" }, DOCK_FLIES.map(([x, y, t, w]) => h("i", { style: `left:${x}%;top:${y}%;--t:${t}s;--w:-${w}s` }))) : null,
+          h("div", { class: "dock-reedbed" }, reedClumps()))
       )
     ));
   }

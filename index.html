@@ -201,6 +201,64 @@ h1, h2, h3 { text-wrap: balance; }
 .fleuron svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .fleuron path, .fleuron circle { transform-box: fill-box; }
 .lede { margin: 4px 0 0; color: var(--ink-soft); font-size: var(--step-1); font-style: italic; line-height: 1.5; max-width: 38rem; }
+/* The book in hand, on the first screen: a small card lit from its cover, as by the reading lamp
+   further down, and the one way back in */
+.reading-card {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: 50px minmax(0, 1fr) auto;
+  grid-template-areas: "cv txt go";
+  align-items: center;
+  gap: 4px 18px;
+  width: min(100%, 31rem);
+  margin: 10px 0 2px;
+  padding: 14px 18px 14px 16px;
+  border: 1px solid color-mix(in srgb, var(--gilt) 38%, transparent);
+  border-radius: 4px;
+  background: linear-gradient(100deg, rgba(52, 36, 14, .62), rgba(5, 12, 16, .78) 42%);
+  box-shadow: 0 22px 40px -22px rgba(0, 0, 0, .95);
+  text-align: left;
+  text-decoration: none;
+}
+.reading-card::before {
+  content: "";
+  position: absolute;
+  left: -46px;
+  top: 50%;
+  width: 190px;
+  height: 190px;
+  translate: 0 -50%;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--lantern) 26%, transparent), transparent);
+}
+.rc-cover { grid-area: cv; position: relative; }
+.rc-cover .cover { width: 50px; box-shadow: 0 10px 14px -8px rgba(0, 0, 0, .9); }
+/* its ribbon, as on the book under the lamp */
+.rc-cover::after {
+  content: "";
+  position: absolute;
+  top: 62%;
+  right: 22%;
+  width: 7px;
+  height: calc(38% + 12px);
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--ribbon) 65%, #000), var(--ribbon) 45%,
+    color-mix(in srgb, var(--ribbon) 80%, #fff) 55%, color-mix(in srgb, var(--ribbon) 65%, #000));
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 5px), 0 100%);
+}
+.rc-text { grid-area: txt; display: grid; gap: 1px; min-width: 0; }
+.rc-text i { color: var(--muted); font: italic .92rem/1.3 var(--font-body); }
+.rc-text strong { color: var(--ink); font: 500 1.55rem/1.05 var(--font-display); }
+.rc-text b { color: var(--accent); font: 400 .98rem/1.3 var(--font-body); }
+.rc-go { grid-area: go; white-space: nowrap; }
+.reading-card:hover .rc-go { background: var(--accent-wash); }
+.reading-card:focus-visible { outline-offset: 4px; }
+@media (max-width: 500px) {
+  .reading-card { grid-template-columns: 50px minmax(0, 1fr); grid-template-areas: "cv txt" "cv go"; gap: 10px 16px; }
+  .rc-go { justify-self: start; }
+}
 .tally {
   margin: 4px 0 0;
   display: flex;
@@ -998,6 +1056,8 @@ h1, h2, h3 { text-wrap: balance; }
 .arriving .fl-l { transform-origin: 100% 50%; }
 .arriving .fl-r { transform-origin: 0 50%; }
 .arriving .progress > span.on { animation: tick .4s ease-out both; animation-delay: calc(var(--d) - var(--since)); }
+.arriving .reading-card { animation: card-in .6s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(700ms - var(--since)); }
+@keyframes card-in { from { opacity: 0; transform: translateY(10px); } }
 @keyframes title-rise { from { transform: translateY(14px); } }
 @keyframes ltr-in { from { opacity: 0; } }
 @keyframes fl-z { from { opacity: 0; transform: scale(0) rotate(-90deg); } }
@@ -1670,6 +1730,14 @@ body.lake-live .plate:hover { rotate: 1.4deg; }
 /* Carrie, the night of the prom, at the end of the dock: seen from behind, looking out over the
    lake, her white dress soaked in blood, the bucket at her feet. Only once Carrie has been read. */
 .dock-carrie { position: absolute; left: 44.9%; top: 2%; width: 7.14%; aspect-ratio: 70 / 100; pointer-events: none; }
+/* The other books' keepsakes, each once its book is read (see ROYAL, CHURCH, LION) */
+.dock-relic { position: absolute; pointer-events: none; }
+.dock-relic svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.dock-royal { left: 62.4%; top: 76.6%; width: 6.53%; aspect-ratio: 64 / 46; }
+.dock-church { left: 36.2%; top: 51%; width: 3.06%; aspect-ratio: 30 / 40; }
+.dock-church .ch-eyes { transform-box: fill-box; transform-origin: 50% 50%; animation: cat-blink 7.5s ease-in-out infinite; }
+@keyframes cat-blink { 0%, 93%, 100% { transform: none; } 95.5% { transform: scaleY(.08); } }
+.dock-lion { left: calc(90% + var(--shift, 0%)); top: 57.4%; width: 10%; aspect-ratio: 120 / 100; }
 /* The nearest things: lily pads and a stump (one drawing over the dock's), the canoe tied up
    under the lantern, rocking a little, and the reeds swaying, each clump on its own */
 .dock { --reed: color-mix(in srgb, var(--tree-near) 78%, #34452b); --reed-head: #2f1e13; }
@@ -1810,6 +1878,103 @@ body[data-view="home"] .loon-btn:hover, body[data-view="home"] .loon-btn[aria-pr
 .loon-btn .on { display: none; }
 .loon-btn[aria-pressed="true"] .on { display: inline; }
 .loon-btn[aria-pressed="true"] .off { display: none; }
+/* The notebook of finds (computer, with the lake that answers): a button above the sound one, with
+   the number found, and two pages of cream paper, as a field notebook opened by the lantern */
+.finds-btn, .finds, .finds-note { display: none; }
+body.lake-live[data-view="home"] .finds-btn {
+  display: grid;
+  place-items: center;
+  position: fixed;
+  right: max(14px, env(safe-area-inset-right));
+  bottom: calc(max(14px, env(safe-area-inset-bottom)) + 48px);
+  z-index: 5;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--bg-raise);
+  color: var(--muted);
+  cursor: pointer;
+  opacity: .78;
+}
+body.lake-live[data-view="home"] .finds-btn:hover, body.lake-live[data-view="home"] .finds-btn[aria-expanded="true"] { opacity: 1; color: var(--accent); }
+.finds-btn svg { width: 19px; height: 19px; }
+.finds-btn b {
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--ribbon) 85%, #000);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .6);
+  color: #fff6ea;
+  font: 700 .68rem/18px var(--font-body);
+  text-align: center;
+}
+body.lake-live[data-view="home"] .finds.open {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: fixed;
+  right: calc(max(14px, env(safe-area-inset-right)) + 50px);
+  bottom: max(14px, env(safe-area-inset-bottom));
+  z-index: 7;
+  width: min(780px, calc(100vw - 96px));
+  max-height: calc(100vh - 28px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  border-radius: 4px 6px 6px 4px;
+  background: #ebe2cd;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, .35), 0 34px 70px -20px rgba(0, 0, 0, .95);
+  color: #2b241c;
+  animation: finds-open .35s cubic-bezier(.2, .7, .2, 1) both;
+}
+@keyframes finds-open { from { opacity: 0; transform: translateY(12px) scale(.98); } }
+.finds:focus { outline: none; }
+.finds-page { min-width: 0; padding: 26px 30px 22px; }
+/* the fold between the two pages */
+.finds-page:first-child { background: linear-gradient(270deg, rgba(60, 40, 15, .16), transparent 38px); }
+.finds-page + .finds-page { border-left: 1px solid rgba(60, 45, 25, .25); background: linear-gradient(90deg, rgba(60, 40, 15, .2), transparent 38px); }
+.finds h2, .finds h3 { margin: 0; color: #2b241c; font: italic 500 1.75rem/1.1 var(--font-display); }
+.finds-sub { margin: 4px 0 16px; color: #6a5c48; font: italic .9rem/1.35 var(--font-body); }
+.finds ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.finds li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; align-items: center; min-height: 32px; }
+.finds li > svg { width: 26px; height: 26px; fill: none; stroke: #8a6420; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+.finds li strong { display: block; font: 500 1.02rem/1.15 var(--font-display); }
+.finds li small { display: block; color: #6a5c48; font: italic .8rem/1.3 var(--font-body); }
+.finds li.sealed span { color: #5d5243; font: italic .86rem/1.35 var(--font-body); }
+.finds li > svg.finds-seal { width: 25px; height: 25px; fill: none; stroke: none; color: var(--ribbon); filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, .45)); }
+.finds-page + .finds-page { display: flex; flex-direction: column; }
+.finds-moon { display: flex; align-items: center; gap: 14px; margin: auto 0 0; padding-top: 22px; color: #5d5243; font: italic .9rem/1.35 var(--font-body); }
+.finds-moon svg { flex: none; width: 40px; height: 40px; }
+.finds-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; margin: 18px 0 0; padding-top: 12px; border-top: 1px solid rgba(60, 45, 25, .22); color: #6a5c48; font: italic .82rem/1.4 var(--font-body); }
+.finds-foot .link-btn { color: #6b4a14; }
+@media (max-width: 820px) {
+  body.lake-live[data-view="home"] .finds.open { grid-template-columns: 1fr; }
+  .finds-page + .finds-page { border-left: 0; border-top: 1px solid rgba(60, 45, 25, .25); background: none; }
+}
+/* A new find, said a moment beside the button */
+body.lake-live[data-view="home"] .finds-note {
+  display: block;
+  position: fixed;
+  right: calc(max(14px, env(safe-area-inset-right)) + 50px);
+  bottom: calc(max(14px, env(safe-area-inset-bottom)) + 53px);
+  z-index: 6;
+  margin: 0;
+  padding: 7px 14px;
+  border-radius: 3px;
+  background: #ebe2cd;
+  box-shadow: 0 10px 24px -10px rgba(0, 0, 0, .85);
+  color: #2b241c;
+  font: italic .9rem/1.3 var(--font-body);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(8px);
+  transition: opacity .35s ease, transform .35s ease;
+}
+body.lake-live[data-view="home"] .finds-note.on { opacity: 1; transform: none; }
 
 /* Legibility: a veil down the middle of the page, fading in below the title so the sky and the
    moon stay clear at the top; on a phone the text spans the width, so the veil does too. */
@@ -2975,7 +3140,7 @@ BOOKS.push({
   const nearMaples = autumn ? mapleRow("csp-maple-near", 47, 18, 34, 62, 100, NEAR_GAP, ["#6e2619", "#6e3e19", "#5e501f"], "#050f0d") : "";
   const midMaples = autumn ? mapleRow("csp-maple-mid", 53, 24, 30, 70, 110, MID_GAP, ["#62271d", "#694221", "#5b5329"], "#0a1c22") : "";
   document.body.insertAdjacentHTML("beforeend", `<div class="lake" aria-hidden="true" style="--lit:${tonight.k.toFixed(3)}">
-    <div class="lk lk-sky"><svg class="lk-stars" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" fill="currentColor">${lakeStars}</svg><div class="lk-milky">${milkyWay()}<span class="lk-shoot"></span></div>${twinkles}<span class="lk-moon">${tonight.svg}</span><canvas class="lk-birds"></canvas><div class="lk-balloon">${BALLOON("csp-balloon")}</div></div>
+    <div class="lk lk-sky"><svg class="lk-stars" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" fill="currentColor">${lakeStars}</svg><div class="lk-milky">${milkyWay()}<span class="lk-shoot"></span></div>${twinkles}<span class="lk-moon">${tonight.svg}</span><canvas class="lk-birds"></canvas><div class="lk-balloon" data-card="ballon">${BALLOON("csp-balloon")}</div></div>
     <div class="lk lk-hills"><svg viewBox="0 0 1600 300" preserveAspectRatio="xMidYMax slice" fill="currentColor"><path opacity=".7" d="${ridge(3, 300, 150, 80)}"/><path d="${ridge(9, 300, 205, 55)}"/></svg></div>
     <div class="lk lk-far"><svg viewBox="0 0 1600 90" preserveAspectRatio="xMidYMax slice" fill="currentColor"><path d="${spruceRow(11, 90, 30, 70, 90)}"/></svg></div>
     <div class="lk lk-mid"><svg viewBox="0 0 1600 110" preserveAspectRatio="xMidYMax slice" fill="currentColor"><path d="${midRow}"/>${midMaples}</svg></div>
@@ -2988,19 +3153,19 @@ BOOKS.push({
       <i class="lk-tk-glow"></i>
       <div class="lk-lanterns"></div>
       <div class="lk-slick" style='--iris:${IRIS}'><i class="sl-core"></i><i class="sl-lobe"></i><i class="sl-lobe"></i><span class="sl-iris"><i></i><i></i></span></div>
-      <div class="lk-raft">${RAFT}</div>
-      <div class="lk-boat">${BOAT("csp-boat-wave")}</div>
+      <div class="lk-raft" data-card="radeau">${RAFT}</div>
+      <div class="lk-boat" data-card="bateau">${BOAT("csp-boat-wave")}</div>
       <div class="lk-glint">${moonPath(5)}${moonPath(17)}</div>
       <canvas class="lk-waves"></canvas>
-      <div class="lk-drain">${DRAIN}</div>
+      <div class="lk-drain" data-card="egout">${DRAIN}</div>
       <div class="lk-loon">${LOON}</div>
-      <div class="lk-turtle"><i class="tt-ring"></i><i class="tt-ring"></i>${TURTLE}</div>
+      <div class="lk-turtle" data-card="tortue"><i class="tt-ring"></i><i class="tt-ring"></i>${TURTLE}</div>
     </div>
-    <div class="lk lk-near"><i class="lk-tk"></i><svg viewBox="0 0 1600 100" preserveAspectRatio="xMidYMax slice" fill="currentColor"><path d="${nearRow}"/>${nearMaples}${TRESTLE}</svg><svg class="lk-train" viewBox="0 0 1600 100" preserveAspectRatio="xMidYMax slice">${TRAIN}</svg>${SEASON === "summer" ? `<div class="lk-flies">${farFlies()}</div>` : ""}<div class="lk-walk"><div class="wk-group"><i class="wk-beam"></i><i class="wk-beam wk-shine"></i><span class="wk-track">${HALFTRACK}</span>${walkers()}</div></div><div class="lk-house">${HOUSE}</div><div class="lk-marsten">${MARSTEN}<span class="mh-light"></span></div></div>
+    <div class="lk lk-near"><i class="lk-tk" data-card="haven"></i><svg viewBox="0 0 1600 100" preserveAspectRatio="xMidYMax slice" fill="currentColor"><path d="${nearRow}"/>${nearMaples}${TRESTLE}</svg><svg class="lk-train" viewBox="0 0 1600 100" preserveAspectRatio="xMidYMax slice">${TRAIN}<rect class="lk-bridge" data-card="pont" x="404" y="64" width="182" height="37" fill="none"/></svg>${SEASON === "summer" ? `<div class="lk-flies">${farFlies()}</div>` : ""}<div class="lk-walk"><div class="wk-group"><i class="wk-beam"></i><i class="wk-beam wk-shine"></i><span class="wk-track">${HALFTRACK}</span>${walkers()}</div></div><div class="lk-house" data-card="sara">${HOUSE}</div><div class="lk-marsten" data-card="marsten">${MARSTEN}<span class="mh-light"></span></div></div>
     <div class="lk lk-fog"><b class="fog-beast">${BEAST}</b><i></i></div>
     <div class="lk lk-mist1"><i></i></div>
     <div class="lk lk-mist2"><i></i></div>
-    <div class="lk lk-float"><div class="lk-balloon-up">${BALLOON("csp-balloon-up")}</div></div>
+    <div class="lk lk-float"><div class="lk-balloon-up" data-card="ballon">${BALLOON("csp-balloon-up")}</div></div>
     ${autumn ? `<div class="lk-leaves">${fallingLeaves()}</div>` : ""}
     ${SEASON === "winter" ? `<div class="lk-snow"><i style="background-image:${snowTile(5, 34, .7, 1.4)}"></i><i style="background-image:${snowTile(9, 16, 1.4, 2.4)}"></i></div>` : ""}
     <div class="lk-trance"></div>
@@ -3168,6 +3333,7 @@ BOOKS.push({
   function trainPass() {
     if (trainOn) return sfx.horn();
     trainOn = true;
+    if (onScreen(bridge)) found("train");
     const run = trainParts.map(el => el.animate([{ transform: "translate(395px, 0)" }, { transform: "translate(764px, 0)" }], { duration: 15000, easing: "linear" }));
     run[0].onfinish = () => { trainOn = false; };
     if (sounds) { sfx.horn(); sfx.rumble(15); }
@@ -3193,6 +3359,8 @@ BOOKS.push({
     birdsEl.height = Math.round(H * k);
     const r = seeded(Math.floor(Math.random() * 1e6) + 1), n = 90, D = 17, east = Math.random() < .5, y0 = H * (.3 + Math.random() * .16);
     const birds = Array.from({ length: n }, () => [gauss(r), gauss(r), r() * 6.28, .8 + r() * .4]);
+    const sky = birdsEl.getBoundingClientRect();
+    if (sky.top + y0 > 0 && sky.top + y0 < innerHeight) found("moineaux");
     const spread = Math.max(50, W * .065), wing = Math.max(3.4, W * .003), start = performance.now();
     if (sounds) for (let i = 0; i < 44; i++) { const f = 3000 + Math.random() * 1900; tone("sine", f, f * 1.28, .045, .016, .35, 1 + Math.random() * (D - 3)); }
     const frame = now => {
@@ -3244,6 +3412,7 @@ BOOKS.push({
     turtleUp.onfinish = () => { turtle.classList.remove("up"); turtleUp = null; };
     turtleRings(x, y);
     sfx.splash(.22);
+    found("tortue");
     return true;
   }
   function turtleRings(x, y) {
@@ -3314,30 +3483,171 @@ BOOKS.push({
     }
     return null;
   }
-  // Its card, above it, kept on the screen; gone as soon as the page moves.
+  /* ---------- The museum ----------
+     Each thing of the lake taken from a book carries a card, as in a museum (title, a line, the
+     book), shown when the pointer rests on it; so do the keepsakes a finished book leaves on the
+     dock. The notebook keeps what the reader has found: things looked at, rare scenes seen. One not
+     found yet stays under a wax seal, with a hint. Kept on this device only. */
+  const FINDS = [
+    // [id, title, line on its card (none for a scene, which has no card), book, hint, top of the card]
+    ["sara", "Sara Laughs", "La maison de Mike Noonan", "Sac d’os · 1998", "Une maison éclairée, sur l’autre rive.", 0],
+    ["marsten", "La maison Marsten", "Elle domine Jerusalem’s Lot", "Salem · 1975", "Une vieille maison, sur la colline.", .05],
+    ["haven", "La lueur verte", "Dans les bois de Haven", "Les Tommyknockers · 1987", "Une lueur, entre les arbres.", .5],
+    ["radeau", "Le radeau", "Sur un lac désert, fin octobre", "Le Radeau · 1982", "Un radeau, au large.", .2],
+    ["bateau", "Le bateau en papier", "Celui de Georgie Denbrough", "Ça · 1986", "Un bateau en papier, quelque part sur l’eau.", .1],
+    ["egout", "La bouche d’égout", "Witcham Street, à Derry", "Ça · 1986", "Un vieux tuyau, sur la rive.", .3],
+    ["pont", "Le pont du chemin de fer", "Au-dessus de la Castle River", "Le Corps · 1982", "Un pont, entre les sapins.", 0],
+    ["ballon", "Le ballon rouge", "Au-dessus de Derry", "Ça · 1986", "Quelque chose de rouge, dans le ciel.", 0],
+    ["tortue", "La Tortue", "Plus vieille que le monde", "Ça · 1986", "Quelque chose remonte du fond, une fois de temps en temps.", .1],
+    ["yeux", "Des yeux, au fond de l’égout", null, "Ça · 1986", "Un bateau en papier qui s’approche trop près de la rive…"],
+    ["cloche", "La clochette de Bunter", null, "Sac d’os · 1998", "Frapper à la porte d’une maison, sur l’autre rive."],
+    ["train", "Le train de marchandises", null, "Le Corps · 1982", "Un sifflet, très loin, du côté du pont."],
+    ["moineaux", "Le vol des moineaux", null, "La Part des ténèbres · 1989", "Des oiseaux, rarement. Très rarement."],
+    ["tache", "La tache noire", null, "Le Radeau · 1982", "Une tache sur l’eau, près du radeau. Ne pas la fixer trop longtemps."]
+  ];
+  // What each finished book leaves on the lake: [book, its line in the notebook, its card, if it has one]
+  const RELICS = [
+    ["carrie", "Carrie White, au bout du ponton", ["Carrie White", "Le soir du bal"]],
+    ["shining", "Le lion taillé de l’Overlook", ["Le lion taillé", "Dans le jardin de l’Overlook"]],
+    ["marche-ou-creve", "Les marcheurs, sur l’autre rive"],
+    ["brume", "Ce qui passe dans la brume"],
+    ["simetierre", "Church, sur le ponton", ["Church", "Le chat d’Ellie Creed"]],
+    ["misery", "La Royal de Paul Sheldon", ["La Royal de Paul Sheldon", "Il lui manque le n"]]
+  ].filter(([id]) => byId[id]);
+  const CARD = Object.fromEntries([
+    ...FINDS.filter(f => f[2]).map(([id, title, line, book, , top]) => [id, { title, line, book, top }]),
+    ...RELICS.filter(r => r[2]).map(([id, , [title, line]]) => [id, { title, line, book: `${byId[id].title} · ${byId[id].year}`, top: 0 }])
+  ]);
+  const ICON = {
+    sara: `<path d="M3 20v-9l6-5 6 5v9M15 20v-6l3-3 3 3v6M2 20h20M7 13h2M11 13h2M17.5 15h1"/>`,
+    marsten: `<path d="M2 21q10-6 20 0M6 18v-7l3-2 3 2v7M12 16V9l3-5 3 5v7M14.5 11h1"/>`,
+    haven: `<path d="M3 20l3-9 3 9zM15 20l3-9 3 9z"/><circle cx="12" cy="15" r="2.2"/><circle cx="12" cy="15" r="5.5" stroke-dasharray="1.5 2.5"/>`,
+    radeau: `<path d="M3 14h18l-2 3H5zM7 14V9M7 10h3M2 20q5-2 10 0t10 0"/>`,
+    bateau: `<path d="M3 15h18l-3 4H6zM12 4v11M12 5l6 9h-6"/>`,
+    egout: `<path d="M2 19h20M5 18a7 7 0 0 1 14 0M8.5 18a3.5 3.5 0 0 1 7 0"/>`,
+    pont: `<path d="M2 9h20M4 9l2 11M10 9l-2 11M14 9l2 11M20 9l-2 11M5 14.5h14"/>`,
+    ballon: `<path d="M12 3c-3.6 0-6 2.8-6 6.4 0 3.8 3 7 6 7.6 3-.6 6-3.8 6-7.6C18 5.8 15.6 3 12 3zM12 17l-1 1.5h2zM12 18.5q-2 2 0 4"/>`,
+    tortue: `<path d="M3 16q9-11 18 0zM21 14.5l2-1M7 16l-1.5 2M17 16l1.5 2M9 12.5l3 3.5 3-3.5"/>`,
+    yeux: `<path d="M3 12q4-4 8 0q-4 4-8 0zM13 12q4-4 8 0q-4 4-8 0z"/><circle cx="7" cy="12" r="1"/><circle cx="17" cy="12" r="1"/>`,
+    cloche: `<path d="M12 3v2M7 16v-5a5 5 0 0 1 10 0v5l2 2H5zM10.5 20a1.5 1.5 0 0 0 3 0"/>`,
+    train: `<path d="M4 16V7h11l4 4v5zM4 11h15M2 20h20"/><circle cx="8" cy="17.5" r="1.5"/><circle cx="15" cy="17.5" r="1.5"/>`,
+    moineaux: `<path d="M3 9q2-2 4 0q2-2 4 0M11 13q2-2 4 0q2-2 4 0M5 17q1.5-1.5 3 0q1.5-1.5 3 0"/>`,
+    tache: `<ellipse cx="12" cy="14" rx="9" ry="3.6"/><ellipse cx="12" cy="14" rx="4.5" ry="1.6"/>`,
+    carrie: `<path d="M12 3s-5.5 7.5-5.5 11a5.5 5.5 0 0 0 11 0C17.5 10.5 12 3 12 3z"/>`,
+    shining: `<path d="M3 19v-5a4 4 0 0 1 4-4h6l2-4h3l1.5 3-1 2v8M7 19v-3M15 19v-3M3 13l-1-3"/>`,
+    "marche-ou-creve": `<path d="M10 3L4 21M14 3l6 18M12 5v2M12 10v3M12 16v4"/>`,
+    brume: `<path d="M3 8h12M7 12h14M3 16h11M9 20h10"/>`,
+    simetierre: `<path d="M8 21c-2.5-3-2-8 .5-10.5L8 6l3 2.2h2L16 6l-.5 4.5c2.5 2.5 3 7.5.5 10.5zM16 20.5c3 .5 5-1.5 3.5-4"/><path d="M10.5 12h.1M13.5 12h.1"/>`,
+    misery: `<path d="M4 13h16v7H4zM7 13V4h10v9M9 7h6M9 9.5h4M6.5 16.5h1M9.5 16.5h1M12.5 16.5h1M15.5 16.5h1M8 18.5h8"/>`
+  };
+  const icon = id => `<svg viewBox="0 0 24 24" aria-hidden="true">${ICON[id]}</svg>`;
+
+  // A card, above what it is about and kept on the screen; gone as soon as the page moves.
   const tag = h("div", { class: "lk-tag", "aria-hidden": "true" });
   document.body.append(tag);
   let tagFor = null, tagTimer = 0;
-  function showTag(l, hint) {
+  function showTag(el, hint) {
+    if (el === tagFor) return;
     clearTimeout(tagTimer);
-    if (l === tagFor) return;
-    tagFor = l;
-    if (!l) return tag.classList.remove("on");
-    tag.replaceChildren(h("strong", null, l.dataset.title), l.dataset.done, hint && l.dataset.id ? h("i", null, hint) : null);
-    const b = l.getBoundingClientRect(), half = tag.offsetWidth / 2;
+    tagFor = el;
+    if (!el) return tag.classList.remove("on");
+    const card = el.dataset.card && CARD[el.dataset.card];
+    tag.replaceChildren(...(card
+      ? [h("strong", null, card.title), card.line, h("i", null, card.book)]
+      : [h("strong", null, el.dataset.title), el.dataset.done, hint && el.dataset.id ? h("i", null, hint) : null]));
+    const b = el.getBoundingClientRect(), half = tag.offsetWidth / 2;
     tag.style.left = f1(clamp(b.left + b.width / 2, half + 8, innerWidth - half - 8)) + "px";
-    tag.style.top = f1(b.top + b.height * .06) + "px";
+    tag.style.top = f1(Math.max(tag.offsetHeight + 18, b.top + b.height * (card ? card.top : .06))) + "px";
     tag.classList.add("on");
+    if (card) found(el.dataset.card);
+    // A balloon goes on rising: its card does not wait for it
+    if (el.dataset.card === "ballon") tagTimer = setTimeout(() => showTag(null), 2500);
   }
   addEventListener("scroll", () => { if (tagFor) showTag(null); }, { passive: true });
+  // The keepsakes on the dock (drawn over the page, out of the lake's reach)
+  const onRelic = e => [...document.querySelectorAll(".dock [data-card]")].find(el => inBox(e, el, .1, 0, .9, 1, 2)) || null;
   // With a finger: a first touch shows the card, a second one opens the book.
   addEventListener("click", e => {
-    if (e.pointerType === "mouse" || document.body.dataset.view !== "home" || !free(e.target)) return;
-    const l = onLantern(e);
+    if (e.pointerType === "mouse" || document.body.dataset.view !== "home") return;
+    const r = e.target.closest && e.target.closest(".dock") && onRelic(e);
+    if (!r && !free(e.target)) return;
+    const l = r || onLantern(e);
     if (l && l === tagFor && l.dataset.id) return void (location.hash = l.dataset.id);
     showTag(l, "Touchez encore pour l'ouvrir");
     if (l) tagTimer = setTimeout(() => showTag(null), 4000);
   });
+
+  // The notebook: a button above the sound one, with the number found; open, two pages, the
+  // lake's finds on the left and the books' keepsakes on the right. A new find says so a moment.
+  const FIND_KEY = "csp.finds";
+  let finds = {};
+  try { finds = JSON.parse(local.get(FIND_KEY)) || {}; } catch (e) {}
+  const findsBtn = h("button", {
+    class: "finds-btn", type: "button", "aria-expanded": "false", "aria-controls": "finds",
+    onclick: () => openFinds(!findsBox.classList.contains("open"))
+  });
+  const findsBox = h("section", { class: "finds", id: "finds", role: "dialog", "aria-labelledby": "finds-title", tabindex: "-1" });
+  const findsNote = h("p", { class: "finds-note", "aria-live": "polite" });
+  document.body.append(findsBtn, findsBox, findsNote);
+  function paintFinds() {
+    const n = FINDS.filter(f => finds[f[0]]).length;
+    findsBtn.setAttribute("aria-label", `Carnet des trouvailles : ${n} sur ${FINDS.length}`);
+    findsBtn.title = "Carnet des trouvailles";
+    findsBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h11a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6zM6 3v18M9 7h6M9 10h4"/></svg>${n ? `<b aria-hidden="true">${n}</b>` : ""}`;
+    if (!findsBox.classList.contains("open")) return;
+    const seal = `<svg class="finds-seal" viewBox="0 0 40 40" aria-hidden="true"><use href="#csp-seal"/></svg>`;
+    const line = (id, title, book) => h("li", { html: icon(id) }, h("span", null, h("strong", null, title), h("small", null, book)));
+    const sealed = text => h("li", { class: "sealed", html: seal }, h("span", null, text));
+    findsBox.replaceChildren(
+      h("div", { class: "finds-page" },
+        h("h2", { id: "finds-title" }, "Carnet des trouvailles"),
+        h("p", { class: "finds-sub" }, n === FINDS.length ? "Le lac n’a plus de secret pour vous… ou presque." : `${n} sur ${FINDS.length} · le lac en cache d’autres`),
+        h("ol", null, FINDS.map(([id, title, , book, hint]) => finds[id] ? line(id, title, book) : sealed(hint)))),
+      h("div", { class: "finds-page" },
+        h("h3", null, "Souvenirs des livres lus"),
+        h("p", { class: "finds-sub" }, "Chaque livre terminé laisse quelque chose sur le lac."),
+        h("ol", null, RELICS.map(([id, text]) => statusOf(id) === "lu" ? line(id, text, `${byId[id].title} · ${byId[id].year}`) : sealed(`Un souvenir de ${byId[id].title}, le jour où vous l’aurez lu.`))),
+        tonightNote(),
+        h("p", { class: "finds-foot" }, "Noté sur cet appareil.",
+          h("button", { class: "link-btn", type: "button", onclick: () => openFinds(false) }, "Fermer le carnet")))
+    );
+  }
+  // At the foot of the second page, tonight's moon, sketched in ink, as it is over the lake
+  const PHASES = [[.03, "nouvelle lune"], [.22, "premier croissant"], [.28, "premier quartier"], [.47, "lune gibbeuse croissante"], [.53, "pleine lune"],
+    [.72, "lune gibbeuse décroissante"], [.78, "dernier quartier"], [.97, "dernier croissant"], [1, "nouvelle lune"]];
+  function tonightNote() {
+    const age = moonAge(), k = (1 - Math.cos(2 * Math.PI * age)) / 2;
+    const lit = `<path${age < .5 ? "" : ` transform="matrix(-1 0 0 1 100 0)"`} d="M50 3A47 47 0 0 1 50 97A${f1(47 * Math.abs(1 - 2 * k))} 47 0 0 ${k > .5 ? 1 : 0} 50 3Z" fill="#f7f0de"/>`;
+    return h("p", { class: "finds-moon", html: `<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="#5a4630" fill-opacity=".2"/>${lit}<circle cx="50" cy="50" r="47" fill="none" stroke="#6a5c48" stroke-width="2.5"/></svg>` },
+      h("span", null, "Ce soir : " + PHASES.find(([end]) => age < end)[1] + "."));
+  }
+  function openFinds(on) {
+    if (on === findsBox.classList.contains("open")) return;
+    findsBox.classList.toggle("open", on);
+    findsBtn.setAttribute("aria-expanded", String(on));
+    paintFinds();
+    if (on) findsBox.focus({ preventScroll: true });
+    else if (findsBox.contains(document.activeElement)) findsBtn.focus({ preventScroll: true });
+  }
+  addEventListener("keydown", e => { if (e.key === "Escape" && findsBox.classList.contains("open")) openFinds(false); });
+  addEventListener("pointerdown", e => { if (findsBox.classList.contains("open") && !e.target.closest(".finds, .finds-btn")) openFinds(false); });
+  addEventListener("hashchange", () => openFinds(false));
+  const onScreen = el => { const r = el.getBoundingClientRect(); return r.width > 0 && r.bottom > 0 && r.top < innerHeight; };
+  let noteTimer = 0;
+  function found(id) {
+    const f = FINDS.find(x => x[0] === id);
+    if (!f || finds[id]) return;
+    finds[id] = new Date().toISOString().slice(0, 10);
+    local.set(FIND_KEY, JSON.stringify(finds));
+    paintFinds();
+    if (!document.body.classList.contains("lake-live")) return;
+    findsNote.textContent = fr("Dans le carnet : " + f[1]);
+    findsNote.classList.add("on");
+    findsBtn.animate([{ transform: "scale(1)" }, { transform: "scale(1.18)", offset: .3 }, { transform: "scale(1)" }], { duration: 600, easing: "ease-out" });
+    clearTimeout(noteTimer);
+    noteTimer = setTimeout(() => findsNote.classList.remove("on"), 3600);
+  }
+  paintFinds();
 
   /* ---------- The lake you can touch (computer) ----------
      With a mouse, on a screen wide enough to leave some lake around the shelf, the scene answers.
@@ -3627,6 +3937,7 @@ BOOKS.push({
       for (const a of iris.getAnimations({ subtree: true })) a.playbackRate = rate;
     }
     trance.classList.toggle("on", h > .002);
+    if (h > .95) found("tache");
     if (h > .002) { trance.style.opacity = (h * .9).toFixed(3); aimTrance(); }
     drone(h);
   }
@@ -3692,7 +4003,7 @@ BOOKS.push({
   /* The page lies over the lake: what lands beside the links and books goes to the lake. A thing
      under the pointer is picked up (even under a line of text, so it is never lost there); on empty
      space, the water rings, or a star falls. */
-  const LINKS = "a, button, input, select, textarea, label, summary, .vol-slot, .plate, .ts-board, .dock, .loon-btn";
+  const LINKS = "a, button, input, select, textarea, label, summary, .vol-slot, .plate, .ts-board, .dock, .loon-btn, .finds, .finds-note";
   const reachable = t => t instanceof Element && !t.closest(LINKS);
   const free = t => reachable(t) && !t.closest("p, h1, h2, h3, .book-caption, .rec, .now, .sync");
   const onWater = e => { const b = water.getBoundingClientRect(); return { x: e.clientX - b.left, y: e.clientY - b.top }; };
@@ -3717,6 +4028,20 @@ BOOKS.push({
   const onHouse = e => inBox(e, houseEl, .15, 0, .95, .7);
   const onDrain = e => inBox(e, drain, .3, .35, .62, .78);
   const onTurtle = e => !!turtleUp && inBox(e, turtle, .05, .1, 1, .7);
+  const marstenEl = lakeEl.querySelector(".lk-marsten"), havenEl = lakeEl.querySelector(".lk-tk"), bridge = lakeEl.querySelector(".lk-bridge");
+  const aloft = (e, el) => el.getAnimations().some(a => a.playState === "running") && inBox(e, el, 0, 0, 1, .45, 8);
+  // The thing with a card under the pointer (those a click wakes up first)
+  function onSpot(e) {
+    if (onTurtle(e)) return turtle;
+    if (onTrestle(e)) return bridge;
+    if (onHouse(e)) return houseEl;
+    if (onDrain(e)) return drain;
+    if (inBox(e, marstenEl, .35, .05, .72, .66)) return marstenEl;
+    if (inBox(e, havenEl, .3, .5, .7, .9)) return havenEl;
+    for (const b of [balloon, rising]) if (aloft(e, b)) return b;
+    return null;
+  }
+  const answers = el => el === turtle || el === bridge || el === houseEl || el === drain;
   let grab = null, swirl = null, lastMove = null, hoverFrame = 0;
   let cursorNow = "";
   function point(c) {
@@ -3738,6 +4063,7 @@ BOOKS.push({
       o.tX = o.X;
       o.tZ = o.Z;
       ripple(o.X, o.Z, o.r * .5, .12);
+      showTag(null);
       point("lk-grabbing");
       return wake();
     }
@@ -3786,15 +4112,18 @@ BOOKS.push({
   function hover() {
     hoverFrame = 0;
     const e = lastMove;
-    let c = "", watching = false, lit = null;
-    if (e && live() && reachable(e.target) && ready()) {
-      const p = onWater(e);
-      if (onThing(p)) c = "lk-grab";
-      else if (free(e.target) && (lit = onLantern(e))) c = lit.dataset.id ? "lk-point" : "";
-      else if (free(e.target) && (onLoon(e) || onHouse(e) || onDrain(e) || onTurtle(e) || onTrestle(e))) c = "lk-point";
-      else watching = onSlick(p);
+    let c = "", watching = false, card = null;
+    if (e && live() && ready()) {
+      if (reachable(e.target)) {
+        const p = onWater(e), o = onThing(p);
+        if (o) { c = "lk-grab"; card = o.el; }
+        else if (free(e.target) && (card = onLantern(e))) c = card.dataset.id ? "lk-point" : "";
+        else if (free(e.target) && (card = onSpot(e))) c = answers(card) ? "lk-point" : "";
+        else if (free(e.target) && onLoon(e)) c = "lk-point";
+        else watching = onSlick(p);
+      } else if (e.target.closest && e.target.closest(".dock")) card = onRelic(e);
     }
-    showTag(lit, "Ouvrir le livre");
+    showTag(card, "Ouvrir le livre");
     point(c);
     if (watching !== slick.watched) { slick.watched = watching; wake(); }
   }
@@ -3874,6 +4203,7 @@ BOOKS.push({
   let houseUntil = 0;
   function houseCall() {
     if (performance.now() < houseUntil) return;
+    found("cloche");
     houseUntil = performance.now() + 3000;
     const n = houseLights.length / 2, blink = () => Array.from({ length: 9 }, (_, k) => ({
       opacity: k === 0 || k === 8 ? 1 : Math.random() < .5 ? Math.random() * .2 : .6 + Math.random() * .4, easing: "steps(1, end)" }));
@@ -3887,7 +4217,7 @@ BOOKS.push({
   }
   // The drain, clicked: something stirs in the dark down there.
   let peekUntil = 0;
-  function peek() { eyes.animate([{ opacity: 0 }, { opacity: .95, offset: .15 }, { opacity: .95, offset: .55 }, { opacity: 0, offset: .62 }, { opacity: .9, offset: .7 }, { opacity: 0 }], { duration: 1600 }); }
+  function peek() { found("yeux"); eyes.animate([{ opacity: 0 }, { opacity: .95, offset: .15 }, { opacity: .95, offset: .55 }, { opacity: 0, offset: .62 }, { opacity: .9, offset: .7 }, { opacity: 0 }], { duration: 1600 }); }
   function drainPeek() {
     if (performance.now() < peekUntil) return;
     peekUntil = performance.now() + 2500;
@@ -3915,6 +4245,7 @@ BOOKS.push({
         { transform: `translate(-.4vw, ${f1(-rise * .97)}px) rotate(-2deg)`, opacity: 1, offset: .97 },
         { transform: `translate(0, ${f1(-rise)}px)`, opacity: 0 }
       ], { duration: 46000, easing: "linear" });
+      found("ballon");
     }, 2600);
     setTimeout(() => {
       Object.assign(boat, { gone: false, vX: 0, vZ: 0, rot: 0 });
@@ -4300,6 +4631,61 @@ BOOKS.push({
     <path fill="#7a0d13" d="${drip(42.5, 30, 6, .6)}${drip(47.5, 31, 8, .6)}${drip(45, 32, 4, .5)}"/>
     <path d="M39.6 9.5C39 17 37.4 25 37.8 33" fill="none" stroke="#c8d3d8" stroke-opacity=".3" stroke-width=".45"/><path d="M50.4 9.5C51 17 52.6 25 52.2 33M56.4 30C56.8 40 56.4 46 56 51" fill="none" stroke="#ffcf8a" stroke-opacity=".4" stroke-width=".5"/>
   </svg>`;
+  /* What the other books leave on the dock once read, lit like Carrie (the moon on the left, the
+     lantern on the right). Misery: the old Royal typewriter, its paper in the platen, the n key
+     missing. Pet Sematary: Church, sitting on the planks, his eyes catching the light and blinking
+     now and then. The Shining: a lion of clipped hedge on the bank, which is never quite where it
+     was the time before. */
+  const royalRow = (y, n, x0, dx, skip = -1) => Array.from({ length: n }, (_, i) => i === skip ? "" : `<circle cx="${f1(x0 + i * dx)}" cy="${y}" r="1.35"/>`).join("");
+  const ROYAL = `<svg viewBox="0 0 64 46">
+    <ellipse cx="32" cy="43.4" rx="30" ry="2.8" fill="#000" opacity=".5"/>
+    <path d="M19 19L20.5 1.5H44.5L46 19Z" fill="#e6dcc4"/><path d="M33 1.5H44.5L46 19H34.2Z" fill="#ffd49a" opacity=".2"/>
+    <path d="M22.6 4.6H41.8M22.4 6.5H39M22.3 8.4H42.2M22.1 10.3H36.4M21.9 12.2H41.6M21.8 14.1H30" stroke="#6e6457" stroke-width=".45" opacity=".75"/>
+    <path d="M4.6 17.6L.4 13.4" stroke="#2a231c" stroke-width="1.2" stroke-linecap="round"/>
+    <rect x="7" y="17" width="50" height="6" rx="3" fill="#191512"/><circle cx="5.6" cy="20" r="3.3" fill="#211b16"/><circle cx="58.4" cy="20" r="3.3" fill="#211b16"/>
+    <path d="M9 18.2H55M57 17.4A3.3 3.3 0 0 1 61.4 19.4" fill="none" stroke="#ffcf8a" stroke-opacity=".35" stroke-width=".6"/>
+    <path d="M9 23H55L60 41H4Z" fill="#14110e"/><path d="M9 23H55L56.2 27.4H7.8Z" fill="#1f1a15"/>
+    <path d="M55 23L60 41" stroke="#ffcf8a" stroke-opacity=".4" stroke-width=".6"/><path d="M9 23L4 41" stroke="#c8d3d8" stroke-opacity=".2" stroke-width=".5"/>
+    <path d="M27 25.2H37" stroke="#b8945a" stroke-width=".8" opacity=".8"/>
+    <g fill="#2b2620" stroke="#5b5145" stroke-width=".35">${royalRow(30, 10, 12.6, 4.3)}${royalRow(33.6, 9, 14.6, 4.4)}${royalRow(37.2, 7, 16.8, 4.6, 5)}<rect x="20" y="39.2" width="24" height="1.6" rx=".8"/></g>
+    <g fill="#ffcf8a" opacity=".3">${royalRow(29.5, 10, 13, 4.3).replace(/r="1.35"/g, 'r=".45"')}</g>
+  </svg>`;
+  const CHURCH = `<svg viewBox="0 0 30 40"><defs><filter id="csp-church-glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation=".9"/></filter></defs>
+    <ellipse cx="15" cy="38.6" rx="11" ry="1.6" fill="#000" opacity=".45"/>
+    <path d="M21 37.6C26.5 38 28.5 35 26 32.6" fill="none" stroke="#353c43" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M8.6 38C5.4 32 6.2 23.6 10.4 19.6H19.6C23.8 23.6 24.6 32 21.4 38Z" fill="#363d44"/>
+    <path d="M11.5 38V32.5M18.5 38V32.5" stroke="#262c32" stroke-width=".6"/>
+    <path d="M10.4 19.6C8.6 22 7.4 26 7.6 31" fill="none" stroke="#c8d3d8" stroke-opacity=".35" stroke-width=".6"/>
+    <path d="M9.2 18.6C8.4 15 8.8 11.6 10 9.6L10.2 4.6L13.4 8.2H16.6L19.8 4.6L20 9.6C21.2 11.6 21.6 15 20.8 18.6C18.6 20.6 11.4 20.6 9.2 18.6Z" fill="#3b434a"/>
+    <path d="M10.9 6.6L11.1 9L12.6 8.2ZM19.1 6.6L18.9 9L17.4 8.2Z" fill="#5a4a4c" opacity=".6"/>
+    <path d="M10.2 4.6L10 9.6C8.8 11.6 8.4 15 9.2 18.6" fill="none" stroke="#c8d3d8" stroke-opacity=".4" stroke-width=".5"/>
+    <g class="ch-eyes"><g fill="#dff07a" opacity=".45" filter="url(#csp-church-glow)"><ellipse cx="12.6" cy="13" rx="2.2" ry="1.7"/><ellipse cx="17.4" cy="13" rx="2.2" ry="1.7"/></g>
+      <ellipse cx="12.6" cy="13" rx="1.7" ry="1.25" fill="#d8e86c"/><ellipse cx="17.4" cy="13" rx="1.7" ry="1.25" fill="#d8e86c"/><path d="M12.6 12V14M17.4 12V14" stroke="#1a1f10" stroke-width=".55"/></g>
+    <path d="M14.3 15.6H15.7L15 16.4Z" fill="#6a5658"/>
+    <path d="M12 16.4L7.5 15.6M12 17L7.6 17.6M18 16.4L22.5 15.6M18 17L22.4 17.6" stroke="#9aa3aa" stroke-opacity=".35" stroke-width=".3"/>
+  </svg>`;
+  const LION = (() => {
+    // Sitting on its clipped box of hedge, facing the dock: a few rounded masses, their edges
+    // ruffled with leaves, the moon catching its back
+    const masses = [[86, 64, 22, 20], [68, 54, 24, 15], [46, 56, 15, 20], [44, 72, 7, 13], [40, 81, 9, 4], [96, 81, 11, 4], [47, 34, 20, 20], [49, 48, 16, 13], [29, 38, 9.5, 7.5], [51, 13, 3, 3], [113, 47, 4.6, 4.6]];
+    const r = seeded(321);
+    let leaves = "", tufts = "";
+    for (const [cx, cy, rx, ry] of masses)
+      for (let a = 0; a < 6.28; a += .45 + r() * .3)
+        leaves += `<circle cx="${f1(cx + rx * Math.cos(a))}" cy="${f1(cy + ry * Math.sin(a))}" r="${f1(1.6 + r() * 1.5)}"/>`;
+    for (let i = 0; i < 190; i++) tufts += `<circle cx="${f1(6 + r() * 110)}" cy="${f1(10 + r() * 90)}" r="${f1(1.1 + r() * 2)}" fill="${r() < .5 ? "#122019" : "#30483a"}" opacity="${f1(.35 + r() * .5)}"/>`;
+    const tail = "M104 74C114 72 117 60 113 51";
+    const shape = masses.map(([cx, cy, rx, ry]) => `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}"/>`).join("") + `<rect x="8" y="83" width="104" height="15" rx="3"/>` + leaves;
+    return `<svg viewBox="0 0 120 100"><defs><clipPath id="csp-lion">${shape}<path d="${tail}" fill="none" stroke="#000" stroke-width="5"/></clipPath>
+      <linearGradient id="csp-lion-moon" x1="0" y1="0" x2=".7" y2="1"><stop offset="0" stop-color="#c4dccb" stop-opacity=".34"/><stop offset=".5" stop-color="#c4dccb" stop-opacity="0"/></linearGradient></defs>
+      <ellipse cx="60" cy="98" rx="58" ry="3.2" fill="#000" opacity=".5"/>
+      <g fill="#203327">${shape}</g><path d="${tail}" fill="none" stroke="#203327" stroke-width="4.5" stroke-linecap="round"/>
+      <g clip-path="url(#csp-lion)">${tufts}<rect width="120" height="100" fill="url(#csp-lion-moon)"/><rect y="83" width="120" height="17" fill="#000" opacity=".22"/></g>
+      <path d="M8 83.6H112" stroke="#c4dccb" stroke-opacity=".18" stroke-width=".8"/>
+      <circle cx="32" cy="34" r="1.7" fill="#0b130e"/><path d="M21 42Q24 44.5 28 43.5" fill="none" stroke="#0b130e" stroke-opacity=".7" stroke-width="1"/>
+    </svg>`;
+  })();
+  const LION_SPOT = [0, -.8, -1.4][Math.floor(Math.random() * 3)];
   const DOCK = `<svg viewBox="0 0 980 300" aria-hidden="true">
     ${shore()}
     <g style="fill:var(--wood-dark)"><rect x="404" y="96" width="9" height="56"/><rect x="627" y="96" width="9" height="56"/><rect x="498" y="104" width="7" height="40"/></g>
@@ -4676,6 +5062,24 @@ BOOKS.push({
     );
   }
 
+  // The same book, right under the title: where the reader stopped and the way back in, on the
+  // first screen. With several books in hand, the one started last.
+  function readingCard(b) {
+    const items = allItems(b), reached = lastOf(b, items), lastItem = reached !== null ? items[reached] : null;
+    const where = lastItem ? progressLabel(b, lastItem) : null;
+    return h("a", {
+        class: "reading-card", "data-id": b.id, href: lastItem ? `#${b.id}/reprendre` : "#" + b.id,
+        "aria-label": lastItem ? `Reprendre ${b.title}, ${where}` : `Ouvrir ${b.title}`
+      },
+      h("span", { class: "rc-cover", "aria-hidden": "true" }, cover(b)),
+      h("span", { class: "rc-text" },
+        h("i", null, lastItem ? "Vous lisiez" : "En cours"),
+        h("strong", null, b.title),
+        where ? h("b", null, where) : null),
+      h("span", { class: "rc-go btn btn-accent btn-solid" }, lastItem ? "Reprendre" : "Ouvrir")
+    );
+  }
+
   // A recommended book added to the piles: no summaries yet, so no page — just its status.
   function pendingCard(r) {
     const status = entry(r.id).status;
@@ -4792,11 +5196,14 @@ BOOKS.push({
       h("span", { class: "plate-motto", "aria-hidden": "true" }, "Vacationland")
     );
     plate.insertAdjacentHTML("afterbegin", PINE);
+    const reading = piles.find(p => p.key === "en-cours").list.filter(x => x.kind === "book").map(x => x.b)
+      .sort((a, z) => (entry(z.id).startedAt || "").localeCompare(entry(a.id).startedAt || ""))[0];
     app.replaceChildren(h("div", { class: entering ? "wrap arriving" : "wrap", style: entering ? `--since:${since}ms` : null },
       h("header", { class: "masthead" },
         h("p", { class: "eyebrow" }, "Carnet de lectures · Stephen King"),
         entering ? h("h1", { "aria-label": "Chapitres en suspens" }, lettered()) : h("h1", { html: "Chapitres <em>en suspens</em>" }),
         h("p", { class: "lede" }, "Les résumés de vos livres, chapitre par chapitre, pour reprendre une lecture là où vous l'avez laissée. Chaque résumé reste caché tant que vous ne cliquez pas dessus : rien ne vous gâche la suite."),
+        reading ? readingCard(reading) : null,
         plate,
         h("span", { class: "fleuron", "aria-hidden": "true", html: FLEURON })
       ),
@@ -4821,11 +5228,14 @@ BOOKS.push({
           halloween() ? h("div", { class: "dock-pumpkins", html: PUMPKIN_GLOW }) : null,
           h("div", { class: "dock-boat", html: BOAT("csp-dock-boat-wave") }),
           h("div", { class: "dock-canoe", html: CANOE }),
-          statusOf("carrie") === "lu" ? h("div", { class: "dock-carrie", html: CARRIE }) : null,
+          statusOf("carrie") === "lu" ? h("div", { class: "dock-carrie", "data-card": "carrie", html: CARRIE }) : null,
+          statusOf("simetierre") === "lu" ? h("div", { class: "dock-relic dock-church", "data-card": "simetierre", html: CHURCH }) : null,
+          statusOf("misery") === "lu" ? h("div", { class: "dock-relic dock-royal", "data-card": "misery", html: ROYAL }) : null,
           h("span", { class: "lantern-glow" }), h("span", { class: "lantern-flame" }),
           h("span", { class: "moths" }, MOTHS.map(([m, t, w]) => h("i", { style: `--m:${m};--t:${t}s;--w:-${w}s` }))),
           SEASON === "summer" ? h("span", { class: "dock-flies" }, DOCK_FLIES.map(([x, y, t, w]) => h("i", { style: `left:${x}%;top:${y}%;--t:${t}s;--w:-${w}s` }))) : null,
-          h("div", { class: "dock-reedbed" }, reedClumps()))
+          h("div", { class: "dock-reedbed" }, reedClumps()),
+          statusOf("shining") === "lu" ? h("div", { class: "dock-relic dock-lion", "data-card": "shining", style: `--shift:${LION_SPOT}%`, html: LION }) : null)
       )
     ));
   }
@@ -5222,9 +5632,10 @@ ${help.format}`;
   let shelfY = 0;         // where the reader was on the shelf
   let turns = 0;
   const inView = el => { const r = el.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight; };
+  // A book in hand shows twice on the shelf (under the title, and in its pile): the one in view.
   const shelfCover = id => {
-    const link = [...app.querySelectorAll("a.book-link")].find(a => a.getAttribute("href") === "#" + id);
-    return link && link.querySelector(".cover");
+    const covers = [...app.querySelectorAll(`a.reading-card[data-id="${id}"] .cover, a.book-link[href="#${id}"] .cover`)];
+    return covers.find(inView) || covers[0];
   };
 
   // On a book page: its painting (or its cover, for a book without one) and its title.

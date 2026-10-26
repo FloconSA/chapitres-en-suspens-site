@@ -815,8 +815,12 @@ h1, h2, h3 { text-wrap: balance; }
 .chapters { --num: 4.4rem; --num-gap: 12px; }
 .chapters.ranged { --num: 5.6rem; }
 .items { list-style: none; margin: 0; padding: 0; }
-.item { position: relative; border-top: 1px solid var(--line); scroll-margin-top: 16px; }
+.item { position: relative; isolation: isolate; border-top: 1px solid var(--line); scroll-margin-top: 16px; }
 .item:last-child { border-bottom: 1px solid var(--line); }
+/* A fiche reached from "Aller à": its row lights up a moment, its seal left whole */
+.item::before { content: ""; position: absolute; inset: 0 -12px; z-index: -1; background: var(--accent-wash); opacity: 0; pointer-events: none; }
+.item.sought::before { animation: sought .9s ease-out both; }
+@keyframes sought { 20%, 50% { opacity: 1; } }
 .item-toggle {
   width: 100%;
   background: none;
@@ -2035,7 +2039,9 @@ BOOKS.push({
   meta: `119 chapitres · 4 parties`,
   cover: { bg: `#dfe3e4`, fg: `#17191b`, motif: `keys` },
   art: `illustrations/misery.webp`,
-  note: `Misery compte 119 chapitres, parfois longs d'une seule ligne, répartis en quatre parties dont la numérotation repart à 1. Ils sont regroupés ici par séquences.`,
+  note: `Misery compte 119 chapitres, parfois longs d'une seule ligne, répartis en quatre parties dont la numérotation repart à 1. Une fiche par chapitre ; quelques chapitres de quelques lignes partagent la fiche de leur voisin.`,
+  // The fiches as they were before the book was cut chapter by chapter: older bookmarks are read against them.
+  former: [`I·1–13`, `I·14–28`, `I·29–36`, `II·1–6`, `II·7–17`, `II·18–20`, `II·21–23`, `III·1–10`, `III·11–22`, `III·23–33`, `III·34–48`, `IV·1–12`],
   pitch: `Paul Sheldon, auteur à succès de la saga sentimentale Misery, vient enfin d'achever un roman « sérieux ». Après un accident de voiture en pleine tempête de neige dans le Colorado, il se réveille les jambes brisées dans la maison isolée d'une ancienne infirmière qui l'a sauvé : Annie Wilkes, sa plus grande admiratrice. Elle est aux petits soins… tant qu'il ne la contrarie pas.`,
   cast: [
     [`Paul Sheldon`, `Écrivain, auteur des romans Misery, qu'il rêve de laisser derrière lui.`],
@@ -2047,33 +2053,123 @@ BOOKS.push({
     {
       title: `Première partie`, name: `Annie`,
       items: [
-        { n: `I·1–13`, label: `Chapitres 1 à 13`, t: `Paul émerge d'un brouillard de douleur : quelqu'un vient de lui faire du bouche-à-bouche. Il est alité chez Annie Wilkes, près de Sidewinder, les jambes broyées. Elle l'a tiré de sa voiture accidentée après qu'il eut fêté, ivre, la fin de son nouveau roman, Fast Cars. Plutôt que de l'emmener à l'hôpital, elle le soigne elle-même et le rend dépendant à un puissant antidouleur, le Novril. Paul comprend vite qu'elle est dangereusement instable : la grossièreté de son manuscrit la met en rage, elle l'oblige à avaler ses cachets avec l'eau sale d'un seau, et elle laisse échapper qu'elle a été jugée à Denver. Puis Annie termine le dernier Misery et découvre que Paul a fait mourir l'héroïne : folle de rage, elle part en l'enfermant, sans ses médicaments.` },
-        { n: `I·14–28`, label: `Chapitres 14 à 28`, t: `Annie abandonne Paul 51 heures, sans eau ni médicaments. À son retour, elle l'oblige à brûler l'unique exemplaire de Fast Cars. Puis elle l'installe dans un fauteuil roulant et lui offre une vieille machine à écrire, à laquelle manque la touche « n » : il va écrire, rien que pour elle, Le Retour de Misery. Paul comprend qu'elle le tuera le jour où sa voiture sera retrouvée. Il se voit en Shéhérazade, condamné à raconter pour survivre.` },
-        { n: `I·29–36`, label: `Chapitres 29 à 36`, t: `Paul demande un meilleur papier ; Annie, vexée, lui frappe le genou brisé avant de partir en ville. Torturé par la douleur, il crochète la serrure avec une épingle à cheveux, se traîne en fauteuil jusqu'à la salle de bain du rez-de-chaussée et y vole des boîtes de Novril. Il regagne sa chambre juste avant le retour d'Annie.` }
+        { n: `I·1–2`, label: `Chapitres 1 et 2`, t: `Des sons sans suite, dans un brouillard de douleur. Paul Sheldon reprend peu à peu conscience : sa douleur va et vient comme la marée qui, sur une plage de son enfance, couvrait et découvrait un vieux pilier. Il cesse de respirer ; une bouche à l'haleine fétide lui insuffle de l'air et une voix lui crie de respirer. Dans un rêve, il comprend que les piliers, ce sont ses jambes brisées. Il se réveille dans un lit. La femme assise à côté de lui, un de ses livres à la main, lui dit qu'ils sont à Sidewinder, au Colorado. Elle s'appelle Annie Wilkes, et Paul termine sa phrase : sa fan numéro un.` },
+        { n: `I·3`, t: `On lui fait avaler des cachets au goût amer. Paul se rappelle qu'il écrit des romans, des bons et des best-sellers, mais il ne sait plus comment il a atterri dans ce lit. Il flotte entre la douleur, ses souvenirs de la plage et le présent.` },
+        { n: `I·4`, t: `Paul observe celle qui le soigne : une femme massive, en cardigan gris et jupe de laine, qui lui rappelle les idoles de pierre des romans de H. Rider Haggard, comme si elle n'avait rien à l'intérieur. Toutes les six heures, elle lui donne deux gélules de Novril, un puissant antidouleur à base de codéine, dont elle a une grosse réserve. Paul comprend qu'il en est déjà dépendant, et que cette femme est dangereusement folle. Elle adore ses romans Misery, mais se vexe quand il demande son portefeuille.` },
+        { n: `I·5`, t: `Annie lui apporte de la soupe et raconte. Il y a deux semaines, elle était en ville en espérant y trouver L'Enfant de Misery, le nouveau roman de Paul. La tempête de neige a changé de direction ; elle est rentrée en hâte pour ses bêtes, dont un cochon qu'elle a baptisé Misery, et elle a trouvé sa voiture retournée sur la route. Son sourire effraie Paul. Au milieu de la conversation, elle se fige, absente. Paul demande pourquoi elle ne l'a pas conduit à l'hôpital.` },
+        { n: `I·6`, t: `Paul se souvient. À l'hôtel Boulderado, à Boulder, il venait d'achever Fast Cars, un roman « sérieux », après avoir fait mourir Misery dans L'Enfant de Misery. Il a fêté ça au champagne puis, au lieu de rentrer à New York, il a pris la route vers l'ouest, ivre, en pleine tempête, et sa voiture s'est retournée. Annie l'a tiré de l'épave, les jambes broyées. Il est resté inconscient près de deux semaines, nourri par perfusion, et il lui doit la vie, dit-elle. Quand il réclame du Novril, elle le fait attendre encore une heure.` },
+        { n: `I·7–8`, label: `Chapitres 7 et 8`, t: `Annie revient au bout d'une heure et fait encore traîner la prise des cachets. Elle lit L'Enfant de Misery et demande la permission de lire le manuscrit de Fast Cars, trouvé dans son sac ; Paul accepte. Elle lui déclare son amour, lui glisse le Novril dans la bouche et lui assure qu'ils vont être très heureux ici. Paul, terrifié, dérive dans ses pensées.` },
+        { n: `I·9`, t: `Le lendemain matin, en lui donnant sa soupe, Annie se trahit : elle a été infirmière. Elle n'aime pas Fast Cars, trop grossier à son goût. Quand Paul défend la façon de parler de son personnage, elle se met en colère, évoque le jour où elle était « à la barre » à Denver, renverse la soupe et fracasse le bol contre le mur. Puis elle reste figée, absente. Revenue à elle, elle rappelle à Paul, qui s'excuse, qu'il dépend entièrement d'elle.` },
+        { n: `I·10`, t: `Annie prend tout son temps pour nettoyer le mur avec un seau et un chiffon, pendant que Paul la supplie de lui donner ses cachets. Elle finit par lui en tendre trois et l'oblige à les avaler avec l'eau sale du seau. Paul promet de ne plus jamais la contrarier ; elle lui dit qu'elle l'aime, et il s'endort.` },
+        { n: `I·11`, t: `Au réveil, Annie est partie s'occuper des bêtes à la grange. Paul a honte d'avoir bu l'eau sale. Il comprend que l'exemplaire de Fast Cars qu'Annie a entre les mains est le seul qui existe. Il se demande pourquoi elle n'est plus infirmière et devine que ses collègues ont dû remarquer sa folie. Il pense à un oiseau exotique vu au zoo de Boston, si loin de chez lui : le monde extérieur, désormais, c'est l'« Afrique ». Il s'endort en essayant d'imaginer Annie à la barre, à Denver.` },
+        { n: `I·12`, t: `Paul fait un cauchemar : une longue salle d'hôpital remplie de Paul identiques, et Annie, en uniforme d'infirmière, qui leur jette du sable au visage. À son réveil, Annie a presque terminé L'Enfant de Misery ; il lui dit avoir rêvé de l'Afrique.` },
+        { n: `I·13`, t: `Le lendemain matin, Annie entre dans une rage folle : elle a fini le livre, et Misery y meurt en couches. Elle insulte Paul, lui renverse une carafe d'eau dessus et la jette contre la porte. Paul tente de se justifier : la fin l'a surpris lui-même. Pour Annie, un écrivain est comme Dieu, il décide de tout. Elle se fige ; Paul cherche des yeux de quoi se défendre. Puis elle part, de peur de commettre l'irréparable, en l'enfermant à clé, sans ses médicaments.` },
+        { n: `I·14`, t: `Annie est partie depuis 51 heures ; Paul compte le temps au stylo sur son bras. La douleur, la faim, la soif et le manque se relaient. Il découvre pour la première fois ses jambes : Annie les a éclissées avec des tiges d'acier, elles sont tordues, et son genou gauche semble avoir disparu. Le deuxième jour, la soif le pousse à boire sa propre urine. Il se demande si Annie s'est suicidée, et souhaite mourir.` },
+        { n: `I·15`, t: `Annie revient enfin, en robe et chapeau, comme pour une grande occasion ; Paul se demande si c'est la tenue qu'elle portait à Denver. Elle lui donne de l'eau, mais exige qu'il l'écoute avant d'avoir ses cachets : elle a réfléchi et prié, et elle est convaincue que Dieu l'a envoyée pour lui montrer le chemin.` },
+        { n: `I·16`, t: `Annie installe un petit barbecue dans la chambre, avec des allumettes, et pose à côté le manuscrit de Fast Cars : avant d'avoir ses médicaments, Paul doit le brûler. Il pense à la facilité avec laquelle il aurait pu en faire une copie, et voit Annie comme une catastrophe naturelle.` },
+        { n: `I·17–18`, label: `Chapitres 17 et 18`, t: `Pour Annie, ce manuscrit est sale et mauvais. Paul refuse de le brûler et la traite de diable ; elle se compare à une mère qui agit pour le bien de son enfant, menace de ne plus lui apporter de cachets, puis lui en promet quatre. Paul pèse ses 190 000 mots contre la douleur. Annie refuse de s'en charger elle-même : il doit le brûler de son plein gré, au moins quelques pages. Le manque l'emporte, et Paul cède.` },
+        { n: `I·19`, t: `Paul brûle la page de titre, en se rappelant le jour où il a commencé ce roman, deux ans plus tôt. Annie lui tend ensuite des pages une à une (elle a noirci les gros mots au feutre), puis jette le reste dans le barbecue. Effrayée par la taille des flammes, elle court chercher de l'eau, et Paul savoure sa peur. Elle noie le feu, ne laissant qu'une bouillie détrempée, et lui donne enfin ses cachets. Paul se promet de la tuer.` },
+        { n: `I·20`, t: `Paul se réveille assis : Annie lui tire les oreilles pour qu'il mange, et après une cuillerée, la faim revient. Elle l'a installé dans un fauteuil roulant, les jambes surélevées ; sa force le stupéfie. Elle veut changer ses draps, et le changer, lui. Paul la remercie tout en s'imaginant la tuer. Rester assis réveille la douleur ; il hurle, et Annie lui apporte du Novril.` },
+        { n: `I·21`, t: `Annie lui annonce qu'elle lui a acheté deux cadeaux en ville : le fauteuil roulant, et un autre qu'elle lui montrera demain.` },
+        { n: `I·22`, t: `Paul fait ses calculs : la distance jusqu'aux Roydman, les voisins, et jusqu'à Sidewinder. Personne ne semble encore le chercher ; sa voiture, une Camaro, est sans doute enfouie sous la neige, peut-être par un chasse-neige. Annie est psychotique, mais pas stupide. Si la voiture est retrouvée et qu'un policier vient frapper chez elle, tout sera découvert : l'enlèvement, les médicaments donnés en cachette, et elle a déjà eu affaire à la justice. Paul comprend qu'elle le tuera plutôt, et que la voiture réapparaîtra au printemps. Il ne trouve pas le sommeil.` },
+        { n: `I·23`, t: `Le lendemain, Annie apporte le second cadeau : une vieille machine à écrire Royal. Paul a l'impression qu'elle lui sourit méchamment ; Annie se vexe quand il la traite d'antiquité. Il manque la touche « n » : Paul plaisante sur le prénom de son infirmière préférée, qui en compte deux, et Annie rougit. Elle a scié une planche à poser sur les accoudoirs du fauteuil et acheté du papier. Avec tout ça, dit-elle, il va écrire son meilleur roman : Le Retour de Misery.` },
+        { n: `I·24`, t: `Pour Annie, ce livre est le juste prix de ses soins. Paul proteste que Misery est morte, mais commence malgré lui à imaginer son retour. Il demande si elle le laissera partir une fois le livre fini ; elle s'étonne qu'il se sente prisonnier et promet que oui. Il n'en croit rien. Il lui emprunte ses romans Misery pour s'y retrouver dans les détails ; elle parle déjà de relier le livre elle-même, lui envoie un baiser et sort. Paul décide d'écrire pour survivre.` },
+        { n: `I·25`, t: `Annie lui sert un repas copieux pour le mettre au travail et le soulève jusque dans le fauteuil ; sa force l'effraie de nouveau. En invoquant une superstition d'écrivain, Paul lui demande de tourner la machine à écrire vers le mur.` },
+        { n: `I·26`, t: `Cette nuit-là, Paul rêve d'Annie dans une cour orientale, qui raconte des histoires sur un tapis volant.` },
+        { n: `I·27`, t: `Au matin, Annie, ravie, lui apporte son petit déjeuner. Paul comprend que la vraie Shéhérazade, c'est lui : il doit écrire une histoire assez bonne pour lui sauver la vie. Il vivra tant que le livre ne sera pas fini.` },
+        { n: `I·28`, t: `Pour la première fois, Annie roule le fauteuil jusqu'à la fenêtre. Paul découvre la propriété, isolée entre forêt et montagnes, et une grange rouge impeccable : Annie l'entretient pour sauver les apparences. Elle lui montre les stalactites de glace qui fondent. Paul pense aussitôt à sa voiture, qui réapparaîtra avec la fonte des neiges, peut-être découverte par les Roydman : le temps qui lui reste vient de raccourcir. Annie, elle, a hâte qu'il commence.` },
+        { n: `I·29`, t: `Paul demande un autre papier : celui d'Annie bave sous l'encre. Elle se vexe, l'accuse de chercher des excuses pour ne pas écrire, et s'indigne qu'il parle de son travail comme d'un commerce. Paul affirme être de son côté et ne penser qu'à la qualité du manuscrit. Elle décide d'aller acheter du papier sur-le-champ, sans lui laisser de cachets, se rue sur lui et frappe son genou brisé. Personne ne l'entendra crier, dit-elle : les gens évitent sa maison.` },
+        { n: `I·30`, t: `Seul, sans médicaments, Paul décide de trouver la réserve de Novril. Il amène le fauteuil jusqu'à la porte fermée à clé et repère par terre une épingle à cheveux tombée du chignon d'Annie ; il hurle de douleur pour l'attraper. Il se souvient qu'en se documentant pour Fast Cars, un ancien policier, Tom Twyford, lui a appris à crocheter une serrure avec une épingle.` },
+        { n: `I·31`, t: `Par le trou de la serrure, Paul aperçoit un couloir et une porte : sans doute la salle de bain du rez-de-chaussée, où doivent être ses cachets. Il manque de lâcher l'épingle, perd connaissance un instant, puis s'acharne. L'épingle se casse dans la serrure, mais la porte s'ouvre. Le fauteuil est trop large : Paul force le passage et s'évanouit de nouveau.` },
+        { n: `I·32`, t: `Annie surgit, un fusil braqué sur Paul, et lui propose de le libérer pour de bon.` },
+        { n: `I·33`, t: `Ce n'était qu'un cauchemar. Paul roule jusqu'à la salle de bain : l'armoire à pharmacie est hors d'atteinte, mais dans un placard il trouve des cartons d'échantillons, et enfin le Novril. Il avale quatre gélules, en prend une trentaine pour sa réserve et remet le carton en place. Une voiture passe, il panique. Puis, poussant sa chance, il entre dans le salon, sous le portrait de la mère d'Annie, cherche un téléphone, fait tomber un pingouin en céramique et le rattrape. Le téléphone est branché, mais la ligne est morte. Une autre voiture approche : Paul sait que c'est Annie.` },
+        { n: `I·34`, t: `Paul fonce vers sa chambre, heurte le chambranle en y laissant une petite marque, et repasse la porte au moment où Annie s'engage dans l'allée. Le bout d'épingle cassé bloque la serrure ; il s'acharne et parvient à refermer juste quand Annie l'appelle joyeusement. Il retourne près de la fenêtre en espérant qu'elle ne remarquera aucune trace, et se demande s'il a bien remis le pingouin à sa place. Quand elle ouvre, il s'aperçoit que les boîtes de Novril sont encore sur ses genoux.` },
+        { n: `I·35`, t: `Annie remarque qu'il est en sueur et lui demande s'il a besoin d'autre chose, une menace à peine voilée de repartir ; qu'il ne la mette plus en colère. En larmes, Paul prétend avoir besoin de l'urinal, ce qui explique ses mains posées sur ses genoux ; dès qu'elle sort, il fourre les boîtes dans son caleçon. Annie revient avec l'urinal et deux cachets. Pour l'instant, elle ne se doute de rien.` },
+        { n: `I·36`, t: `Paul demande à Annie d'attendre que les cachets agissent avant de le recoucher, et profite de son absence pour cacher le Novril sous son matelas. Il sombre et se réveille quatorze heures plus tard : il neige.` }
       ]
     },
     {
       title: `Deuxième partie`, name: `Misery`,
       items: [
-        { n: `II·1–6`, label: `Chapitres 1 à 6`, t: `Premier chapitre du Retour de Misery : Paul a simplement effacé la mort de l'héroïne. Annie le rejette : c'est une tricherie, comme dans les feuilletons de son enfance où le héros s'en sortait de façon déloyale. Piqué au vif, Paul reprend tout et cherche une solution honnête : Misery aurait été enterrée vivante.` },
-        { n: `II·7–17`, label: `Chapitres 7 à 17`, t: `Annie approuve la nouvelle version. Un matin, une voiture arrive : elle menotte et bâillonne Paul. C'est un employé venu réclamer des impôts impayés ; Paul propose de les régler pour l'amadouer, puis efface les traces que son fauteuil a laissées sur la porte. Le roman avance, et Paul y prend un plaisir inattendu. Au printemps, Annie sombre dans une dépression terrifiante : elle se gave, se frappe, parle de mourir ensemble. Puis elle part s'isoler dans son refuge des collines, son « coin pour rire ». Seul, Paul sort de sa chambre : les portes sont verrouillées, la cour inondée ; il rapporte un peu de nourriture en prenant soin de ne laisser aucune trace.` },
-        { n: `II·18–20`, label: `Chapitres 18 à 20`, t: `Dans le salon, Paul découvre l'album de souvenirs d'Annie : coupures de presse et avis de décès. Il reconstitue la vérité : son père, une colocataire, des patients âgés, puis des nouveau-nés à l'hôpital de Boulder. Jugée à Denver, Annie a été acquittée faute de preuves. Les dernières pages parlent de la disparition de Paul. Il cache un couteau de boucher sous son matelas.` },
-        { n: `II·21–23`, label: `Chapitres 21 à 23`, t: `Annie revient et lui injecte un calmant. Elle a une bonne nouvelle : la fonte des neiges a emporté la voiture de Paul, comme elle a emporté autrefois le corps d'un jeune homme qu'elle avait tué. Elle sait que Paul est sorti et a trouvé le couteau. Pour qu'il ne recommence jamais, elle lui tranche le pied gauche à la hache et cautérise la plaie au chalumeau.` }
+        { n: `II·1`, t: `Premier chapitre du Retour de Misery, dédié à Annie Wilkes ; les « n » y sont ajoutés à la main. Ian Carmichael rentre chez lui, dans la campagne anglaise, bouleversé : sa femme, Misery, a frôlé la mort après avoir accouché, mais son ami Geoffrey a ramené le médecin à temps. La gouvernante, Mrs Ramage, l'accueille ; Ian entend son fils pleurer, retrouve Misery et lui jure qu'il serait mort avec elle.` },
+        { n: `II·2`, t: `Annie aime le chapitre, mais il n'est « pas juste » : c'est de la triche, puisque dans L'Enfant de Misery, Geoffrey n'arrivait pas à temps chez le médecin. Elle se souvient des feuilletons du samedi au cinéma, dans son enfance : le jour où le héros s'en était sorti d'une façon impossible, en contredisant l'épisode précédent, elle avait enragé. Paul a honte, car elle a raison. Elle exige qu'il répare cette injustice, et il sait que s'il ne ramène pas Misery d'une façon crédible, elle le tuera.` },
+        { n: `II·3`, t: `Seul, Paul s'imagine en dispute avec la machine à écrire, qui se moque de son échec. Sa douleur diminue, mais il se sait dépendant : les boîtes cachées sous son matelas indiquent que le Novril est à base de codéine. Il décide de sauter quelques prises pour se sevrer, dès qu'il aura écrit un chapitre qui plaise à Annie. Il redoute la prochaine punition.` },
+        { n: `II·4`, t: `Paul recommence Le Retour de Misery. Il cherche un moyen de ramener Misery qui soit loyal, à défaut d'être réaliste, et s'assoupit. Il se rappelle un jeu de colonie de vacances où chacun avait dix secondes pour tirer un héros d'une situation impossible, sous peine de quitter le cercle. Paul y excellait, et il pense pouvoir trouver une solution qui satisfera Annie. Mais la machine à écrire l'accuse de tricher.` },
+        { n: `II·5`, t: `À son réveil, Paul entend Annie faire la vaisselle en silence : il sent venir une de ses crises de dépression. Il distingue « essayer d'avoir une idée », le travail laborieux de son imagination, et « avoir une idée », qui arrive par hasard, comme Fast Cars lui est venu en voyant un voiturier forcer une portière. D'habitude, son remède, c'est l'ennui et la marche. Assis dans son fauteuil, il attend l'étincelle… et l'idée arrive enfin. Il écrit d'abord par à-coups, puis de plus en plus vite, sans même voir Annie qui l'observe depuis la porte, jusqu'à ce qu'elle l'arrête. Il dort cette nuit-là sans rêver.` },
+        { n: `II·6`, t: `La nouvelle version du Retour de Misery. Un fossoyeur, Colter, vient réveiller Geoffrey, encore blessé depuis la nuit de la mort de Misery, trois jours plus tôt : il entend gratter dans la tombe. Geoffrey se rappelle le teint encore rose de Misery, et une phrase du vieux docteur Shinebone sur une certaine Miss Evelyn-Hyde. Il court chez Mrs Ramage, qui comprend aussitôt : comme Miss Evelyn-Hyde, au village voisin, qu'on avait crue morte et dont la main était sortie de terre quatre jours après l'enterrement, Misery a été enterrée vivante. Au cimetière, ils entendent des ongles gratter le bois ; Mrs Ramage se met à creuser à mains nues.` },
+        { n: `II·7`, t: `Annie a lu cette deuxième version : c'est loyal, même si ça ne ressemble pas aux autres Misery. Paul accepte qu'elle lise au fur et à mesure, à condition qu'elle remplisse les « n ». Timidement, Annie suggère que Misery pourrait être allergique au venin d'abeille : elle a vu des patients tomber dans le coma ainsi. Paul n'y croit pas mais ne la contredit pas. En la regardant sortir, il remarque sur le chambranle les marques laissées par son fauteuil et, effrayé, ne parvient plus à travailler.` },
+        { n: `II·8`, t: `Le lendemain matin, Annie entre en panique, menotte Paul au lit et le bâillonne avec un vieux chiffon : une voiture arrive. S'il fait le moindre bruit, elle tuera le visiteur, puis Paul, puis elle-même. Par la fenêtre, Paul la voit intercepter l'homme, qui lui tend un papier officiel et semble la prendre pour une folle. Elle hurle, donne des coups de pied dans sa voiture, et il repart.` },
+        { n: `II·9`, t: `Le papier : Annie doit 506 dollars d'impôts en retard, et le fisc a pris une garantie sur sa maison. Elle détache Paul pour qu'il lui explique : elle ne pourra pas la vendre. Annie jure qu'elle paie toujours ses factures ; si elle a oublié cette fois, c'est à cause de lui. Paul lui dit qu'il lui doit la vie et lui offre les 400 dollars de son portefeuille ; flattée, elle proteste pour la forme. Il lui conseille de payer l'après-midi même, et compte profiter de son absence pour effacer les marques sur la porte.` },
+        { n: `II·10`, t: `Annie lui apporte son portefeuille : elle veut qu'il lui donne l'argent lui-même. En se rappelant le jour où il l'a retiré, quand il était libre, Paul se met à pleurer. Il demande à être installé dans son fauteuil pour écrire pendant qu'elle sera en ville.` },
+        { n: `II·11`, t: `Une fois Annie partie, Paul crochète la serrure avec une autre épingle volée : il a repris des forces en soulevant la machine à écrire en cachette. Il efface les marques sur le chambranle, se renferme dans sa chambre et, pensant à l'oiseau du zoo qui a dû finir par oublier son pays, se perd dans l'écriture.` },
+        { n: `II·12`, t: `Pendant trois semaines, Paul vit dans un calme étrange et écrit une douzaine de pages par jour, trois fois plus que d'habitude ; le Novril est son seul vice. Ils ont pris leurs habitudes, comme regarder la télévision ensemble en fin d'après-midi. L'idée d'Annie sur les abeilles fait son chemin : Misery et Miss Evelyn-Hyde seraient deux sœurs perdues de vue, avec la même allergie. Paul appelle Annie pour noter son idée à la main. Puis la pluie arrive, et tout change.` },
+        { n: `II·13`, t: `Début avril, quelques jours de beau temps : Annie installe Paul sur la véranda, ils regardent la télévision et elle chante. Paul rêve que sa voiture est retrouvée et termine les chapitres 9 et 10 de son roman. À la mi-avril, le ciel se couvre, et Annie aussi. Le premier jour de pluie, elle est en retard pour ses cachets, couverte de taches ; elle répond qu'elle ne va pas bien et se pince la lèvre jusqu'au sang. Paul l'entend se gifler dans le salon et prend peur.` },
+        { n: `II·14`, t: `Comme Annie ne vient pas l'installer, Paul se hisse seul dans son fauteuil, et elle le surprend. Puisqu'il se débrouille si bien, il n'a qu'à remplir lui-même ses « n ». Plus tard, Paul se fait mal en se recouchant et pioche dans sa réserve de Novril.` },
+        { n: `II·15`, t: `À son réveil, Annie est assise sur le lit, couverte de nourriture, un rat vivant pris dans un piège à la main. Le regard vide, elle explique que tout le monde est comme ce rat, puis l'écrase jusqu'à le tuer. Elle propose d'aller chercher son arme pour les tuer tous les deux ; Paul la supplie de le laisser finir Le Retour de Misery. Elle doit partir dans son « coin pour rire », dans les collines, où surtout elle crie. Elle lui laisse des cachets, mais rien à manger.` },
+        { n: `II·16`, t: `Deux heures après son départ, Paul sort de sa chambre pour tenter de s'enfuir. Le salon est jonché d'assiettes sales ; sur la table, un gros album de souvenirs. La porte d'entrée a trois serrures solides, celle de la cuisine est fermée aussi ; dehors, la cour est inondée, et la remise où se trouve la hache est verrouillée. Dans le cellier, Paul trouve des allumettes et pense un instant mettre le feu à la maison, puis renonce. Une voix intérieure lui dit qu'il a abandonné pour de bon ; il répond à voix haute : « Afrique. »` },
+        { n: `II·17`, t: `Paul pille le cellier : sardines, jambon en boîte, raisins secs, céréales, en se demandant ce qu'Annie risque de remarquer. Ses jambes commencent à lui faire mal ; il décide de regagner sa chambre en prenant soin de ne laisser aucune trace.` },
+        { n: `II·18`, t: `Dans le salon, Paul ouvre l'album. Le mariage des parents d'Annie, la naissance de son frère, puis la sienne. Un incendie qui a tué cinq personnes, dont trois enfants des Krenmitz, des voisins qu'Annie gardait et détestait : elle avait onze ans. La mort de son père, tombé dans l'escalier ; celle d'Andrea Saint James, sa camarade de chambre à l'école d'infirmières, tombée elle aussi. Puis des avis de décès de patients, d'hôpital en hôpital, toujours plus à l'ouest. Un mariage avec Ralph Dugan, qui demande le divorce pour cruauté mentale. À Boulder, devenue infirmière en chef de la maternité, des nouveau-nés meurent : Annie est arrêtée, jugée à Denver, et acquittée faute de preuves. Une coupure parle aussi d'un jeune homme, Andrew Pomeroy, retrouvé mort, mutilé. La dernière annonce la disparition de Paul. Il comprend qu'il est dans le livre des morts d'Annie.` },
+        { n: `II·19`, t: `Assommé par ses cachets, Paul comprend que personne ne viendra le sauver : il devra tuer Annie lui-même.` },
+        { n: `II·20`, t: `Un orage, puis le gel. Dans la grange abandonnée, le cochon et les vaches d'Annie crient de faim. Paul avance son roman, le meilleur des Misery selon lui : la seconde moitié se passera en Afrique, chez les Bourkas, le peuple des abeilles, qui vénèrent une idole de pierre. Chaque soir, il cherche comment tuer Annie ; une des vaches se tait. Il prend un couteau de boucher à la cuisine et le cache sous son matelas. Mais Annie revient pendant son sommeil : il ne s'en rend compte qu'en sentant une aiguille s'enfoncer dans son bras.` },
+        { n: `II·21`, t: `Paul se réveille calme, drogué, persuadé qu'Annie va le tuer. Elle s'assoit sur le lit, pose quelque chose de lourd hors de sa vue, et propose la bonne ou la mauvaise nouvelle. La bonne : la fonte des neiges a emporté la voiture de Paul, comme elle avait emporté ce sale Andrew Pomeroy. La mauvaise : elle sait qu'il est sorti et qu'il a lu son album, grâce à des cheveux posés entre les pages. Elle raconte : Pomeroy, un auto-stoppeur qui se prétendait dessinateur, était devenu son amant ; elle a compris qu'il mentait, il s'est moqué d'elle, et elle l'a retrouvé mort dans sa baignoire. Paul a eu son accident à l'endroit même où elle avait abandonné le corps : elle y a vu un signe. Elle a aussi trouvé le bout d'épingle cassé dans la serrure.` },
+        { n: `II·22–23`, label: `Chapitres 22 et 23`, t: `Annie l'interroge : combien de fois est-il sorti ? Trois, avoue Paul, sans parler du couteau. Elle ne le croit pas et sort le couteau de sous le matelas. Elle annonce qu'elle va faire en sorte qu'il ne puisse plus jamais s'enfuir, comme on punissait les ouvriers voleurs des mines de diamants. Elle découvre ses jambes, prend une hache, un chalumeau et un flacon de Bétadine. Malgré ses supplications, elle lui tranche le pied gauche au-dessus de la cheville et cautérise la plaie au chalumeau. C'est sa faute, lui dit-elle. Paul perd connaissance.` }
       ]
     },
     {
       title: `Troisième partie`, name: `Paul`,
       items: [
-        { n: `III·1–10`, label: `Chapitres 1 à 10`, t: `Des semaines ont passé. Le récit alterne entre les chapitres du Retour de Misery, où Ian et Geoffrey partent en Afrique au pays d'une déesse des abeilles, et le présent. La machine à écrire perd ses touches une à une, jusqu'au « e ». Paul revient sur ce qui a suivi l'amputation, et sur le jour où Annie lui a tranché le pouce. Quand il sort de ses souvenirs, une voiture de police est garée devant la maison.` },
-        { n: `III·11–22`, label: `Chapitres 11 à 22`, t: `Paul compte les jours et approche de la fin du roman. Un jeune policier, Duane Kushner, se présente pendant qu'Annie tond la pelouse. Paul crie et lance un cendrier par la fenêtre ; le policier le reconnaît. Annie le tue sauvagement, d'abord avec un piquet de croix, puis avec la tondeuse. Elle enferme Paul dans la cave aux rats le temps de faire disparaître le corps et la voiture, en promettant de les tuer tous si d'autres policiers le voient.` },
-        { n: `III·23–33`, label: `Chapitres 23 à 33`, t: `Dans la cave, la vue du petit barbecue donne une idée à Paul : il vole le bidon d'allume-feu et le cache sur lui. Annie le remonte dans sa chambre. Deux policiers viennent l'interroger sur la disparition de Kushner ; Paul se tait, décidé à se venger lui-même. Les curieux et les journalistes recommencent à harceler Annie. Paul écrit à toute vitesse.` },
-        { n: `III·34–48`, label: `Chapitres 34 à 48`, t: `Paul achève Le Retour de Misery. Annie, ravie, lui offre caviar et champagne. Il tend son piège : il arrose une pile de feuilles de liquide inflammable et met le feu au « manuscrit » sous ses yeux. Annie se jette sur les flammes ; Paul l'assomme avec la machine à écrire et lui enfonce des pages brûlantes dans la gorge. Elle s'effondre ; il l'enferme dans la chambre. Les policiers arrivent et trouvent Paul… mais la chambre est vide.` }
+        { n: `III·1`, t: `Un extrait du Retour de Misery : Ian et Geoffrey regardent des abeilles affluer dans une clairière africaine. Le texte s'interrompt net.` },
+        { n: `III·2`, t: `Paul secoue la machine à écrire jusqu'à ce que le « t » tombe. Il voudrait exiger une nouvelle machine mais, avec un pied et un pouce en moins, il n'ose même plus demander. C'est le premier jour de l'été. Il se remet au travail.` },
+        { n: `III·3`, t: `Le roman reprend : Misery est attachée nue dans la clairière, couverte d'abeilles. Ian veut s'élancer vers elle ; on le retient, et Hezekiah, leur compagnon africain, explique que tant que les tambours battent, les abeilles restent endormies.` },
+        { n: `III·4`, t: `Le texte s'arrête au milieu d'une phrase : c'est le « e » qui a lâché, la lettre la plus courante. Annie tond la pelouse sur sa tondeuse autoportée. Paul devra écrire à la main ; il n'osera pas réclamer une autre machine, Annie est devenue trop étrange. Il revoit malgré lui la hache, et se dit qu'être écrivain, c'est se souvenir de l'histoire de chaque cicatrice. Il décide de revisiter ce souvenir, pour qu'il cesse de le hanter.` },
+        { n: `III·5–6`, label: `Chapitres 5 et 6`, t: `Après l'amputation, la douleur a disparu un temps. Paul repasse ces journées : tout tourne autour d'un même mot, misère, qui désigne à la fois sa souffrance et le personnage qui l'a sauvé. Il a joué les Shéhérazade pour Annie, mais aussi pour lui-même : s'il n'est pas mort, c'est qu'il voulait savoir comment finirait l'histoire de Misery.` },
+        { n: `III·7`, t: `Annie ne l'a pas laissé reprendre le travail tout de suite. Elle a lu tout ce qu'il avait écrit et s'est remise à remplir les « n », comme pour se faire pardonner. Mais le besoin de connaître la suite, chez lui comme chez elle, a été le plus fort : Paul voulait retourner à son roman.` },
+        { n: `III·8`, t: `Paul s'est remis au travail, d'abord par courtes séances, puis de plus en plus longtemps, malgré la douleur de son moignon. Chaque soir, Annie lisait ses pages : elle aussi avait besoin de connaître la suite.` },
+        { n: `III·9`, t: `Un jour, Annie lui avait apporté une coupe glacée en le priant de lui raconter la fin. Paul avait refusé : elle voulait tuer la poule aux œufs d'or. Elle s'était excusée. Quelques jours plus tard, il s'est plaint du bruit de la machine, et elle lui a coupé le pouce : en réalité, elle n'avait pas supporté son refus. Paul songe au pouvoir de la fiction, qui fait pleurer ou enrager pour des personnages inventés, comme cette lectrice qui avait aménagé chez elle un salon de Misery.` },
+        { n: `III·10`, t: `Paul, endormi, revit la scène : Annie arrive avec un couteau électrique, menace de l'égorger s'il se débat et lui tranche le pouce en répétant qu'elle l'aime. Le soir, elle lui apporte un gâteau d'anniversaire hérissé de bougies… et de son pouce : s'il est sage, il n'aura pas à manger cette bougie-là. Paul se réveille en retenant un cri. Par la fenêtre, il voit une voiture de police dans l'allée.` },
+        { n: `III·11`, t: `Depuis, Paul compte les jours. Il continue d'écrire malgré tout, même si l'inspiration faiblit, et Annie le félicite pour son travail pendant sa « convalescence ». Le livre est presque fini, et c'est le Misery le mieux construit qu'il ait écrit. Paul sait que sa vie s'arrêtera avec lui. Une seule chose est sûre : il ne criera pas.` },
+        { n: `III·12`, t: `Retour au présent : un jeune policier descend de la voiture. Paul est déchiré entre l'envie d'appeler au secours et la peur d'être puni ; il mesure à quel point Annie a brisé sa volonté. Il finit par crier « Afrique ! » et par jeter un cendrier en céramique à travers la vitre.` },
+        { n: `III·13`, t: `Le policier lève les yeux, sort une photo de sa poche et reconnaît Paul. Mais Annie arrive, armée de la croix de bois plantée sur la tombe de sa vache, Bessie : elle l'enfonce dans le dos du jeune homme et frappe encore et encore, jusqu'à ce que la croix se brise.` },
+        { n: `III·14`, t: `Paul pense à se tuer avant qu'Annie ne se venge, quand il voit que le policier bouge encore : il rampe vers sa voiture. Paul crie pour l'avertir. Annie arrive sur sa tondeuse autoportée, roule sur l'arme et le bras du policier, puis fait demi-tour et lui passe sur la tête. Paul vomit.` },
+        { n: `III·15`, t: `Annie enferme Paul, dégage la tondeuse, range le corps et la voiture dans la grange, puis nettoie la cour, très sereine. Elle rend à Paul son cendrier : c'est lui qui a tué ce policier, dit-elle. Paul lui répond que l'homme avait sa photo, donc que sa voiture a été retrouvée : ils se racontaient des histoires. En la regardant arroser la pelouse, il remarque qu'elle a oublié la lame ensanglantée de la tondeuse.` },
+        { n: `III·16`, t: `Paul lui demande de le tuer vite. Annie sait qu'elle devrait, mais pas tout de suite. Elle le porte jusqu'à la cave humide, infestée de rats, le pose sur un matelas et s'approche avec une seringue.` },
+        { n: `III·17`, t: `La morphine, c'est pour plus tard, si ses jambes lui font mal. Annie le gifle quand il lui rappelle qu'elle l'a amputé. Elle a l'arme du policier : si quelqu'un vient avant la nuit, elle le tuera, puis Paul, puis elle-même. Paul comprend que s'il lui arrive malheur, il mourra ici, dévoré par les rats.` },
+        { n: `III·18`, t: `À la nuit, Annie compte conduire la voiture et le corps jusqu'à son coin pour rire, dans les collines. Elle a déjà son histoire : elle dira aux policiers qu'elle a parlé au jeune homme puis l'a laissé repartir ; et Paul Sheldon, son auteur préféré, elle s'en serait souvenue. Elle tendra une chaîne en travers de l'allée. Son sang-froid inquiète Paul. Ils ont peut-être une semaine avant que la police revienne avec un mandat : il devra écrire plus vite.` },
+        { n: `III·19`, t: `Annie remet une vitre à la fenêtre de Paul. Sans le livre, lui dit-elle, elle le tuerait tout de suite ; elle s'étonne qu'il ne connaisse pas encore la fin : il hésite entre deux. Furieuse, elle lui demande s'il va encore tuer Misery. Paul rit : elle le tuera de toute façon. Il pense pourtant que la fin lui plaira.` },
+        { n: `III·20`, t: `Paul demande un bloc-notes pour écrire pendant son absence ; Annie refuse, de peur qu'on voie la lumière. Il la supplie de ne pas le laisser dans le noir avec les rats. Elle rit, éteint et l'enferme.` },
+        { n: `III·21`, t: `Seul dans le noir, Paul imagine le policier mort venant le punir et hurle au contact d'une araignée. Ses yeux s'habituent : il reconnaît le petit barbecue où il a brûlé Fast Cars. Il urine dans le bassin et sent qu'une infection urinaire commence.` },
+        { n: `III·22`, t: `Paul s'injecte la morphine, en espérant qu'elle le tuera.` },
+        { n: `III·23`, t: `Dans les brumes de la morphine, la douleur disparaît. Paul fixe le barbecue et sent naître une idée, mais il s'endort.` },
+        { n: `III·24`, t: `À son réveil, l'idée revient : brûler quelque chose. Paul se demande si Annie avait raison sur Fast Cars ; peut-être n'a-t-il jamais détesté Misery, seulement qu'elle soit plus aimée que lui. Près du barbecue, il y a un bidon d'allume-feu. Il serait dévasté de brûler Le Retour de Misery… mais la vraie question, c'est le mal que cela ferait à Annie.` },
+        { n: `III·25`, t: `Annie rentre en fin d'après-midi, épuisée. Paul refuse une nouvelle piqûre, pour qu'elle ne trouve pas le bidon caché dans son caleçon. Elle le remonte dans sa chambre, avec du papier et des crayons. Le livre sera fini dans moins de deux semaines, promet Paul, et il lui demande de ne plus le lire d'ici là : la fin, dit-il, sera brûlante.` },
+        { n: `III·26–27`, label: `Chapitres 26 et 27`, t: `Tous deux se reposent : Annie dort le reste de la journée. Le soir, Paul cache le bidon d'allume-feu derrière une plinthe descellée, puis écrit pendant quatre heures.` },
+        { n: `III·28`, t: `Chapitre 37 du Retour de Misery : Geoffrey attend devant la hutte du chef des Bourkas, éclairée de torches, décidé à tuer le chef quand Hezekiah le fera sortir. Le texte s'interrompt : une voiture approche.` },
+        { n: `III·29`, t: `Annie se précipite : Paul s'est déjà éloigné de la fenêtre. Elle décide de lui faire confiance et referme la porte sans la verrouiller. Deux policiers descendent de voiture : un colosse que Paul surnomme Goliath, et un petit homme en civil, David. Paul calcule ses chances, puis choisit de se taire : il ne veut pas qu'Annie aille en prison, il veut s'occuper d'elle lui-même.` },
+        { n: `III·30`, t: `Annie a suivi l'affaire à la radio : le policier disparu s'appelait Duane Kushner et recherchait Paul, mais personne n'a encore fait le lien entre les deux disparitions. Annie fait entrer David et Goliath et répond à leurs questions avec aplomb. Elle leur propose même de visiter la chambre d'amis ; ils déclinent, mais demandent à voir la grange. Qu'ils disent bonjour à Misery, son cochon, leur lance-t-elle.` },
+        { n: `III·31`, t: `Les policiers repartent. Annie ne comprend pas pourquoi Paul n'a pas crié ; il assure qu'il veut finir son livre, et c'est vrai. Elle a vu les deux hommes échanger un regard inquiet : il faut se dépêcher.` },
+        { n: `III·32`, t: `Paul écrit, poussant le roman vers son dénouement. Trois jours après la visite des policiers, des journalistes se présentent : Annie les chasse avec son fusil, puis s'écorche le front en disant à Paul que c'est ce qu'ils veulent voir.` },
+        { n: `III·33`, t: `La police locale passe à son tour. À sa propre surprise, Paul a un peu pitié d'Annie, ainsi harcelée. La prochaine fois, prévient-elle, ils viendront avec un mandat.` },
+        { n: `III·34`, t: `Paul écrit jusqu'à en avoir mal à la main. Annie remarque qu'il n'écrit plus seulement pour elle, et Paul sait qu'elle a raison.` },
+        { n: `III·35`, t: `Des curieux viennent observer la maison ; Annie tend une chaîne en travers de l'allée. Paul annonce qu'il finira le livre le lendemain, ce qui la réjouit. Elle lui dit qu'elle l'aime et lui apporte de la glace pour sa main.` },
+        { n: `III·36–37`, label: `Chapitres 36 et 37`, t: `Paul continue d'écrire. Le lendemain, Annie apporte cachets et soupe et, voyant l'état de sa main, regrette de ne pas lui avoir racheté une machine ; Paul tient à finir sur celle-ci. Elle lui a réservé une surprise : du caviar. Paul éclate de rire, et Annie rit avec lui.` },
+        { n: `III·38`, t: `Paul mange presque tout le caviar, en se disant joyeusement qu'il tuera Annie le ventre plein. Elle a aussi acheté du champagne pour fêter la fin. Comme il fume toujours une cigarette après avoir fini un livre, il lui en demande une ; elle désapprouve, mais accepte.` },
+        { n: `III·39`, t: `La fin du Retour de Misery : Geoffrey réfléchit à la différence entre les dieux cruels et les dieux fous, et comprend qu'il ne veut pas vivre si Misery meurt. Quand elle se réveille, il sait qu'il pourra vivre, même sans son amour.` },
+        { n: `III·40`, t: `Paul remplit les lettres manquantes. Il se sent vide, comme chaque fois, mais c'est bon d'avoir fini. Annie lui a laissé une cigarette et une seule allumette. Paul roule jusqu'à la plinthe descellée pour se préparer.` },
+        { n: `III·41`, t: `Paul appelle Annie, qui file chercher le champagne. Il allume calmement son allumette. Quand elle entre, il est assis derrière une pile de feuilles imbibées d'allume-feu, coiffée de la page de titre : Le Retour de Misery.` },
+        { n: `III·42`, t: `Paul lui dit qu'elle avait raison : c'est le meilleur des Misery. Terrifiée, Annie lâche le champagne et le supplie. Il laisse tomber l'allumette. Annie hurle et se jette sur les feuilles en flammes pour les sauver ; Paul soulève la lourde machine à écrire et la lui abat sur le dos.` },
+        { n: `III·43–44`, label: `Chapitres 43 et 44`, t: `Debout sur son pied valide, Paul se jette sur Annie, brûlée et blessée par les éclats de la bouteille, et lui enfonce des poignées de papier brûlant dans la bouche. Elle le repousse, se cogne la tête contre le manteau de la cheminée et s'effondre. Mais alors que Paul rampe vers la porte, elle rouvre les yeux, hurle à travers le papier, lui agrippe les jambes puis serre les mains autour de son cou. Paul lui crie de mourir : elle s'écroule sur lui.` },
+        { n: `III·45`, t: `Paul se dégage, sans croire qu'elle soit morte, et l'enferme dans la chambre : ses doigts apparaissent dans la fente de la porte. Il s'enferme dans la salle de bain, avale trois cachets et perd connaissance.` },
+        { n: `III·46`, t: `À son réveil, Paul est certain qu'Annie l'attend dehors avec la hache. Dans la vie, contrairement aux romans, les plans échouent : il voulait la tuer d'un seul coup à la tête. Il pense au vrai manuscrit, caché sous le lit (les feuilles brûlées n'étaient qu'un leurre), et rassemble son courage pour aller arrêter une voiture. Dans le salon, il voit Annie dans chaque ombre. Une voiture arrive : il jette le pingouin en céramique à travers la fenêtre et appelle au secours.` },
+        { n: `III·47`, t: `Ce sont les deux policiers venus interroger Annie, David et Goliath, de leurs vrais noms Wicks et McKnight, horrifiés par la maigreur de Paul. Il leur parle d'une déesse et les prévient qu'elle est peut-être encore vivante. Ils vont voir la chambre.` },
+        { n: `III·48`, t: `Wicks revient : soulagé, Paul croit qu'Annie est morte. Mais il n'y a personne dans la chambre. Paul hurle jusqu'à perdre connaissance.` }
       ]
     },
     {
       title: `Quatrième partie`, name: `La Déesse`,
       items: [
-        { n: `IV·1–12`, label: `Chapitres 1 à 12`, t: `Neuf mois plus tard, à New York. Le vrai manuscrit était caché : Paul n'avait brûlé que des pages vierges, et Le Retour de Misery va paraître. Annie a été retrouvée morte dans sa grange, le crâne fracturé, une tronçonneuse près d'elle. Paul marche avec une prothèse, boit trop, et Annie le hante encore. Puis, un jour, une idée d'histoire lui vient, et il se remet à écrire, en pleurant.` }
+        { n: `IV·1–3`, label: `Chapitres 1 à 3`, t: `Les mêmes sons sans suite qu'au début, dans le brouillard. Neuf mois ont passé. Paul réapprend à marcher, boit trop et n'écrit plus. Le Retour de Misery va paraître, tiré à un million d'exemplaires, et son éditeur le presse d'écrire le récit de sa captivité. En rentrant chez lui, il voit Annie se jeter sur lui avec la hache… et le tuer.` },
+        { n: `IV·4–8`, label: `Chapitres 4 à 8`, t: `Ce n'était que de l'imagination : Annie n'était pas une déesse immortelle. Après s'être échappée de la chambre, elle s'était traînée jusqu'à la grange, où elle est morte d'une fracture du crâne, une tronçonneuse à la main. Mais, comme Misery dans sa tombe, elle ne repose pas en paix dans l'esprit de Paul.` },
+        { n: `IV·9–12`, label: `Chapitres 9 à 12`, t: `En rentrant, Paul a croisé un garçon qui poussait une mouffette dans un chariot de supermarché, et une idée d'histoire lui est venue. Chez lui, malgré les apparitions d'Annie, il se met à écrire. Il retrouve le trou dans le papier où l'histoire l'attend, et accélère, en pleurant.` }
       ]
     }
   ],
@@ -4471,6 +4567,31 @@ BOOKS.push({
     return list.map((it, i) => ({ ...it, i, id: `${book.id}-${i}`, d: describe(book, it) }));
   }
 
+  /* ---------- The bookmark ----------
+     The fiche the reader has reached is saved by its number (`at`: "14", "I·14–28"…) as well as by
+     its place in the list (`last`), so that a book cut up afresh still lands on the fiche holding
+     that chapter. Saves older than `at` carry the place alone: for a book cut up since, it is read
+     against the earlier cut (`former`, the fiches' numbers as they were). */
+  const span = n => {
+    const [p, r] = n.includes("·") ? n.split("·") : ["", n];
+    const m = /^(\d+)(?:–(\d+))?$/.exec(r);
+    return m ? { p, a: +m[1], z: +(m[2] || m[1]) } : null;
+  };
+  function ficheAt(items, at) {
+    const exact = items.findIndex(it => it.n === at);
+    if (exact >= 0) return exact;
+    const s = span(at);
+    const i = s ? items.findIndex(it => { const t = span(it.n); return t && t.p === s.p && t.a <= s.z && s.z <= t.z; }) : -1;
+    return i >= 0 ? i : null;
+  }
+  function lastOf(book, items = allItems(book)) {
+    const e = entry(book.id);
+    if (e.at) return ficheAt(items, e.at);
+    if (!Number.isInteger(e.last)) return null;
+    if (book.former) return book.former[e.last] ? ficheAt(items, book.former[e.last]) : null;
+    return items[e.last] ? e.last : null;
+  }
+
   /* ---------- Progress ----------
      "Chapitre 12 sur 18": the total is the book's highest chapter number. Books whose numbering
      restarts with each part (Misery) have no single total, so they keep the plain label. */
@@ -4525,7 +4646,8 @@ BOOKS.push({
   function nowCard(b) {
     const e = entry(b.id);
     const items = allItems(b);
-    const lastItem = Number.isInteger(e.last) ? items[e.last] : null;
+    const reached = lastOf(b, items);
+    const lastItem = reached !== null ? items[reached] : null;
     // Part-numbered fiches (Misery) already name their part in the label.
     const where = lastItem && lastItem.part.title && !lastItem.n.includes("·") ? `${lastItem.part.title} · ${lastItem.part.name}` : null;
     const facts = [
@@ -4713,7 +4835,7 @@ BOOKS.push({
     setView("book", book);
     const items = allItems(book);
     const nodes = [];
-    const storedLast = () => { const v = entry(book.id).last; return Number.isInteger(v) && items[v] ? v : null; };
+    const storedLast = () => lastOf(book, items);
     let lastIndex = storedLast();
 
     const resumeBox = h("div", { class: "resume" });
@@ -4722,7 +4844,7 @@ BOOKS.push({
       resumeBox.hidden = lastIndex === null;
       if (lastIndex === null) return;
       resumeBox.append(...[
-        h("span", null, "Dernière fiche ouverte : " + progressLabel(book, items[lastIndex])),
+        h("span", null, "Marque-page : " + progressLabel(book, items[lastIndex])),
         h("button", { class: "link-btn", type: "button", onclick: () => goTo(lastIndex) }, "Y retourner"),
         canAsk() && lastIndex > 0
           ? h("button", { class: "link-btn", type: "button", onclick: () => { const i = lastIndex; goTo(i); runHelp(i, "express"); } }, "Résumé express jusque-là")
@@ -4772,7 +4894,7 @@ BOOKS.push({
       n.action.textContent = open ? "Masquer" : "Afficher";
       if (open !== was) unseal(n, open);
     }
-    // Everything before the last opened fiche counts as read.
+    // Everything before the bookmark counts as read.
     function paintFlags() {
       let stamps = 0;
       nodes.forEach((n, j) => {
@@ -4781,21 +4903,40 @@ BOOKS.push({
         n.flag.hidden = j !== lastIndex;
         if (passed && n.seen.hidden && !calm()) stamp(n.seen, stamps++);
         n.seen.hidden = !passed;
+        n.mark.hidden = !passed;
         n.li.classList.toggle("passed", passed);
         n.btn.setAttribute("aria-label", items[j].d.full + (passed ? " · lu" : ""));
       });
     }
+    // Opening a fiche moves the bookmark forward, never back: rereading an earlier one leaves it
+    // where it was. Moving it back is asked for from that fiche ("Placer mon marque-page ici").
     function markLast(i) {
+      if (lastIndex === null || i > lastIndex) setLast(i);
+    }
+    function setLast(i) {
       lastIndex = i;
       paintFlags();
       paintResume();
-      if (entry(book.id).last !== i) save(book.id, { last: i });
+      const e = entry(book.id);
+      if (e.last !== i || e.at !== items[i].n) save(book.id, { last: i, at: items[i].n });
     }
     function goTo(i) {
       setOpen(i, true);
       markLast(i);
       nodes[i].li.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
       nodes[i].btn.focus({ preventScroll: true });
+    }
+    // "Aller à" brings a fiche into view still sealed, its row lit a moment: choosing one in the
+    // list never shows its summary nor moves the bookmark.
+    function seek(i) {
+      const n = nodes[i];
+      n.li.scrollIntoView({ behavior: calm() ? "auto" : "smooth", block: "start" });
+      n.btn.focus({ preventScroll: true });
+      n.li.classList.remove("sought");
+      void n.li.offsetWidth;
+      n.li.classList.add("sought");
+      clearTimeout(n.soughtDone);
+      n.soughtDone = setTimeout(() => n.li.classList.remove("sought"), 1000);
     }
 
     /* Two helps written by Claude from the summaries the reader has reached, and nothing past them:
@@ -4920,7 +5061,7 @@ ${help.format}`;
       }
       const bodyId = it.id + "-body";
       const action = h("span", { class: "item-action", "aria-hidden": "true" }, "Afficher");
-      const flag = h("span", { class: "flag" }, "dernière fiche");
+      const flag = h("span", { class: "flag" }, "marque-page");
       flag.hidden = i !== lastIndex;
       const seen = h("span", { class: "seen" }, "lu");
       seen.hidden = !(lastIndex !== null && i < lastIndex);
@@ -4944,12 +5085,16 @@ ${help.format}`;
       expressBtn.hidden = !canAsk() || i < 1;
       const castBtn = h("button", { class: "link-btn", type: "button", onclick: () => { markLast(i); runHelp(i, "cast"); } }, "Qui est qui à ce stade");
       castBtn.hidden = !canAsk();
+      // On a fiche before the bookmark: bring the bookmark back here (rereading alone leaves it be).
+      const mark = h("button", { class: "link-btn", type: "button", onclick: () => setLast(i) }, "Placer mon marque-page ici");
+      mark.hidden = !(lastIndex !== null && i < lastIndex);
       const text = h("p", { class: "item-text" }, it.t);
       const body = h("div", { class: "item-body", id: bodyId },
         it.cue ? h("p", { class: "cue" }, h("b", null, "Repère"), " · " + it.cue) : null,
         text,
         h("div", { class: "item-tools" },
           i > 0 ? h("button", { class: "link-btn", type: "button", onclick: () => { for (let j = 0; j <= i; j++) setOpen(j, true); markLast(i); } }, "Afficher aussi tout ce qui précède") : null,
+          mark,
           expressBtn,
           castBtn
         ),
@@ -4962,11 +5107,11 @@ ${help.format}`;
         h("span", { class: "veil-cue" }, "Brisez le sceau pour lire la suite")
       );
       const li = h("li", { class: "item", id: it.id }, btn, veil, body);
-      nodes.push({ li, btn, body, text, action, flag, seen, express, expressBtn, castBtn });
+      nodes.push({ li, btn, body, text, action, flag, seen, mark, express, expressBtn, castBtn });
       list.append(li);
     });
 
-    const jump = h("select", { id: "jump-" + book.id, onchange: e => { if (e.target.value !== "") goTo(+e.target.value); e.target.value = ""; } },
+    const jump = h("select", { id: "jump-" + book.id, onchange: e => { if (e.target.value !== "") seek(+e.target.value); e.target.value = ""; } },
       h("option", { value: "" }, "Choisir…"),
       items.map(it => h("option", { value: String(it.i) }, it.d.full))
     );

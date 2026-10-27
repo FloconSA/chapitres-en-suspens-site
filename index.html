@@ -1557,6 +1557,17 @@ body:not([data-view="home"]) .lk-tag { display: none; }
   opacity: 0;
   background: radial-gradient(circle at var(--tx, 50%) var(--ty, 50%), transparent 3vmin, rgba(1, 4, 7, .55) 15vmin, rgba(1, 4, 7, .82) 48vmin);
 }
+/* The painted lake (computer, in autumn, script): the oil painting of the shore and an extra sky above
+   it, the water worked out point by point under it, both drawn in one canvas lying in the water's
+   own layer so they never slip against the raft while the page scrolls. The sky (and its moon) then
+   rises at the same pace, like a camera tilting down to the water. What the painting already holds,
+   or what the water now draws, steps aside; Sara Laughs, the Marsten House and the green glow stay
+   as unseen spots over their painted selves, for the labels and the clicks. */
+.lk-gl { display: none; }
+.lake.painted .lk-gl { display: block; position: absolute; left: 0; width: 100%; top: calc(-1 * var(--art-above, 0px)); height: calc(var(--art-above, 0px) + 175vh); pointer-events: none; }
+.lake.painted .lk-sky { --dy: -135vh; z-index: 1; }
+.lake.painted :is(.lk-hills, .lk-far, .lk-mid, .lk-stars, .lk-milky > svg, .lk-tw, .lk-reflect, .lk-lit, .lk-glint, .lk-house-glow, .lk-tk-glow, .lk-waves, .lk-train, .lk-near > svg) { display: none; }
+.lake.painted :is(.lk-house, .lk-marsten, .lk-tk) { opacity: 0; animation: none; aspect-ratio: auto; }
 html.lk-grab { cursor: grab; }
 html.lk-point { cursor: pointer; }
 html.lk-grabbing, html.lk-grabbing * { cursor: grabbing !important; -webkit-user-select: none; user-select: none; }
@@ -3309,11 +3320,14 @@ BOOKS.push({
   setTimeout(shootingStar, 6000 + Math.random() * 8000);
 
   // Every 40 to 80 s, a light in the Marsten House's tower: it wavers a few seconds, then goes out.
+  // (On the painted lake, the painted tower window does it: towerLitAt, read by the water's light.)
   const marstenLight = document.querySelector(".mh-light");
+  let towerLitAt = -99;
   function marstenLater() {
     setTimeout(() => {
       marstenLater();
       if (document.body.dataset.view !== "home" || document.hidden || calm()) return;
+      towerLitAt = performance.now() / 1000;
       marstenLight.animate([{ opacity: 0 }, { opacity: .9, offset: .15 }, { opacity: .55, offset: .3 }, { opacity: .95, offset: .42 }, { opacity: .8, offset: .8 }, { opacity: 0 }],
         { duration: 7000, easing: "ease-in-out" });
     }, 40000 + Math.random() * 40000);
@@ -3331,6 +3345,7 @@ BOOKS.push({
   const trainSvg = document.querySelector(".lk-train"), trainParts = [...trainSvg.querySelectorAll(".tr-body, .tr-light")];
   let trainOn = false;
   function trainPass() {
+    if (document.querySelector(".lake.painted")) return; // the painted trestle has no train yet
     if (trainOn) return sfx.horn();
     trainOn = true;
     if (onScreen(bridge)) found("train");
@@ -3703,6 +3718,7 @@ BOOKS.push({
     G.mouth = lake(m.x, m.y);
     G.mouthY = m.y;
     setupWaves();
+    if (art.on) artLayout();
     if (was) show();
     return true;
   }
@@ -3767,6 +3783,7 @@ BOOKS.push({
   // A dent (a < 0) or a bump of radius r at (X, Z): the rings spread from there
   function ripple(X, Z, r, a) {
     if (!sea) return;
+    if (art.on) return art.drop(X, Z, r, a);
     const { cols, rows, lo, hi, cell, h1 } = sea, gi = cols / 2 + X / cell, gj = (sea.zf - Z) / cell + 1, R = Math.max(1.5, r / cell);
     for (let j = Math.max(1, Math.floor(gj - R)); j <= Math.min(rows - 2, Math.ceil(gj + R)); j++)
       for (let i = Math.max(lo[j], Math.floor(gi - R)); i <= Math.min(hi[j], Math.ceil(gi + R)); i++) {
@@ -3839,6 +3856,7 @@ BOOKS.push({
     o.X += o.vX * dt;
     o.Z += o.vZ * dt;
     keepIn(o, 6, 72);
+    artKeep(o);
     const sp = speed(o);
     if (sp > 10) {
       const a = -Math.min(.3, sp * .001), c = sea.cell;
@@ -3876,6 +3894,7 @@ BOOKS.push({
     o.X += o.vX * dt;
     o.Z += o.vZ * dt;
     keepIn(o, 8, 100);
+    artKeep(o);
     const sp = speed(o);
     if (sp > 12) ripple(o.X, o.Z, sea.cell * 1.1, -Math.min(.16, sp * .0005));
     o.rot += (clamp(o.vX * .03, -12, 12) - o.rot) * Math.min(1, dt * 6);
@@ -3913,6 +3932,7 @@ BOOKS.push({
     o.X += o.vX * dt;
     o.Z += o.vZ * dt;
     keepIn(o, 4, 100);
+    artKeep(o);
     const sp = speed(o);
     o.stretch += (1 + Math.min(.8, sp / (raft.r * 1.2)) - o.stretch) * Math.min(1, dt * 1.5);
     if (sp > 2) {
@@ -4075,8 +4095,8 @@ BOOKS.push({
     if (onLoon(e)) return loonDive();
     if (onHouse(e)) return houseCall();
     if (onDrain(e)) return drainPeek();
-    if (p.y > 2) { e.preventDefault(); swirl = { x: p.x, y: p.y, moved: 0 }; }
-    else if (e.clientY < farEl.getBoundingClientRect().top) starAt(e.clientX, e.clientY);
+    if (p.y > 2 && !artLand(p)) { e.preventDefault(); swirl = { x: p.x, y: p.y, moved: 0 }; }
+    else if (e.clientY < (art.on ? water.getBoundingClientRect().top - art.treeTop : farEl.getBoundingClientRect().top)) starAt(e.clientX, e.clientY);
   });
   // Where the held thing should go: under the hand, wherever the page has scrolled to
   function aim() {
@@ -4160,11 +4180,381 @@ BOOKS.push({
     if (slick.hyp > 0) aimTrance();
   }, { passive: true });
   addEventListener("resize", () => { if (G) { G.stale = true; wake(); } });
+
+  /* ---------- The painted lake (computer, in autumn) ----------
+     An oil painting of the far shore (Sara Laughs on the left, the trestle, the Marsten House and
+     the green glow on the right), with more sky painted on above it, and under it the water worked
+     out point by point on the graphics card: a field of waves laid on the lake (the same one the
+     raft, the boat and a click stir), a light breeze, and in it the painting mirrored, dark at one's
+     feet and a mirror far off, with the glitter of the moon and of every window, which follows a
+     window the moment it flickers. One canvas in the water's own layer holds both, so it moves with
+     the raft as the page scrolls; only the strip on screen is drawn. The breeze keeps the water
+     moving, so it runs while the shelf is shown and sleeps otherwise. Without a graphics card that
+     can do it, or out of autumn (no painting yet), the drawn lake stays. */
+  const ART = {"src":"illustrations/lac-automne.webp","map":"illustrations/lac-automne-lumieres.png","w":2560,"h":1440,"horizon":992,"shore":[1145,1143,1141,1139,1137,1134,1130,1127,1119,1116,1115,1114,1113,1113,1113,1112,1112,1112,1112,1112,1112,1112,1112,1112,993,993,993,993,993,992,992,992,992,992,992,993,993,993,994,994,994,994,995,996,999,1009,1012,1014,1015,1016,1016,1017,1018,1018,1019,1020,1021,1022,1023,1024,1025,1026,1026,1027],"lights":[[607,990,4455,0.783,0.566,0.248,"sara"],[2154,924,550,0.678,0.463,0.177,"marsten"],[337,961,548,0.757,0.485,0.135,"sara"],[2124,784,324,0.623,0.428,0.175,"marsten"],[2153,854,287,0.625,0.426,0.185,"marsten"],[2069,658,116,0.755,0.586,0.372,"tour"],[1920,801,76,0.667,0.63,0.269,"marsten"],[2247,856,21,0.665,0.43,0.203,"marsten"],[2408,742,19,0.719,0.499,0.297,"chaude"],[1938,743,7053,0.175,0.497,0.357,"verte"]],"spots":{"sara":[205,805,680,1105],"marsten":[1600,603,2600,1152],"haven":[1715,400,2165,900]}};
+  const artCanvas = document.createElement("canvas");
+  artCanvas.className = "lk-gl";
+  water.prepend(artCanvas);
+  const art = { on: false, failed: false, gl: null, loaded: 0, drops: [], bellAt: -99, scale: 1, slow: 0, frame: 0, treeTop: 0 };
+  art.drop = (X, Z, r, a) => { if (art.drops.length < 64) art.drops.push([X, Z, r, a]); };
+  const artSpots = [[houseEl, "sara"], [lakeEl.querySelector(".lk-marsten"), "marsten"], [lakeEl.querySelector(".lk-tk"), "haven"]];
+  const ART_VS = `#version 300 es
+in vec2 p;
+void main() { gl_Position = vec4(p, 0., 1.); }`;
+  // The waves: each point moves with its four neighbours and the four in the corners, and slowly calms
+  const ART_SIM = `#version 300 es
+precision highp float;
+uniform sampler2D uPrev;
+uniform vec2 uSize;
+uniform float uC, uDamp, uRatio;
+uniform vec4 uDrops[16];
+uniform int uNDrops;
+out vec4 o;
+void main() {
+  vec2 uv = gl_FragCoord.xy / uSize, e = 1. / uSize;
+  vec2 s = texture(uPrev, uv).rg;
+  float n4 = texture(uPrev, uv + vec2(e.x, 0.)).r + texture(uPrev, uv - vec2(e.x, 0.)).r + texture(uPrev, uv + vec2(0., e.y)).r + texture(uPrev, uv - vec2(0., e.y)).r;
+  float d4 = texture(uPrev, uv + e).r + texture(uPrev, uv - e).r + texture(uPrev, uv + vec2(e.x, -e.y)).r + texture(uPrev, uv + vec2(-e.x, e.y)).r;
+  float h = (2. * s.r - s.g + uC * (4. * n4 + d4 - 20. * s.r) / 6.) * uDamp;
+  h *= mix(.86, 1., smoothstep(0., .05, min(min(uv.x, 1. - uv.x), min(uv.y, 1. - uv.y))));
+  for (int i = 0; i < 16; i++) {
+    if (i >= uNDrops) break;
+    vec2 q = (uv - uDrops[i].xy) / vec2(uDrops[i].z, uDrops[i].z * uRatio);
+    float r2 = dot(q, q);
+    if (r2 < 1.) h += uDrops[i].w * (1. - r2) * (1. - r2);
+  }
+  o = vec4(h, s.r, 0., 1.);
+}`;
+  // The picture: the painting above its shore, the water below it, in the lake's own perspective (G)
+  const ART_SCENE = `#version 300 es
+precision highp float;
+uniform sampler2D uDecor, uLight, uSim;
+uniform vec2 uRes, uSimTexel;
+uniform float uDpr, uWater, uY0, uDref, uSQ, uTop, uFade, uDecorH, uTime, uWind, uWaveAmp;
+uniform vec4 uSimRect, uMoon;
+uniform float uK[16];
+uniform vec4 uL[17];
+uniform vec3 uLC[17];
+uniform float uLB[17];
+uniform int uNL;
+uniform float uShore[64];
+out vec4 o;
+vec3 lin(vec3 c) { return pow(c, vec3(2.2)); }
+vec3 srgb(vec3 c) { return pow(max(c, 0.), vec3(1. / 2.2)); }
+float shoreY(float x) {
+  float u = clamp(x * uDpr / uRes.x, 0., 1.) * 63.;
+  int i = int(floor(u));
+  return uTop + mix(uShore[i], uShore[min(i + 1, 63)], u - float(i)) * uDecorH;
+}
+float hash2(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+// Above the painting, more of its night: the deep blue of its sky (not sampled from its edge, where
+// the Milky Way would run on up as a streak), and stars, some twinkling
+vec3 skyAt(vec2 sp) {
+  vec3 c = vec3(.066, .118, .165) * (.92 + .08 * hash2(floor(sp / 90.)));
+  vec2 id = floor(sp / 7.), q = fract(sp / 7.) - .5;
+  float h = hash2(id);
+  if (h > .88) {
+    vec2 off = vec2(hash2(id + 3.1), hash2(id + 7.7)) - .5;
+    float lit = (.3 + .7 * pow(hash2(id + 9.), 3.)) * (.75 + .25 * sin(uTime * (1. + 2. * hash2(id + 5.)) + h * 40.));
+    c += vec3(.86, .9, 1.) * smoothstep(.1 + .22 * hash2(id + 1.3), 0., length(q - off * .6)) * lit;
+  }
+  return c;
+}
+// The painting, each window as bright as it is now
+vec3 decorAt(vec2 sp, float lod) {
+  vec2 uv = clamp((sp - vec2(0., uTop)) / vec2(uRes.x / uDpr, uDecorH), vec2(.0005), vec2(.9995));
+  vec3 c = textureLod(uDecor, uv, lod).rgb;
+  vec2 lm = texture(uLight, uv).rg;
+  int id = int(lm.g * 255. / 16. + .5) - 1;
+  return c * (1. + ((id >= 0 && id < 16 ? uK[id] : 1.) - 1.) * lm.r * .92);
+}
+// The scene: the painting fading at its top edge into the sky above it; seen in the water, the moon too
+vec3 sceneAt(vec2 sp, float lod, bool mirrored) {
+  vec3 c = decorAt(sp, lod);
+  float a = smoothstep(uTop, uTop + uFade, sp.y);
+  if (a < 1.) c = mix(skyAt(sp), c, a);
+  if (mirrored && uMoon.z > 0.) {
+    float d = length(sp - uMoon.xy) / uMoon.z;
+    c += vec3(.9, .88, .8) * uMoon.w * (smoothstep(1.05, .9, d) * .9 + exp(-max(d - 1., 0.) * 1.6) * .12);
+  }
+  return c;
+}
+// The breeze: some sixteen ripples, each faded out once finer than a pixel (or the far water fizzes)
+vec2 windSlope(vec2 p, float fp) {
+  vec2 s = vec2(0.);
+  for (int i = 0; i < 16; i++) {
+    float fi = float(i), ang = 1.5708 + (fract(fi * .618034) - .5) * 1.9;
+    vec2 d = vec2(cos(ang), sin(ang));
+    float lambda = 1.6 * pow(.8, fi), k = 6.2832 / lambda;
+    s += d * (.03 * cos(dot(d, p) * k - sqrt(9.8 * k) * .45 * uTime + fi * 1.913)) * smoothstep(2.2, 7., lambda / fp);
+  }
+  return s;
+}
+void main() {
+  vec2 sp = vec2(gl_FragCoord.x, uRes.y - gl_FragCoord.y) / uDpr;
+  if (sp.y < shoreY(sp.x)) { o = vec4(sceneAt(sp, 0., false), 1.); return; }
+  float W = uRes.x / uDpr, cx = W * .5, hor = uWater - uY0, f = uDref / uSQ;
+  float D = max(sp.y - hor, .5), Z = uDref * f / D;
+  vec3 P = vec3((sp.x - cx) * uDref / D, 0., Z), V = normalize(vec3(0., uDref, 0.) - P);
+  vec2 sl = windSlope(P.xz / uDref, Z * Z / (f * uDref * uDref)) * uWind;
+  vec2 su = (P.xz - uSimRect.xy) / (uSimRect.zw - uSimRect.xy);
+  if (su.x > 0. && su.x < 1. && su.y > 0. && su.y < 1.) {
+    vec2 cell = (uSimRect.zw - uSimRect.xy) * uSimTexel;
+    float hl = texture(uSim, su - vec2(uSimTexel.x, 0.)).r, hr = texture(uSim, su + vec2(uSimTexel.x, 0.)).r;
+    float hd = texture(uSim, su - vec2(0., uSimTexel.y)).r, hu = texture(uSim, su + vec2(0., uSimTexel.y)).r;
+    sl += vec2(hr - hl, hu - hd) / (2. * cell) * uWaveAmp;
+  }
+  vec3 N = normalize(vec3(-sl.x, 1., -sl.y)), R = reflect(-V, N);
+  R.y = max(R.y, .0004);
+  float rz = max(R.z, .02);
+  vec2 rp = vec2(cx + f * R.x / rz, hor - f * R.y / rz);
+  // Mirrored about the foot of what it shows: the far shore's waterline, or nearer, the cabin's
+  float w = .015 * W, foot = (shoreY(rp.x - w) + shoreY(rp.x) + shoreY(rp.x + w)) / 3.;
+  rp.y = min(rp.y + 2. * (foot - hor), shoreY(rp.x) - 1.);
+  vec3 refl = lin(sceneAt(rp, .4 + 2.2 * clamp(length(sl) * 5., 0., 1.), true));
+  float F = .02 + .98 * pow(1. - clamp(dot(N, V), 0., 1.), 5.);
+  vec3 col = mix(lin(vec3(.016, .036, .046)), refl, F);
+  for (int i = 0; i < 17; i++) {
+    if (i >= uNL) break;
+    vec4 L = uL[i];
+    vec3 Ld;
+    if (uLB[i] - hor > 1.5) {
+      float Zc = uDref * f / (uLB[i] - hor);
+      Ld = normalize(vec3((L.x - cx) * Zc / f, (uLB[i] - L.y) * Zc / f, Zc) - P);
+    } else Ld = normalize(vec3((L.x - cx) / f, (hor - L.y) / f, 1.));
+    vec3 H = normalize(Ld + V);
+    float fs = .02 + .98 * pow(1. - clamp(dot(V, H), 0., 1.), 5.);
+    col += uLC[i] * pow(max(dot(N, H), 0.), L.w) * L.z * (i < 16 ? uK[i] : 1.) * fs;
+  }
+  col = srgb(col);
+  o = vec4(mix(col, .82 + .18 * (1. - exp(-(col - .82) / .18)), step(.82, col)), 1.);
+}`;
+  function artProgram(gl, fs) {
+    const p = gl.createProgram();
+    for (const [type, src] of [[gl.VERTEX_SHADER, ART_VS], [gl.FRAGMENT_SHADER, fs]]) {
+      const s = gl.createShader(type);
+      gl.shaderSource(s, src);
+      gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+      gl.attachShader(p, s);
+    }
+    gl.bindAttribLocation(p, 0, "p");
+    gl.linkProgram(p);
+    if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p));
+    const u = {};
+    for (let i = gl.getProgramParameter(p, gl.ACTIVE_UNIFORMS); i--;) {
+      const name = gl.getActiveUniform(p, i).name.replace(/\[0\]$/, "");
+      u[name] = gl.getUniformLocation(p, name);
+    }
+    return { p, u };
+  }
+  function artTexture(gl, w, h, fmt, filter, data) {
+    const t = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, t);
+    if (fmt === "half") gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA16F, w, h, 0, gl.RGBA, gl.HALF_FLOAT, null);
+    else gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, data);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, filter);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, filter === gl.LINEAR_MIPMAP_LINEAR ? gl.LINEAR : filter);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    if (filter === gl.LINEAR_MIPMAP_LINEAR) gl.generateMipmap(gl.TEXTURE_2D);
+    return t;
+  }
+  // Ready the graphics card once, then fetch the painting and its map of lights
+  function artInit() {
+    if (art.gl || art.failed) return;
+    const gl = artCanvas.getContext("webgl2", { antialias: false, alpha: false, preserveDrawingBuffer: true });
+    try {
+      if (!gl || !gl.getExtension("EXT_color_buffer_float")) throw new Error("WebGL2 sans tampons flottants");
+      // Drawn by the processor rather than a graphics card, it would crawl: keep the drawn lake
+      const info = gl.getExtension("WEBGL_debug_renderer_info"), who = String(gl.getParameter(info ? info.UNMASKED_RENDERER_WEBGL : gl.RENDERER));
+      if (/swiftshader|llvmpipe|software|basic render/i.test(who)) throw new Error("rendu logiciel (" + who + ")");
+      art.sim = artProgram(gl, ART_SIM);
+      art.scene = artProgram(gl, ART_SCENE);
+    } catch (err) { art.failed = true; console.warn("Lac peint indisponible :", err.message); return; }
+    art.gl = gl;
+    gl.bindVertexArray(gl.createVertexArray());
+    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(0);
+    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+    gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, gl.NONE);
+    for (const [key, src, filter] of [["decor", ART.src, gl.LINEAR_MIPMAP_LINEAR], ["lightMap", ART.map, gl.NEAREST]]) {
+      const img = new Image();
+      img.onload = () => { art[key] = artTexture(gl, 0, 0, "", filter, img); if (++art.loaded === 2) artSwitch(); };
+      img.onerror = () => { art.failed = true; };
+      img.src = src;
+    }
+  }
+  // Painted while the lake is lively, in autumn, once the painting is in
+  function artSwitch() {
+    const on = lively() && SEASON === "autumn" && !art.failed;
+    if (on) artInit();
+    const was = art.on;
+    art.on = on && art.loaded === 2;
+    lakeEl.classList.toggle("painted", art.on);
+    if (art.on !== was) {
+      if (!art.on) for (const [el] of artSpots) for (const k of ["left", "width", "height", "bottom", "translate"]) el.style[k] = "";
+      if (G) G.stale = true;
+    }
+    artWake();
+  }
+  // The painting at the page's width, its far waterline on the water layer's top edge, and above it
+  // enough sky (extra) to fill the screen at the top of the page
+  const artShore = x => {
+    const u = clamp(x / art.k / ART.w, 0, 1) * 63, i = Math.floor(u), j = Math.min(i + 1, 63);
+    return art.extra + (ART.shore[i] + (ART.shore[j] - ART.shore[i]) * (u - i)) * art.k;
+  };
+  function artLayout() {
+    const gl = art.gl, W = water.clientWidth, vh = innerHeight / 100, k = W / ART.w, horizon = ART.horizon * k, extra = Math.max(0, 112 * vh - horizon);
+    Object.assign(art, { W, k, extra, above: extra + horizon, treeTop: .14 * W });
+    lakeEl.style.setProperty("--art-above", f1(art.above) + "px");
+    art.dpr = Math.min(devicePixelRatio || 1, 1.25) * art.scale;
+    art.cssH = art.above + 175 * vh;
+    artCanvas.width = Math.round(W * art.dpr);
+    artCanvas.height = Math.round(art.cssH * art.dpr);
+    // The waves on the stretch of lake the raft can reach, finer than the drawn lake's
+    const yTop = 4 * vh, yBot = 104 * vh, zf = G.lake(0, yTop).Z, zn = G.lake(0, yBot).Z, xMax = W / 2 * G.Dref / (yTop + G.y0);
+    const cell = Math.max(G.Dref / 70, 2 * xMax / 1400), SW = Math.ceil(2 * xMax / cell), SH = Math.min(1400, Math.ceil((zf - zn) / cell));
+    art.rect = [-xMax, zn, xMax, zn + SH * cell];
+    if (SW !== art.SW || SH !== art.SH) {
+      for (const t of art.simTex || []) gl.deleteTexture(t);
+      art.simTex = [0, 1].map(() => artTexture(gl, SW, SH, "half", gl.LINEAR));
+      art.simFb = art.simTex.map(t => {
+        const fb = gl.createFramebuffer();
+        gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, t, 0);
+        return fb;
+      });
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      Object.assign(art, { SW, SH, read: 0 });
+    }
+    art.cell = cell;
+    // The lights: each window where it is painted, standing on its own shore; then the moon
+    art.lights = ART.lights.map(([x, y, area, r, g, b]) => {
+      const m = Math.max(r, g, b), warm = r > g;
+      return { x: x * k, y: extra + y * k, base: artShore(x * k), power: warm ? 1.3 * Math.min(1.4, .4 + Math.sqrt(area) / 22) : .1, sharp: warm ? 650 : 160, col: [r, g, b].map(c => Math.pow(c / m, 2.2)) };
+    });
+    const mr = lakeEl.querySelector(".lk-moon").getBoundingClientRect(), wr = water.getBoundingClientRect();
+    art.moon = [mr.left + mr.width / 2 - wr.left, mr.top + mr.height / 2 - wr.top + art.above, mr.width / 2, tonight.k];
+    art.lights.push({ x: art.moon[0], y: art.moon[1], base: art.above - G.y0, power: 5 * tonight.k, sharp: 1200, col: [1, .93, .8] });
+    // The unseen spots over Sara Laughs, the Marsten House and the glow (in the near layer, whose
+    // foot stands .6vh below the water's top edge)
+    for (const [el, id] of artSpots) {
+      const [x0, y0, x1, y1] = ART.spots[id];
+      Object.assign(el.style, { left: f1(x0 * k) + "px", width: f1((x1 - x0) * k) + "px", height: f1((y1 - y0) * k) + "px",
+        bottom: f1(.6 * vh - (y1 * k - horizon)) + "px", translate: "0 0" });
+    }
+  }
+  // Water-layer point p on painted land (the cabin's bank, its dock)?
+  const artLand = p => art.on && p.y + art.above < artShore(p.x) + 2;
+  // Nothing floats onto the painted bank: pushed back out onto the water
+  function artKeep(o) {
+    if (!art.on) return;
+    const q = G.at(o.X, o.Z), foot = artShore(q.x) - art.above + 6;
+    if (q.y < foot) { o.Z = G.lake(q.x, foot).Z; o.vZ = -Math.abs(o.vZ) * .3; }
+  }
+  // How bright each painted light is now
+  const hash = n => { const s = Math.sin(n * 127.1) * 43758.5453; return s - Math.floor(s); };
+  function artLevel(role, i, t) {
+    if (role === "verte") return .94 + .1 * Math.sin(t * 1.4) * Math.sin(t * .37 + 1);
+    if (role === "marsten") return .1;
+    if (role === "tour") {
+      const e = (t - towerLitAt) / 7;
+      return e < 0 || e > 1 ? .1 : .1 + .9 * (e < .15 ? e / .15 : e < .3 ? 1 - .45 * (e - .15) / .15 : e < .8 ? .9 : (1 - e) / .2 * .9);
+    }
+    let k = 1 + .07 * Math.sin(t * 9.1 + i * 3) * Math.sin(t * 5.3 + i);
+    const e = t - art.bellAt;
+    if (role === "sara" && e >= 0 && e < 1.8) k = hash(Math.floor(e * 6) + i * 7) < .5 ? .08 : .7 + .3 * hash(e * 6 + i);
+    return k;
+  }
+  function artWake() {
+    if (!art.frame && art.on && live() && !document.hidden) art.frame = requestAnimationFrame(artFrame);
+  }
+  document.addEventListener("visibilitychange", artWake);
+  new MutationObserver(artWake).observe(document.body, { attributes: true, attributeFilter: ["data-view"] });
+  function artFrame(now) {
+    art.frame = 0;
+    if (!art.on || !live() || document.hidden) return;
+    art.frame = requestAnimationFrame(artFrame);
+    if (!ready() || !art.simTex) return;
+    const gl = art.gl, t = now / 1000, dt = Math.min(.05, (now - (art.then || now)) / 1000);
+    art.then = now;
+    // Too slow for this card: draw a little coarser, and if that is not enough, go back to the drawn lake
+    art.slow = dt > .026 ? art.slow + 1 : Math.max(0, art.slow - 2);
+    if (art.slow > 90) {
+      art.slow = 0;
+      if (art.scale > .6) { art.scale *= .8; artLayout(); } else { art.failed = true; return artSwitch(); }
+    }
+    // Waves, 120 small steps a second
+    const S = art.sim, [X0, Z0, X1, Z1] = art.rect;
+    gl.disable(gl.SCISSOR_TEST);
+    gl.useProgram(S.p);
+    gl.viewport(0, 0, art.SW, art.SH);
+    gl.uniform2f(S.u.uSize, art.SW, art.SH);
+    gl.uniform1f(S.u.uC, .1);
+    gl.uniform1f(S.u.uDamp, .9945);
+    gl.uniform1f(S.u.uRatio, (X1 - X0) / (Z1 - Z0));
+    art.acc = Math.min((art.acc || 0) + dt, 4 / 120);
+    for (; art.acc >= 1 / 120; art.acc -= 1 / 120) {
+      const d = art.drops.splice(0, 16), flat = new Float32Array(64);
+      d.forEach(([X, Z, r, a], i) => flat.set([(X - X0) / (X1 - X0), (Z - Z0) / (Z1 - Z0), r / (X1 - X0), a], i * 4));
+      gl.uniform4fv(S.u.uDrops, flat);
+      gl.uniform1i(S.u.uNDrops, d.length);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, art.simFb[1 - art.read]);
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, art.simTex[art.read]);
+      gl.uniform1i(S.u.uPrev, 0);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      art.read = 1 - art.read;
+    }
+    // The picture, only the strip that is (nearly) on screen
+    const top = water.getBoundingClientRect().top - art.above, a = Math.max(0, -top - innerHeight * .3), b = Math.min(art.cssH, -top + innerHeight * 1.3);
+    if (b <= a) return;
+    const C = art.scene, u = C.u, H = artCanvas.height, dpr = art.dpr;
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.viewport(0, 0, artCanvas.width, H);
+    gl.enable(gl.SCISSOR_TEST);
+    gl.scissor(0, Math.floor(H - b * dpr), artCanvas.width, Math.ceil((b - a) * dpr) + 1);
+    gl.useProgram(C.p);
+    [art.decor, art.lightMap, art.simTex[art.read]].forEach((tex, i) => { gl.activeTexture(gl.TEXTURE0 + i); gl.bindTexture(gl.TEXTURE_2D, tex); });
+    gl.uniform1i(u.uDecor, 0);
+    gl.uniform1i(u.uLight, 1);
+    gl.uniform1i(u.uSim, 2);
+    gl.uniform2f(u.uRes, artCanvas.width, H);
+    gl.uniform2f(u.uSimTexel, 1 / art.SW, 1 / art.SH);
+    gl.uniform1f(u.uDpr, dpr);
+    gl.uniform1f(u.uWater, art.above);
+    gl.uniform1f(u.uY0, G.y0);
+    gl.uniform1f(u.uDref, G.Dref);
+    gl.uniform1f(u.uSQ, SQ);
+    gl.uniform1f(u.uTop, art.extra);
+    gl.uniform1f(u.uFade, .1 * art.W);
+    gl.uniform1f(u.uDecorH, ART.h * art.k);
+    gl.uniform1f(u.uTime, t % 3600);
+    gl.uniform1f(u.uWind, .6);
+    gl.uniform1f(u.uWaveAmp, 12);
+    gl.uniform4fv(u.uSimRect, art.rect);
+    gl.uniform4fv(u.uMoon, art.moon);
+    const K = ART.lights.map((l, i) => artLevel(l[6], i, t));
+    while (K.length < 16) K.push(1);
+    gl.uniform1fv(u.uK, K);
+    const L = new Float32Array(68), LC = new Float32Array(51), LB = new Float32Array(17);
+    art.lights.forEach((l, i) => { L.set([l.x, l.y, l.power, l.sharp], i * 4); LC.set(l.col, i * 3); LB[i] = l.base; });
+    gl.uniform4fv(u.uL, L);
+    gl.uniform3fv(u.uLC, LC);
+    gl.uniform1fv(u.uLB, LB);
+    gl.uniform1i(u.uNL, art.lights.length);
+    gl.uniform1fv(u.uShore, ART.shore.map(v => v / ART.h));
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  }
+
   function setLive() {
     const on = lively();
     lakeEl.classList.toggle("live", on);
     document.body.classList.toggle("lake-live", on);
     G = null;
+    artSwitch();
     if (on) return;
     for (const o of [raft, boat, slick]) o.el.style.transform = o.el.style.zIndex = o.el.style.opacity = "";
     rest();
@@ -4213,6 +4603,7 @@ BOOKS.push({
       houseLights[i + n].animate(keys, opt);
     }
     houseShine.animate(blink(), { duration: 1700 });
+    art.bellAt = performance.now() / 1000;
     sfx.bell(Math.random() < .5 ? 1 : 2);
   }
   // The drain, clicked: something stirs in the dark down there.
